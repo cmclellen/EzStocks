@@ -12,7 +12,7 @@ function StockGraph() {
   const { stocks } = useStocks();
 
   return (
-    <ResponsiveContainer width="100%" aspect={4.0 / 2.0} className="my-10">
+    <ResponsiveContainer width="100%" aspect={4.0 / 2.0} className="py-15">
       <LineChart data={stocks}>
         <XAxis dataKey="name" />
         <YAxis />
