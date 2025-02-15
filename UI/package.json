@@ -13,12 +13,16 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/react-query": "^5.66.0",
+    "@tanstack/react-query-devtools": "^5.66.0",
     "clsx": "^2.1.1",
     "json-server": "^1.0.0-beta.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
     "react-icons": "^5.4.0",
     "react-is": "^19.0.0",
+    "react-router-dom": "^7.1.5",
     "recharts": "^2.15.1",
     "tailwindcss": "^4.0.6"
   },

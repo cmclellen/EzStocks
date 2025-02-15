@@ -13,7 +13,7 @@ import { AiOutlineStock } from "react-icons/ai";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
-  // { name: "Team", href: "#", current: false },
+  { name: "Add Stock", href: "#", current: false },
   // { name: "Projects", href: "#", current: false },
   // { name: "Calendar", href: "#", current: false },
 ];
