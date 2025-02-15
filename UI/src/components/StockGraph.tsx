@@ -29,7 +29,7 @@ function StockGraph() {
   }, []);
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" aspect={4.0 / 2.0} className="my-10">
       <LineChart data={data}>
         <XAxis dataKey="name" />
         <YAxis />

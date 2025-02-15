@@ -5,7 +5,7 @@ function AppLayout() {
   return (
     <div className="h-dvh flex flex-col">
       <Header />
-      <main className="grow border border-blue-600 container mx-auto justify-items-center content-center">
+      <main className="grow container mx-auto justify-items-center content-center">
         <StockGraph />
       </main>
     </div>
