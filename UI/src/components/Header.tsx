@@ -12,10 +12,8 @@ import { HiBars3, HiBell, HiXMark } from "react-icons/hi2";
 import { AiOutlineStock } from "react-icons/ai";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Add Stock", href: "#", current: false },
-  // { name: "Projects", href: "#", current: false },
-  // { name: "Calendar", href: "#", current: false },
+  { name: "Dashboard", href: "/", current: true },
+  { name: "Add Stock", href: "/add-stock", current: false },
 ];
 
 function MobileMenu() {
@@ -57,7 +55,7 @@ function Header() {
                     aria-current={item.current ? "page" : undefined}
                     className={clsx(
                       item.current
-                        ? "bg-gray-900 text-white"
+                        ? "bg-red-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "rounded-md px-3 py-2 text-sm font-medium"
                     )}

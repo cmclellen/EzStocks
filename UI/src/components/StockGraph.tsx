@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Line,
@@ -7,30 +6,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import useStocks from "../hooks/useStocks";
 
 function StockGraph() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const opts = {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      };
-      const url = "http://localhost:8000/stocks";
-      const response = await fetch(url, opts);
-      const json = await response.json();
-      setData(json);
-    };
-
-    fetchData();
-  }, []);
+  const { stocks } = useStocks();
 
   return (
     <ResponsiveContainer width="100%" aspect={4.0 / 2.0} className="my-10">
-      <LineChart data={data}>
+      <LineChart data={stocks}>
         <XAxis dataKey="name" />
         <YAxis />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
