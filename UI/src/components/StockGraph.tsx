@@ -12,21 +12,20 @@ function StockGraph() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const opts = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+    const fetchData = async () => {
+      const opts = {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      };
+      const url = "http://localhost:8000/stocks";
+      const response = await fetch(url, opts);
+      const json = await response.json();
+      setData(json);
     };
-    console.log("here1");
-    fetch("http://localhost:8000/stocks", opts)
-      .then((response) => {
-        return response.json();
-      })
-      .then((myjson) => {
-        console.log(myjson);
-        setData(myjson);
-      });
+
+    fetchData();
   }, []);
 
   return (
