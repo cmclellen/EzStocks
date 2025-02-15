@@ -9,14 +9,13 @@ import {
 } from "@headlessui/react";
 import { clsx } from "clsx";
 import { HiBars3, HiBell, HiXMark } from "react-icons/hi2";
-import stocksLogo from "../assets/stocks.png";
 import { AiOutlineStock } from "react-icons/ai";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  // { name: "Team", href: "#", current: false },
+  // { name: "Projects", href: "#", current: false },
+  // { name: "Calendar", href: "#", current: false },
 ];
 
 function MobileMenu() {
