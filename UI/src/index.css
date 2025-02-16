@@ -2,7 +2,7 @@
 @config "../tailwind.config.js";
 
 .light {
-  --background: 240, 240, 240;
+  --background: 220, 220, 220;
   --primary: 80, 0, 0;
   --on-primary: 255, 255, 255;
   --secondary: 229, 208, 172;

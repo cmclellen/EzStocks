@@ -14,7 +14,7 @@ import { AiOutlineStock } from "react-icons/ai";
 
 const navigation = [
   { name: "Dashboard", href: "/view-stock", current: true },
-  { name: "Add Stock", href: "/add-stock", current: false },
+  // { name: "Add Stock", href: "/add-stock", current: false },
 ];
 
 function MobileMenu() {
