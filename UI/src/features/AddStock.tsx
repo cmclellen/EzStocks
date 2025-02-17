@@ -1,19 +1,17 @@
 import Form from "../components/Form";
 import FormButton from "../components/FormButton";
 import FormRow from "../components/FormRow";
+import { addStock } from "../services/StocksApi";
 
 interface AddStockProps {
   onCloseModal?: () => void;
 }
 
 function AddStock({ onCloseModal }: AddStockProps) {
-  function addStock() {
-    console.log("Add stock");
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    addStock();
+
+    addStock({ stock: event.currentTarget.stock.value });
   }
 
   return (
@@ -28,9 +26,7 @@ function AddStock({ onCloseModal }: AddStockProps) {
       </FormRow>
       <div className="flex justify-end space-x-2">
         <FormButton onClick={() => onCloseModal?.()}>Cancel</FormButton>
-        <FormButton onClick={() => addStock()} type="submit">
-          Add
-        </FormButton>
+        <FormButton type="submit">Add</FormButton>
       </div>
     </Form>
   );
