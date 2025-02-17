@@ -7,12 +7,19 @@ import {
   YAxis,
 } from "recharts";
 import useStocks from "../hooks/useStocks";
+import Spinner from "./Spinner";
 
 function StockGraph() {
-  const { stocks } = useStocks();
+  const { stocks, isLoadingStocks } = useStocks();
+
+  if (isLoadingStocks) return <Spinner />;
 
   return (
-    <ResponsiveContainer width="100%" aspect={4.0 / 2.0} className="py-15">
+    <ResponsiveContainer
+      width="100%"
+      aspect={4.0 / 2.0}
+      className="flex items-center"
+    >
       <LineChart data={stocks}>
         <XAxis dataKey="name" />
         <YAxis />
