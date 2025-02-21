@@ -1,5 +1,6 @@
 import {
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -23,9 +24,10 @@ function StockGraph() {
       <LineChart data={stocks}>
         <XAxis dataKey="name" />
         <YAxis />
+        <Legend />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-        <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
+        <Line name="# Apples1" type="monotone" dataKey="uv" stroke="#8884d8" />
+        <Line name="# Apples" type="monotone" dataKey="pv" stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>
   );
