@@ -1,0 +1,48 @@
+name: Provision Azure resources
+
+on:
+  push:
+    paths:
+      - "Infra/**"
+      - ".github/workflows/infra.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AZURE_RESOURCEGROUP_NAME: "rg-ezstocks-dev-aue"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Infra
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Infra/
+
+      - name: Print variables
+        run: |
+          echo "Repository name: $GITHUB_REPOSITORY"
+          echo "Branch name: $GITHUB_REF"
+          echo "Workspace: $GITHUB_WORKSPACE"
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: azure/arm-deploy@v2
+        with:
+          scope: resourcegroup
+          resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+          template: ./Infra/main.bicep
+          parameters: ./Infra/main.dev.bicepparam
