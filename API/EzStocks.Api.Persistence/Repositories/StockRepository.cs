@@ -9,8 +9,8 @@ namespace EzStocks.Api.Persistence.Repositories
         {
             await Task.CompletedTask;
             var data = new List<StockItem>{
-                new StockItem{Id = Guid.NewGuid(), Code = "AAPL"},
-                new StockItem{Id = Guid.NewGuid(), Code = "MSFT"},
+                new StockItem{Id = Guid.NewGuid(), Code = "AAPL", Name = "Apple Inc."},
+                new StockItem{Id = Guid.NewGuid(), Code = "MSFT", Name = "Microsoft Corp"},
             };
             return data;
         }
