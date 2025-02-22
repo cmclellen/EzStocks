@@ -1,4 +1,18 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
+
+.light {
+  --background: 220, 220, 220;
+  --primary: 80, 0, 0;
+  --on-primary: 255, 255, 255;
+  --secondary: 229, 208, 172;
+  --on-secondary: 0, 0, 0;
+  --tertiary: 17, 24, 39;
+  --on-tertiary: 255, 255, 255;
+
+  background: rgba(var(--background));
+  color: rgba(var(--primary));
+}
 
 html,
 body {

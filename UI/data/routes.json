@@ -1,0 +1,4 @@
+{
+  "/stocks/:id": "/stocks/:id",
+  "/stocks/comparison-summary": "/stocks-comparison-summary"
+}

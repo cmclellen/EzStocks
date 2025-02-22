@@ -1,0 +1,63 @@
+{
+  "stocks": [
+    {
+      "id": "6577",
+      "stock": "MSFT"
+    },
+    {
+      "id": "5465",
+      "stock": "APPL"
+    }
+  ],
+  "stocks-comparison-summary": [
+    {
+      "createdDate": "2025-02-01",
+      "stocks": {
+        "AAPL": 4000,
+        "GOOG": 2400
+      }
+    },
+    {
+      "createdDate": "2025-02-02",
+      "stocks": {
+        "AAPL": 3000,
+        "GOOG": 1398
+      }
+    },
+    {
+      "createdDate": "2025-02-03",
+      "stocks": {
+        "AAPL": 2000,
+        "GOOG": 9800
+      }
+    },
+    {
+      "createdDate": "2025-02-04",
+      "stocks": {
+        "AAPL": 2780,
+        "GOOG": 3908
+      }
+    },
+    {
+      "createdDate": "2025-02-05",
+      "stocks": {
+        "AAPL": 1890,
+        "GOOG": 4800
+      }
+    },
+    {
+      "createdDate": "2025-02-06",
+      "stocks": {
+        "AAPL": 2390,
+        "GOOG": 3800
+      }
+    },
+    {
+      "createdDate": "2025-02-07",
+      "stocks": {
+        "AAPL": 3490,
+        "GOOG": 4300
+      }
+    }
+  ]
+}
