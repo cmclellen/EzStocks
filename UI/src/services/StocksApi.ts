@@ -1,7 +1,7 @@
 import AxiosInstance from "../AxiosInstance";
 
 async function getStocks() {
-  const url = "/stocks/comparison-summary";
+  const url = "/stocks/history";
   const { data } = await AxiosInstance.get(url);
   return data;
 }
