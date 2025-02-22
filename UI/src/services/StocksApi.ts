@@ -1,26 +1,15 @@
+import AxiosInstance from "../AxiosInstance";
+
 async function getStocks() {
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  const url = "http://localhost:8000/stocks/comparison-summary";
-  const response = await fetch(url, { headers });
-  return await response.json();
+  const url = "/stocks/comparison-summary";
+  const { data } = await AxiosInstance.get(url);
+  return data;
 }
 
 async function addStock({ stock }: { stock: string }) {
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  const opts = {
-    headers,
-    method: "POST",
-    body: JSON.stringify({ stock }),
-  };
-  const url = "http://localhost:8000/stocks";
-  const response = await fetch(url, opts);
-  return await response.json();
+  const url = "/stocks";
+  const { data } = await AxiosInstance.post(url, { stock });
+  return data;
 }
 
 export { getStocks, addStock };
