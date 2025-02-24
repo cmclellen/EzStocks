@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EzStocks.Api.Persistence.EntityTypeConfigurations
 {
-    public class StockItemEntityTypeConfiguration : IEntityTypeConfiguration<StockItem>
+    public class LookupEntityTypeConfiguration : IEntityTypeConfiguration<Lookup>
     {
-        public void Configure(EntityTypeBuilder<StockItem> builder)
+        public void Configure(EntityTypeBuilder<Lookup> builder)
         {
-            builder.ToContainer("StockItem");
+            builder.ToContainer("Lookup");
             builder.HasKey(e => e.Id);
-            builder.HasDiscriminator(e => e.Type).HasValue(nameof(StockItem));
+            builder.HasDiscriminator(e => e.Type)
+                .HasValue<StockItem>(nameof(StockItem));
             builder.HasPartitionKey(e => e.Type);
         }
     }

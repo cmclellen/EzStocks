@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzStocks.Api.Domain.Entities
+﻿namespace EzStocks.Api.Domain.Entities
 {
-    internal class Lookup
+    public class Lookup
     {
+        public Guid? Id { get; set; }
+        public string Type { get; set; } = null!;
     }
 }
