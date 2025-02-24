@@ -7,6 +7,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Scrutor;
 
 var host = new HostBuilder()
@@ -42,6 +43,18 @@ var host = new HostBuilder()
             .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsMatchingInterface()
             .WithTransientLifetime());
+    })
+    .ConfigureLogging(logging =>
+    {
+        logging.Services.Configure<LoggerFilterOptions>(options =>
+        {
+            LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName
+                == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider")!;
+            if (defaultRule is not null)
+            {
+                options.Rules.Remove(defaultRule);
+            }
+        });
     })
     .Build();
 
