@@ -58,4 +58,10 @@ var host = new HostBuilder()
     })
     .Build();
 
+using (var scope = host.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<EzStockDbContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+}
+
 host.Run();
