@@ -7,6 +7,7 @@ namespace EzStocks.Api.Application.Mapping
         public ApplicationProfile()
         {
             CreateMap<Domain.Entities.StockItem, Dtos.StockItem>();
+            CreateMap<Dtos.StockItem, Domain.Entities.StockItem>();
         }
     }
 }

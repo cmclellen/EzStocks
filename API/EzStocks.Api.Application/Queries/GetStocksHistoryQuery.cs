@@ -6,7 +6,7 @@ namespace EzStocks.Api.Application.Queries
 {
     public record GetStocksHistoryQuery : IRequest<IList<StocksPriceItem>>;
 
-    public class GetStocksHistoryQueryHandler(IStockHistoryRepository stockHistoryRepository) : IRequestHandler<GetStocksHistoryQuery, IList<StocksPriceItem>>
+    public class GetStocksHistoryQueryHandler(IStockHistoryItemRepository stockHistoryRepository) : IRequestHandler<GetStocksHistoryQuery, IList<StocksPriceItem>>
     {
         public async Task<IList<StocksPriceItem>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
         {

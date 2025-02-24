@@ -2,7 +2,7 @@
 
 namespace EzStocks.Api.Persistence.Repositories
 {
-    public class StockHistoryRepository : IStockHistoryRepository
+    public class StockHistoryItemRepository : IStockHistoryItemRepository
     {
         public async Task<IList<Domain.Entities.StockHistoryItem>> GetStockHistoryAsync(CancellationToken cancellationToken = default)
         {
