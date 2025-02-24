@@ -9,7 +9,6 @@ namespace EzStocks.Api.Persistence.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<StockItem> builder)
         {
             builder.ToContainer("StockItem");
-            builder.HasPartitionKey(s=>s.Type);
         }
     }
 }

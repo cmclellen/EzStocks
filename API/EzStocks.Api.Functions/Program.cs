@@ -45,14 +45,4 @@ var host = new HostBuilder()
     })
     .Build();
 
-using (var scope = host.Services.CreateScope())
-{
-    EzStocks.Api.Persistence.EzStockDbContext ezStockDbContext = scope.ServiceProvider.GetRequiredService<EzStocks.Api.Persistence.EzStockDbContext>();
-    await ezStockDbContext.Database.EnsureCreatedAsync();
-
-    ezStockDbContext.Add(new StockItem { Code = "AAPL", Name = "Apple Inc.", Id = Guid.NewGuid() });
-
-    await ezStockDbContext.SaveChangesAsync();
-}
-
 host.Run();

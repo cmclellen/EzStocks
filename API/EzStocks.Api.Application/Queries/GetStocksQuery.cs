@@ -9,7 +9,7 @@ namespace EzStocks.Api.Application.Queries
 
     public class GetStocksQueryHandler(
         IMapper mapper,
-        IStockRepository stockRepository) : IRequestHandler<GetStocksQuery, IList<Dtos.StockItem>>
+        IStockItemRepository stockRepository) : IRequestHandler<GetStocksQuery, IList<Dtos.StockItem>>
     {
         public async Task<IList<Dtos.StockItem>> Handle(GetStocksQuery request, CancellationToken cancellationToken)
         {
