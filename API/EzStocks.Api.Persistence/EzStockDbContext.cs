@@ -1,6 +1,5 @@
 ﻿using EzStocks.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace EzStocks.Api.Persistence
 {
@@ -12,6 +11,8 @@ namespace EzStocks.Api.Persistence
         }
 
         public DbSet<StockItem> StockItems { get; set; }
+        public DbSet<StockPriceItem> StockPriceItems { get; set; }
+
         public DbSet<StockHistoryItem> StockHistoryItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
