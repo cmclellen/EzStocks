@@ -1,17 +1,16 @@
-﻿using AzStocks.Api.Functions.Functions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 
 namespace EzStocks.Api.Functions.Functions
 {
-    public class StockPriceItemFunctions(ISender sender)
+    public class StockPriceFunctions(ISender sender)
     {
-        [Function(nameof(CreateStockPriceItem))]
+        [Function(nameof(CreateStockPrice))]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<IActionResult> CreateStockPriceItem([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockpriceitems")] HttpRequest req, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stockPriceItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockPriceItem>();
             await sender.Send(new Application.Commands.CreateStockPriceItemCommand(stockPriceItem!), cancellationToken);
