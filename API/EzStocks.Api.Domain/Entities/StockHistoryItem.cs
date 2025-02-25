@@ -5,8 +5,6 @@
         public Guid Id { get; set; }
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Guid StockItemId { get; set; }
-
-        public StockItem? StockItem { get; set; }
+        public required string Symbol { get; set; }
     }
 }
