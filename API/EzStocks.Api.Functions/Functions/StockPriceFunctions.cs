@@ -16,5 +16,14 @@ namespace EzStocks.Api.Functions.Functions
             await sender.Send(new Application.Commands.CreateStockPriceItemCommand(stockPriceItem!), cancellationToken);
             return new CreatedResult();
         }
+
+        [Function(nameof(FetchStockPrice))]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<IActionResult> FetchStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices/fetch")] HttpRequest req, CancellationToken cancellationToken)
+        {
+            await sender.Send(new Application.Commands.FetchStockPriceItemCommand(), cancellationToken);
+            return new OkResult();
+        }
     }
 }

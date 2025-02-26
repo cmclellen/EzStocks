@@ -1,5 +1,5 @@
 using Azure.Identity;
-using EzStocks.Api.Domain.Entities;
+using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Persistence;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +17,17 @@ var host = new HostBuilder()
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddEnvironmentVariables().AddUserSecrets(typeof(Program).Assembly);
     })
-    .ConfigureServices((hbctx, services) =>
+    .ConfigureServices((builder, services) =>
     {
-        var configuration = hbctx.Configuration;
+        var configuration = builder.Configuration;
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
+
+        services
+            .AddOptions<AlphavantageSettings>()
+            .Bind(builder.Configuration.GetSection(AlphavantageSettings.ConfigurationSection))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddAutoMapper(EzStocks.Api.Application.AssemblyReference.Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(EzStocks.Api.Application.AssemblyReference.Assembly));
@@ -38,7 +44,8 @@ var host = new HostBuilder()
             .FromAssemblies(
                 EzStocks.Api.Application.AssemblyReference.Assembly,
                 EzStocks.Api.Domain.AssemblyReference.Assembly,
-                EzStocks.Api.Persistence.AssemblyReference.Assembly)
+                EzStocks.Api.Persistence.AssemblyReference.Assembly,
+                EzStocks.Api.Infrastructure.AssemblyReference.Assembly)
             .AddClasses(false)
             .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsMatchingInterface()

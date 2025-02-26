@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EzStocks.Api.Application\EzStocks.Api.Application.csproj" />
     <ProjectReference Include="..\EzStocks.Api.Domain\EzStocks.Api.Domain.csproj" />
+    <ProjectReference Include="..\EzStocks.Api.Infrastructure\EzStocks.Api.Infrastructure.csproj" />
     <ProjectReference Include="..\EzStocks.Api.Persistence\EzStocks.Api.Persistence.csproj" />
   </ItemGroup>
   <ItemGroup>
