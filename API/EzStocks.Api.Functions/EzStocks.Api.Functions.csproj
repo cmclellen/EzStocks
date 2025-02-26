@@ -8,6 +8,9 @@
     <UserSecretsId>99e3ddaf-f073-49aa-b9c7-85c11c860c8d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="local.settings.json" />
+  </ItemGroup>
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Azure.Identity" Version="1.13.2" />
     <PackageReference Include="MediatR" Version="12.4.1" />
