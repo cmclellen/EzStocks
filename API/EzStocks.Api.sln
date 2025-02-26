@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Domain", "EzSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Persistence", "EzStocks.Api.Persistence\EzStocks.Api.Persistence.csproj", "{8FEB3357-2231-4FEA-98B8-5C3403712CFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Infrastructure", "EzStocks.Api.Infrastructure\EzStocks.Api.Infrastructure.csproj", "{9545B55F-05F8-41FD-89C1-96ABEE67574F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +35,15 @@ Global
 		{8FEB3357-2231-4FEA-98B8-5C3403712CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FEB3357-2231-4FEA-98B8-5C3403712CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FEB3357-2231-4FEA-98B8-5C3403712CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E3FB695A-2692-4E25-87B8-8E3D39FC883E}
 	EndGlobalSection
 EndGlobal
