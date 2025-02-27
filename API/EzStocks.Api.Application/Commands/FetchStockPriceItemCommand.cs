@@ -24,12 +24,21 @@ namespace EzStocks.Api.Application.Commands
             }).ToList();
 
             var stockPriceItemsToSave = stockPriceItems.Take(3);
-            
-            //stockPriceItemsToSave.Select(item => item.AsAtDate)
-            //stockPriceItemRepository.GetByAsAtDatesAsync();
+
+            var asAtDates = stockPriceItemsToSave.Select(item => item.AsAtDate).ToList();
+            var existingItems = await stockPriceItemRepository.GetByAsAtDatesAsync(asAtDates, cancellationToken);
             foreach (var stockPriceItem in stockPriceItemsToSave)
             {
-                await stockPriceItemRepository.CreateAsync(stockPriceItem, cancellationToken);
+                var existingItem = existingItems.FirstOrDefault(item => item.AsAtDate == stockPriceItem.AsAtDate);
+                if(existingItem is null)
+                {
+                    await stockPriceItemRepository.CreateAsync(stockPriceItem, cancellationToken);
+                } 
+                else
+                {
+                    existingItem.Close = stockPriceItem.Close;
+                    await stockPriceItemRepository.UpdateAsync(existingItem, cancellationToken);
+                }
             }
             await unitOfWork.CommitAsync(cancellationToken);
         }
