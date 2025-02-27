@@ -2,12 +2,9 @@
 {
     public class OhlcvItem
     {
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public decimal Close { get; set; }
     }
 
-    public class GetStockPriceResponse
-    {
-        public List<OhlcvItem> OhlcvItems { get; set; } = new List<OhlcvItem>();
-    }
+    public record GetStockPriceResponse(string Symbol, TimeZoneInfo TimeZone, List<OhlcvItem> OhlcvItems);
 }

@@ -15,7 +15,7 @@ namespace EzStocks.Api.Application.Commands
         {
             var stockItem = mapper.Map<Dtos.StockItem, Domain.Entities.StockItem>(request.StockItem);
             await stockRepository.CreateStockAsync(stockItem, cancellationToken);
-            await unitOfWork.Commit(cancellationToken);
+            await unitOfWork.CommitAsync(cancellationToken);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EzStocks.Api.Application.Services;
 using System.Globalization;
-using System.Text.Json;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json.Nodes;
 
 namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
@@ -14,24 +14,37 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
     {
         public GetStockPriceResponse MapFromJson(string json)
         {
-            var jsonObject = JsonNode.Parse(json)!;
-            var timeSeries = jsonObject["Time Series (Daily)"]!;
+            var root = JsonNode.Parse(json)!;
+            var metaDataNode = root["Meta Data"]!;
+            var symbol = metaDataNode["2. Symbol"]!.GetValue<string>();
+            var timeZone = GetTimeZone(metaDataNode);
+            return new GetStockPriceResponse(symbol, timeZone, ParseTimeSeries(root));
+        }
 
+        private TimeZoneInfo GetTimeZone(JsonNode metaDataNode)
+        {
+            var tzText = metaDataNode["5. Time Zone"]!.GetValue<string>();
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(tzText);
+            return tz;
+        }
+
+        private List<OhlcvItem> ParseTimeSeries(JsonNode node)
+        {
+            var timeSeries = node["Time Series (Daily)"]!;
             List<OhlcvItem> ohlcvItems = new List<OhlcvItem>();
             foreach (var timeSeriesItem in timeSeries.AsObject().AsEnumerable())
             {
                 var dateText = timeSeriesItem.Key;
                 var closeNode = timeSeriesItem.Value!["4. close"]!;
-                var ohlcvItem = 
-                    new OhlcvItem 
+                var ohlcvItem =
+                    new OhlcvItem
                     {
-                        Date = DateTime.ParseExact(dateText, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                        Date = DateOnly.ParseExact(dateText, "yyyy-MM-dd", CultureInfo.InvariantCulture),
                         Close = decimal.Parse(closeNode.GetValue<string>())
                     };
                 ohlcvItems.Add(ohlcvItem);
             }
-
-            return new GetStockPriceResponse() { OhlcvItems = ohlcvItems };
+            return ohlcvItems.OrderByDescending(i => i.Date).ToList();
         }
     }
 }

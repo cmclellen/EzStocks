@@ -2,6 +2,6 @@
 {
     public interface IStocksApiClient
     {
-        Task<GetStockPriceResponse> GetStockPriceAsync(string symbol, CancellationToken cancellationToken);
+        Task<GetStockPriceResponse> GetStockPriceAsync(GetStockPriceRequest request, CancellationToken cancellationToken);
     }
 }
