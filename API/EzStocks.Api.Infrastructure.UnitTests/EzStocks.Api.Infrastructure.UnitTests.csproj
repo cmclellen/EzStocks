@@ -16,11 +16,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Alphavantage\Mappers\TIME_SERIES_DAILY.Response.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Alphavantage\Mappers\TIME_SERIES_DAILY.Response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.12.6" />
-    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.4.3" />
-    <PackageReference Include="MSTest" Version="3.6.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.2" />
+    <PackageReference Include="MSTest" Version="3.8.2" />
+    <PackageReference Include="Verify" Version="28.13.0" />
+    <PackageReference Include="Verify.MSTest" Version="28.13.0" />
   </ItemGroup>
 
   <ItemGroup>

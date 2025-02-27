@@ -23,7 +23,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
 
             var response = await client.GetAsync(request, cancellationToken);
 
-            return getStockPriceResponseMapper.MapFromText(response.Content!);
+            return getStockPriceResponseMapper.MapFromJson(response.Content!);
 
         }
     }
