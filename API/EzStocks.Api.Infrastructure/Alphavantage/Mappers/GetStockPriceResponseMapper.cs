@@ -17,8 +17,13 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
             var root = JsonNode.Parse(json)!;
             var metaDataNode = root["Meta Data"]!;
             var symbol = metaDataNode["2. Symbol"]!.GetValue<string>();
-            var timeZone = metaDataNode["5. Time Zone"]!.GetValue<string>();
+            var timeZone = GetTimeZone(metaDataNode);
             return new GetStockPriceResponse(symbol, timeZone, ParseTimeSeries(root));
+        }
+
+        private string GetTimeZone(JsonNode metaDataNode)
+        {
+            return metaDataNode["5. Time Zone"]!.GetValue<string>();
         }
 
         private List<OhlcvItem> ParseTimeSeries(JsonNode node)
