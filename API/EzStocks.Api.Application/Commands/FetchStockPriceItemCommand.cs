@@ -19,11 +19,13 @@ namespace EzStocks.Api.Application.Commands
             {
                 Close = item.Close,
                 Symbol = request.Symbol,
-                AsAtDateUtc = item.Date
+                IanaTimeZoneId = getStockPriceResponse.TimeZone.Id,
+                AsAtDate = item.Date
             }).ToList();
 
             var stockPriceItemsToSave = stockPriceItems.Take(3);
-            //stockPriceItemsToSave.Select(item=>item.AsAtDateUtc)
+            
+            //stockPriceItemsToSave.Select(item => item.AsAtDate)
             //stockPriceItemRepository.GetByAsAtDatesAsync();
             foreach (var stockPriceItem in stockPriceItemsToSave)
             {

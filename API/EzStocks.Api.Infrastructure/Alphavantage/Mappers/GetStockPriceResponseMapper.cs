@@ -39,7 +39,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
                 var ohlcvItem =
                     new OhlcvItem
                     {
-                        Date = DateTime.ParseExact(dateText, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                        Date = DateOnly.ParseExact(dateText, "yyyy-MM-dd", CultureInfo.InvariantCulture),
                         Close = decimal.Parse(closeNode.GetValue<string>())
                     };
                 ohlcvItems.Add(ohlcvItem);
