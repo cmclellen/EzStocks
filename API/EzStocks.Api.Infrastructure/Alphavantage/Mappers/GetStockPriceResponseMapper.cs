@@ -1,6 +1,5 @@
 ﻿using EzStocks.Api.Application.Services;
 using System.Globalization;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
@@ -31,7 +30,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
                 ohlcvItems.Add(ohlcvItem);
             }
 
-            return new GetStockPriceResponse() { OhlcvItems = ohlcvItems };
+            return new GetStockPriceResponse() { OhlcvItems = ohlcvItems.OrderByDescending(i=>i.Date).ToList() };
         }
     }
 }

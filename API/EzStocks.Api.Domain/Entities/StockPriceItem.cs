@@ -4,6 +4,6 @@
     {
         public required string Symbol { get; set; }
         public decimal Close { get; set; }
-        public DateTime CreatedDateUtc { get; set; }
+        public DateTime AsAtDateUtc { get; set; }
     }
 }
