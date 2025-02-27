@@ -15,7 +15,10 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
         public GetStockPriceResponse MapFromJson(string json)
         {
             var root = JsonNode.Parse(json)!;
-            return new GetStockPriceResponse("IBM", "US/Eastern", ParseTimeSeries(root));
+            var metaDataNode = root["Meta Data"]!;
+            var symbol = metaDataNode["2. Symbol"]!.GetValue<string>();
+            var timeZone = metaDataNode["5. Time Zone"]!.GetValue<string>();
+            return new GetStockPriceResponse(symbol, timeZone, ParseTimeSeries(root));
         }
 
         private List<OhlcvItem> ParseTimeSeries(JsonNode node)
