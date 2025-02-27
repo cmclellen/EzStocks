@@ -21,9 +21,11 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
             return new GetStockPriceResponse(symbol, timeZone, ParseTimeSeries(root));
         }
 
-        private string GetTimeZone(JsonNode metaDataNode)
+        private TimeZoneInfo GetTimeZone(JsonNode metaDataNode)
         {
-            return metaDataNode["5. Time Zone"]!.GetValue<string>();
+            var tzText = metaDataNode["5. Time Zone"]!.GetValue<string>();
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(tzText);
+            return tz;
         }
 
         private List<OhlcvItem> ParseTimeSeries(JsonNode node)
