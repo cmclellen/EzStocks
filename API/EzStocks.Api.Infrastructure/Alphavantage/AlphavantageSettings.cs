@@ -4,6 +4,7 @@
     {
         public const string ConfigurationSection = "Alphavantage";
 
+        public required string ApiBaseUrl { get; set; }
         public required string ApiKey { get; set; }
     }
 }

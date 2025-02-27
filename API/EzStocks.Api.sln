@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Persistence", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Infrastructure", "EzStocks.Api.Infrastructure\EzStocks.Api.Infrastructure.csproj", "{9545B55F-05F8-41FD-89C1-96ABEE67574F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzStocks.Api.Infrastructure.UnitTests", "EzStocks.Api.Infrastructure.UnitTests\EzStocks.Api.Infrastructure.UnitTests.csproj", "{F3D050FB-294F-4B81-BBC6-34704B3A595A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9545B55F-05F8-41FD-89C1-96ABEE67574F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D050FB-294F-4B81-BBC6-34704B3A595A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D050FB-294F-4B81-BBC6-34704B3A595A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D050FB-294F-4B81-BBC6-34704B3A595A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D050FB-294F-4B81-BBC6-34704B3A595A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
