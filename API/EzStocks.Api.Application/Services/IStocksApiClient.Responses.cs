@@ -6,8 +6,5 @@
         public decimal Close { get; set; }
     }
 
-    public class GetStockPriceResponse
-    {
-        public List<OhlcvItem> OhlcvItems { get; set; } = new List<OhlcvItem>();
-    }
+    public record GetStockPriceResponse(string Symbol, string TimeZone, List<OhlcvItem> OhlcvItems);
 }

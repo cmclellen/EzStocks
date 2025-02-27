@@ -18,11 +18,9 @@ namespace EzStocks.Api.Functions.Functions
         }
 
         [Function(nameof(FetchStockPrice))]
-        [Produces("application/json")]
-        [Consumes("application/json")]
         public async Task<IActionResult> FetchStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices/fetch")] HttpRequest req, CancellationToken cancellationToken)
         {
-            await sender.Send(new Application.Commands.FetchStockPriceItemCommand(), cancellationToken);
+            await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
             return new OkResult();
         }
     }

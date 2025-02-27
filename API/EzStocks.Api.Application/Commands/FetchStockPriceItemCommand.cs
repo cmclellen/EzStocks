@@ -4,7 +4,7 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Commands
 {
-    public record FetchStockPriceItemCommand : IRequest;
+    public record FetchStockPriceItemCommand(string Symbol) : IRequest;
 
     public class FetchStockPriceItemCommandHandler(
         IUnitOfWork unitOfWork,
@@ -13,17 +13,19 @@ namespace EzStocks.Api.Application.Commands
     {
         public async Task Handle(FetchStockPriceItemCommand request, CancellationToken cancellationToken)
         {
-            var symbol = "MSFT";
-            var getStockPriceResponse = await stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(symbol), cancellationToken);
+            var getStockPriceResponse = await stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(request.Symbol), cancellationToken);
 
             var stockPriceItems = getStockPriceResponse.OhlcvItems.Select(item => new Domain.Entities.StockPriceItem
             {
                 Close = item.Close,
-                Symbol = symbol,
+                Symbol = request.Symbol,
                 AsAtDateUtc = item.Date
             }).ToList();
 
-            foreach(var stockPriceItem in stockPriceItems.Take(3))
+            var stockPriceItemsToSave = stockPriceItems.Take(3);
+            //stockPriceItemsToSave.Select(item=>item.AsAtDateUtc)
+            //stockPriceItemRepository.GetByAsAtDatesAsync();
+            foreach (var stockPriceItem in stockPriceItemsToSave)
             {
                 await stockPriceItemRepository.CreateAsync(stockPriceItem, cancellationToken);
             }

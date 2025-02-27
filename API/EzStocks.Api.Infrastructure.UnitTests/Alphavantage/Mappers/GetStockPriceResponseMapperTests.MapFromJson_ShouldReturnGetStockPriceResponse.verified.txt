@@ -1,4 +1,6 @@
 ﻿{
+  Symbol: IBM,
+  TimeZone: US/Eastern,
   OhlcvItems: [
     {
       Date: 2025-02-27,
