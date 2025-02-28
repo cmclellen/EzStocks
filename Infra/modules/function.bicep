@@ -68,12 +68,24 @@ resource sbDataReceiverRoleDefinition 'Microsoft.Authorization/roleDefinitions@2
   name: '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'
 }
 
-resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id)
-  scope: serviceBusNamespace
-  properties: {
-    roleDefinitionId: sbDataReceiverRoleDefinition.id
-    principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
+resource sbDataSenderRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39'
 }
+
+var sbRoleDefinitions = [
+  sbDataReceiverRoleDefinition.id
+  sbDataSenderRoleDefinition.id
+]
+
+resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
+  for sbRoleDefinition in sbRoleDefinitions: {
+    name: guid(serviceBusNamespace.id, sbRoleDefinition)
+    scope: serviceBusNamespace
+    properties: {
+      roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', sbRoleDefinition)
+      principalId: functionApp.identity.principalId
+      principalType: 'ServicePrincipal'
+    }
+  }
+]
