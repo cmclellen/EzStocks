@@ -29,6 +29,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     name: 'Y1'
     tier: 'Dynamic'
   }
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
 }
 
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
@@ -63,6 +67,8 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           value: serviceBusNamespace.properties.serviceBusEndpoint
         }
       ]
+      minTlsVersion: '1.2'
+      ftpsState: 'FtpsOnly'
     }
   }
 }
