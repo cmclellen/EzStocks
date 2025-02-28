@@ -3,7 +3,9 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/"
+    "FUNCTIONS_EXTENSION_VERSION": "~4",
+    "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/",
+    "ServicebusConnection__fullyQualifiedNamespace": "https://sbns-ezstocks-dev-aue.servicebus.windows.net:443/"
   },
   "Host": {
     "LocalHttpPort": 7071,

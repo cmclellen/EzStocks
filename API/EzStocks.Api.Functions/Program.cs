@@ -17,15 +17,15 @@ var host = new HostBuilder()
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
         config.AddEnvironmentVariables().AddUserSecrets(typeof(Program).Assembly);
     })
-    .ConfigureServices((builder, services) =>
+    .ConfigureServices((ctx, services) =>
     {
-        var configuration = builder.Configuration;
+        var configuration = ctx.Configuration;
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
 
         services
             .AddOptions<AlphavantageSettings>()
-            .Bind(builder.Configuration.GetSection(AlphavantageSettings.ConfigurationSection))
+            .Bind(configuration.GetSection(AlphavantageSettings.ConfigurationSection))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
@@ -34,6 +34,7 @@ var host = new HostBuilder()
 
         services.AddAzureClients(clientBuilder =>
             {
+                clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
                 clientBuilder.UseCredential(new DefaultAzureCredential());
             });
 

@@ -34,7 +34,7 @@ namespace EzStocks.Api.Application.Commands
                 {
                     await stockPriceItemRepository.CreateAsync(stockPriceItem, cancellationToken);
                 } 
-                else
+                else if(existingItem.Close != stockPriceItem.Close)
                 {
                     existingItem.Close = stockPriceItem.Close;
                     await stockPriceItemRepository.UpdateAsync(existingItem, cancellationToken);
