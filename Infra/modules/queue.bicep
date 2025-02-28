@@ -1,4 +1,4 @@
-param location string
+param location string = resourceGroup().location
 
 param resourceNameFormat string
 
@@ -6,7 +6,7 @@ var queueNames = [
   'fetch-stock-prices'
 ]
 
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
+resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
   name: format(resourceNameFormat, 'sbns')
   location: location
   sku: {

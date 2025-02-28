@@ -9,6 +9,14 @@ param environment string
 
 var resourceNameFormat = format('{{0}}-ezstocks-{0}-aue', environment)
 
+module insights 'modules/insights.bicep' = {
+  name: 'insights'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}
+
 module db 'modules/database.bicep' = {
   name: 'database'
   params: {
@@ -19,6 +27,15 @@ module db 'modules/database.bicep' = {
 
 module queue 'modules/queue.bicep' = {
   name: 'queue'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}
+
+module function 'modules/function.bicep' = {
+  name: 'function'
+  dependsOn: [insights, queue]
   params: {
     location: location
     resourceNameFormat: resourceNameFormat
