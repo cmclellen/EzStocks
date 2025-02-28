@@ -87,7 +87,7 @@ resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-
     name: guid(serviceBusNamespace.id, sbRoleDefinition)
     scope: serviceBusNamespace
     properties: {
-      roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', sbRoleDefinition)
+      roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', sbRoleDefinition)
       principalId: functionApp.identity.principalId
       principalType: 'ServicePrincipal'
     }
