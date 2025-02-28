@@ -63,19 +63,17 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-// resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
-//   scope: subscription()
-//   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
-// }
+resource sbDataReceiverRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'
+}
 
-// storageRoleDefinitionId
-
-// resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-//   name: guid(serviceBusNamespace.id, storageRoleDefinitionId)
-//   scope: serviceBusNamespace
-//   properties: {
-//     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', storageRoleDefinitionId)
-//     principalId: flexFuncApp.identity.principalId
-//     principalType: 'ServicePrincipal'
-//   }
-// }
+resource storageRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id)
+  scope: serviceBusNamespace
+  properties: {
+    roleDefinitionId: sbDataReceiverRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
