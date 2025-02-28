@@ -24,9 +24,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: ./API
+    defaults:
+      run:
+        working-directory: API
     environment: dev
     steps:
       - uses: actions/checkout@v4
