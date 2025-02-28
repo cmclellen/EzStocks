@@ -1,5 +1,4 @@
-﻿using Azure.Messaging.ServiceBus;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -25,12 +24,12 @@ namespace EzStocks.Api.Functions.Functions
         //    return new OkResult();
         //}
 
-        [Function(nameof(FetchStockPrices))]
-        public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        ServiceBusReceivedMessage message, CancellationToken cancellationToken)
-        {
-            await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
-            return new OkResult();
-        }        
+        //[Function(nameof(FetchStockPrices))]
+        //public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
+        //ServiceBusReceivedMessage message, CancellationToken cancellationToken)
+        //{
+        //    await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
+        //    return new OkResult();
+        //}        
     }
 }

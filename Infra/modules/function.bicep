@@ -58,6 +58,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsights.properties.ConnectionString
         }
+        {
+          name: 'ServicebusConnection__fullyQualifiedNamespace'
+          value: serviceBusNamespace.properties.serviceBusEndpoint
+        }
       ]
     }
   }
