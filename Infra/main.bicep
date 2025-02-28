@@ -16,3 +16,11 @@ module db 'modules/database.bicep' = {
     resourceNameFormat: resourceNameFormat
   }
 }
+
+module queue 'modules/queue.bicep' = {
+  name: 'queue'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}

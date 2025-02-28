@@ -3,7 +3,8 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/"
+    "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/",
+    "ServicebusConnection__fullyQualifiedNamespace": "xxx"
   },
   "Host": {
     "LocalHttpPort": 7071,
