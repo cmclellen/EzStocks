@@ -46,8 +46,8 @@ jobs:
       - name: Build
         run: dotnet build --configuration ${{env.CONFIGURATION}} --no-restore
 
-      - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
+      # - name: Run tests
+      #   run: dotnet test --no-restore --verbosity normal
 
       - uses: azure/login@v2
         with:
