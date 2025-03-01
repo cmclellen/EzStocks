@@ -34,7 +34,7 @@ var host = new HostBuilder()
 
         services.AddAzureClients(clientBuilder =>
             {
-                //clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
+                clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
                 clientBuilder.UseCredential(new DefaultAzureCredential());
             });
 

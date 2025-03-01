@@ -1,11 +1,17 @@
-﻿using MediatR;
+﻿using Azure.Messaging.ServiceBus;
+using EzStocks.Api.Application.Commands;
+using EzStocks.Api.Functions.Messages;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 
 namespace EzStocks.Api.Functions.Functions
 {
-    public class StockPriceFunctions(ISender sender)
+    public class StockPriceFunctions(
+        ILogger<StockPriceFunctions> _logger,
+        ISender _sender)
     {
         [Function(nameof(CreateStockPrice))]
         [Produces("application/json")]
@@ -13,7 +19,7 @@ namespace EzStocks.Api.Functions.Functions
         public async Task<IActionResult> CreateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stockPriceItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockPriceItem>();
-            await sender.Send(new Application.Commands.CreateStockPriceItemCommand(stockPriceItem!), cancellationToken);
+            await _sender.Send(new Application.Commands.CreateStockPriceItemCommand(stockPriceItem!), cancellationToken);
             return new CreatedResult();
         }
 
@@ -24,12 +30,23 @@ namespace EzStocks.Api.Functions.Functions
         //    return new OkResult();
         //}
 
-        //[Function(nameof(FetchStockPrices))]
-        //public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        //ServiceBusReceivedMessage message, CancellationToken cancellationToken)
-        //{
-        //    await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
-        //    return new OkResult();
-        //}        
+        [Function(nameof(FetchStockPrices))]
+        public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
+        FetchStockPricesMessage fetchStockPricesMessage, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+            _logger.LogInformation("fetchStockPricesMessage received");
+            _logger.LogInformation("fetchStockPricesMessage {Symbols}", string.Join("; ", fetchStockPricesMessage.Symbols));
+            //await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
+            return new OkResult();
+        }
+
+        [Function(nameof(FetchStockPricesTimer))]
+        [ServiceBusOutput("fetch-stock-prices", Connection = "ServiceBusConnection")]
+        public static FetchStockPricesMessage FetchStockPricesTimer([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo, FunctionContext context)
+        {
+            var outputMessage = $"Output message created at {DateTime.Now}";
+            return new FetchStockPricesMessage([ "MSFT" ]);
+        }
     }
 }
