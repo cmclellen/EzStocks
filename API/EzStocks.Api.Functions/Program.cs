@@ -1,7 +1,9 @@
 using Azure.Identity;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Persistence;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +22,8 @@ var host = new HostBuilder()
     .ConfigureServices((ctx, services) =>
     {
         var configuration = ctx.Configuration;
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
+        //services.AddApplicationInsightsTelemetryWorkerService();
+        //services.ConfigureFunctionsApplicationInsights();
 
         services
             .AddOptions<AlphavantageSettings>()
@@ -34,12 +36,16 @@ var host = new HostBuilder()
 
         services.AddAzureClients(clientBuilder =>
             {
-                //clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
+                clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
                 clientBuilder.UseCredential(new DefaultAzureCredential());
             });
 
         var conn = configuration.GetConnectionString("DefaultConnection")!;
         services.AddDbContext<EzStockDbContext>((sp, options) => options.UseCosmos(conn, databaseName: "EzStocks"));
+
+        var ot = services.AddOpenTelemetry();
+        ot.UseFunctionsWorkerDefaults();
+        ot.UseAzureMonitor();
 
         services.Scan(selector => selector
             .FromAssemblies(

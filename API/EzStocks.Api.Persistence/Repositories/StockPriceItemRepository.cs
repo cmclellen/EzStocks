@@ -12,9 +12,9 @@ namespace EzStocks.Api.Persistence.Repositories
             await ezStockDbContext.StockPriceItems.AddAsync(stockPriceItem, cancellationToken);
         }
 
-        public async Task<IList<Domain.Entities.StockPriceItem>> GetByAsAtDatesAsync(IList<DateOnly> asAtDates, CancellationToken cancellationToken)
+        public async Task<IList<Domain.Entities.StockPriceItem>> GetByAsAtDatesAsync(string symbol, IList<DateOnly> asAtDates, CancellationToken cancellationToken)
         {
-            return await ezStockDbContext.StockPriceItems.Where(item => asAtDates.Contains(item.AsAtDate)).ToListAsync(cancellationToken);
+            return await ezStockDbContext.StockPriceItems.Where(item => item.Symbol == symbol && asAtDates.Contains(item.AsAtDate)).ToListAsync(cancellationToken);
         }
 
         public Task UpdateAsync(StockPriceItem stockPriceItem, CancellationToken cancellationToken)
