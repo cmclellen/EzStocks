@@ -65,10 +65,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
         }
-        {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '1'
-        }
+        // {
+        //   name: 'WEBSITE_RUN_FROM_PACKAGE'
+        //   value: '1'
+        // }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet-isolated'
@@ -86,11 +86,11 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           value: serviceBusNamespace.properties.serviceBusEndpoint
         }
         {
-          name: 'ConnectionStrings'
-          value: serviceBusNamespace.properties.serviceBusEndpoint
+          name: 'Alphavantage__ApiBaseUrl'
+          value: 'https://www.alphavantage.co/'
         }
         {
-          name: 'Alphavantage'
+          name: 'Alphavantage__ApiKey'
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=alphavantage-api-key)'
         }
       ]
