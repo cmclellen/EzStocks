@@ -18,7 +18,7 @@ namespace EzStocks.Api.Application.Queries
         {
             using var _ = Traces.DefaultSource.StartActivity("GetStockQuery");
 
-            using var _1 = _logger.BeginScope("Get stock {CraigValue}", "here");
+            using var _1 = _logger.BeginScope(new Dictionary<string, object> { ["CraigValue"] = "here" });
 
             _logger.LogDebug("Retrieving stock items...");
             var stockEntities = await _stockRepository.GetStocksAsync(cancellationToken);
