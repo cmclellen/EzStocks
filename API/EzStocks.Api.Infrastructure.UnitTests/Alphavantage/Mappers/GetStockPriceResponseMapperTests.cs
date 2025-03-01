@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using EzStocks.Api.Infrastructure.Alphavantage.Mappers;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
@@ -26,7 +27,8 @@ namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
             // ARRANGE
             var assembly = Assembly.GetExecutingAssembly();            
             var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage\\Mappers");
-            Console.WriteLine(path);
+            Console.WriteLine("Path1: " + path);
+            Debug.WriteLine("Path2: " + path);
             var json = await File.ReadAllTextAsync(Path.Join(path, "TIME_SERIES_DAILY.Response.json"));
             
             // ACT
