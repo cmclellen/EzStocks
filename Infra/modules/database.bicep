@@ -5,6 +5,10 @@ param resourceNameFormat string
 @description('The name for the SQL API database')
 param databaseName string = 'EzStocks'
 
+resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
+  name: format(resourceNameFormat, 'kv')
+}
+
 // @description('The name for the SQL API container')
 // param containerName string = 'stockscontainer1'
 
@@ -62,5 +66,13 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2024-11-15' = {
     //       }
     //     }
     //   }
+  }
+}
+
+resource cosmosdbConnectionString 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
+  name: 'cosmosdb-connection-string'
+  parent: keyVault
+  properties: {
+    value: account.listConnectionStrings().connectionStrings[0].connectionString
   }
 }

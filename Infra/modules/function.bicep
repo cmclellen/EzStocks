@@ -2,12 +2,19 @@ param location string = resourceGroup().location
 
 param resourceNameFormat string
 
+@secure()
+param alphavantageApiKey string
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: format(resourceNameFormat, 'appi')
 }
 
 resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existing = {
   name: format(resourceNameFormat, 'sbns')
+}
+
+resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
+  name: format(resourceNameFormat, 'kv')
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
@@ -34,6 +41,8 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     reserved: true
   }
 }
+
+var kvName = format(resourceNameFormat, 'kv')
 
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   name: format(resourceNameFormat, 'func')
@@ -76,10 +85,32 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'ServicebusConnection__fullyQualifiedNamespace'
           value: serviceBusNamespace.properties.serviceBusEndpoint
         }
+        {
+          name: 'ConnectionStrings'
+          value: serviceBusNamespace.properties.serviceBusEndpoint
+        }
+        {
+          name: 'Alphavantage'
+          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=alphavantage-api-key)'
+        }
+      ]
+      connectionStrings: [
+        {
+          name: 'DefaultConnection'
+          connectionString: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=cosmosdb-connection-string)'
+        }
       ]
       minTlsVersion: '1.2'
       ftpsState: 'FtpsOnly'
     }
+  }
+}
+
+resource alphavantageApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
+  name: 'alphavantage-api-key'
+  parent: keyVault
+  properties: {
+    value: alphavantageApiKey
   }
 }
 
@@ -123,6 +154,21 @@ resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssig
   scope: storageAccount
   properties: {
     roleDefinitionId: stgBlobDataContributorRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '4633458b-17de-408a-b874-0445c86b69e6'
+}
+
+resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id)
+  scope: keyVault
+  properties: {
+    roleDefinitionId: kvSecretsUserRoleDefinition.id
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
