@@ -1,6 +1,4 @@
-﻿using Azure.Messaging.ServiceBus;
-using EzStocks.Api.Application.Commands;
-using EzStocks.Api.Functions.Messages;
+﻿using EzStocks.Api.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,21 +30,19 @@ namespace EzStocks.Api.Functions.Functions
 
         [Function(nameof(FetchStockPrices))]
         public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        FetchStockPricesMessage fetchStockPricesMessage, CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
-            _logger.LogInformation("fetchStockPricesMessage received");
-            _logger.LogInformation("fetchStockPricesMessage {Symbols}", string.Join("; ", fetchStockPricesMessage.Symbols));
-            //await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
+        FetchStockPriceItemCommand fetchStockPriceItemCommand, CancellationToken cancellationToken)
+        {   
+            await _sender.Send(fetchStockPriceItemCommand, cancellationToken);
             return new OkResult();
         }
 
         [Function(nameof(FetchStockPricesTimer))]
         [ServiceBusOutput("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        public static FetchStockPricesMessage FetchStockPricesTimer([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo, FunctionContext context)
+        public static IList<FetchStockPriceItemCommand> FetchStockPricesTimer([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, FunctionContext context)
         {
             var outputMessage = $"Output message created at {DateTime.Now}";
-            return new FetchStockPricesMessage([ "MSFT" ]);
+            List<string> symbols = ["MSFT", "AAPL"];
+            return symbols.Select(symbol => new FetchStockPriceItemCommand(symbol)).ToList();
         }
     }
 }
