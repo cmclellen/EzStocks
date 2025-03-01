@@ -35,10 +35,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   sku: {
     name: 'Y1'
   }
-  // kind: 'linux'
-  // properties: {
-  //   reserved: true
-  // }
+  kind: 'functionapp'
+  properties: {
+    reserved: false
+  }
 }
 
 var kvName = format(resourceNameFormat, 'kv')
