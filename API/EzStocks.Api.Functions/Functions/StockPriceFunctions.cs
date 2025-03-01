@@ -38,11 +38,10 @@ namespace EzStocks.Api.Functions.Functions
 
         [Function(nameof(FetchStockPricesTimer))]
         [ServiceBusOutput("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        public static IList<FetchStockPriceItemCommand> FetchStockPricesTimer([TimerTrigger("0 30 5 * * *")] TimerInfo timerInfo, FunctionContext context)
+        public FetchStockPriceItemCommand[] FetchStockPricesTimer([TimerTrigger("0 */2 * * * *")] TimerInfo timerInfo, FunctionContext context)
         {
-            var outputMessage = $"Output message created at {DateTime.Now}";
             List<string> symbols = ["MSFT", "AAPL"];
-            return symbols.Select(symbol => new FetchStockPriceItemCommand(symbol)).ToList();
+            return symbols.Select(symbol => new FetchStockPriceItemCommand(symbol)).ToArray();
         }
     }
 }
