@@ -47,7 +47,7 @@ var kvName = format(resourceNameFormat, 'kv')
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   name: format(resourceNameFormat, 'func')
   location: location
-  kind: 'functionapp,,linux'
+  kind: 'functionapp,linux'
   identity: {
     type: 'SystemAssigned'
   }
