@@ -73,7 +73,8 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'WEBSITE_TIME_ZONE'
-          value: 'Australia/Perth'
+          // value: 'Australia/Perth'
+          value: 'W. Australia Standard Time'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
