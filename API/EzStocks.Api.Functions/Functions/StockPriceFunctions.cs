@@ -28,8 +28,8 @@ namespace EzStocks.Api.Functions.Functions
         //    return new OkResult();
         //}
 
-        [Function(nameof(FetchStockPrices))]
-        public async Task<IActionResult> FetchStockPrices([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
+        [Function(nameof(FetchStockPrice))]
+        public async Task<IActionResult> FetchStockPrice([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
         FetchStockPriceItemCommand fetchStockPriceItemCommand, CancellationToken cancellationToken)
         {   
             await _sender.Send(fetchStockPriceItemCommand, cancellationToken);
