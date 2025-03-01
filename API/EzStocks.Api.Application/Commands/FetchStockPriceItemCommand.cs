@@ -15,9 +15,11 @@ namespace EzStocks.Api.Application.Commands
     {
         public async Task Handle(FetchStockPriceItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Fetching stock prices for {Symbol}...", request.Symbol);
+            _logger.BeginScope("Fetch stock prices for {Symbol}", request.Symbol);
+
+            _logger.LogDebug("Fetching stock prices...");
             var getStockPriceResponse = await _stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(request.Symbol), cancellationToken);
-            _logger.LogInformation("Successfully fetched stock prices for {Symbol}", request.Symbol);
+            _logger.LogInformation("Successfully fetched stock prices");
 
             var stockPriceItems = getStockPriceResponse.OhlcvItems.Select(item => new Domain.Entities.StockPriceItem
             {
@@ -29,13 +31,12 @@ namespace EzStocks.Api.Application.Commands
 
             var stockPriceItemsToSave = stockPriceItems.Take(3);
 
-            _logger.LogDebug("Retrieving existing stock prices for {Symbol}...", request.Symbol);
+            _logger.LogDebug("Retrieving existing stock prices...");
             var asAtDates = stockPriceItemsToSave.Select(item => item.AsAtDate).ToList();
-            var existingItems = await _stockPriceItemRepository.GetByAsAtDatesAsync(asAtDates, cancellationToken);
-            _logger.LogInformation("Found {HistoricStockPriceCount} existing stock prices for {Symbol}", existingItems.Count, request.Symbol);
+            var existingItems = await _stockPriceItemRepository.GetByAsAtDatesAsync(request.Symbol, asAtDates, cancellationToken);
+            _logger.LogInformation("Found {HistoricStockPriceCount} existing stock prices", existingItems.Count);
 
-
-            _logger.LogDebug("Saving stock prices for {Symbol}...", request.Symbol);
+            _logger.LogDebug("Saving stock prices...");
             foreach (var stockPriceItem in stockPriceItemsToSave)
             {
                 var existingItem = existingItems.FirstOrDefault(item => item.AsAtDate == stockPriceItem.AsAtDate);
@@ -50,7 +51,7 @@ namespace EzStocks.Api.Application.Commands
                 }
             }
             await _unitOfWork.CommitAsync(cancellationToken);
-            _logger.LogInformation("Saved stock prices for {Symbol}", request.Symbol);
+            _logger.LogInformation("Saved stock prices");
         }
     }
 
