@@ -33,12 +33,12 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: format(resourceNameFormat, 'asp')
   location: location
   sku: {
-    name: 'F1'
+    name: 'Y1'
   }
-  kind: 'linux'
-  properties: {
-    reserved: true
-  }
+  // kind: 'linux'
+  // properties: {
+  //   reserved: true
+  // }
 }
 
 var kvName = format(resourceNameFormat, 'kv')
@@ -46,14 +46,21 @@ var kvName = format(resourceNameFormat, 'kv')
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   name: format(resourceNameFormat, 'func')
   location: location
-  kind: 'functionapp,linux'
+  kind: 'functionapp'
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'DOTNET-ISOLATED|9.0'
+      // windowsFxVersion: 'DOTNET-ISOLATED|9.0'
+      netFrameworkVersion: 'v9.0'
+      metadata: [
+        {
+          name: 'CURRENT_STACK'
+          value: 'dotnet'
+        }
+      ]
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
