@@ -33,7 +33,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: format(resourceNameFormat, 'asp')
   location: location
   sku: {
-    name: 'Y1'
+    name: 'F1'
   }
   kind: 'functionapp'
   properties: {
