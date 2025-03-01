@@ -7,7 +7,18 @@ param location string = resourceGroup().location
 ])
 param environment string
 
+@secure()
+param alphavantageApiKey string
+
 var resourceNameFormat = format('{{0}}-ezstocks-{0}-aue', environment)
+
+module keyvault 'modules/keyvault.bicep' = {
+  name: 'keyvault'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}
 
 module insights 'modules/insights.bicep' = {
   name: 'insights'
@@ -39,5 +50,6 @@ module function 'modules/function.bicep' = {
   params: {
     location: location
     resourceNameFormat: resourceNameFormat
+    alphavantageApiKey: alphavantageApiKey
   }
 }

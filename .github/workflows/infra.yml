@@ -49,4 +49,5 @@ jobs:
           scope: resourcegroup
           resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
           template: ./Infra/main.bicep
-          parameters: ./Infra/main.dev.bicepparam
+          parameters: ./Infra/main.dev.bicepparam `
+            alphavantageApiKey=ddd
