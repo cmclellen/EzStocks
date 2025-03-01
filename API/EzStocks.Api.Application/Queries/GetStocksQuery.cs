@@ -1,22 +1,32 @@
 ﻿using AutoMapper;
+using EzStocks.Api.Application.Observability;
 using EzStocks.Api.Domain.Entities;
 using EzStocks.Api.Domain.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace EzStocks.Api.Application.Queries
 {
     public record GetStocksQuery : IRequest<IList<Dtos.StockItem>>;
 
     public class GetStocksQueryHandler(
-        IMapper mapper,
-        IStockItemRepository stockRepository) : IRequestHandler<GetStocksQuery, IList<Dtos.StockItem>>
+        ILogger<GetStocksQueryHandler> _logger,
+        IMapper _mapper,
+        IStockItemRepository _stockRepository) : IRequestHandler<GetStocksQuery, IList<Dtos.StockItem>>
     {
         public async Task<IList<Dtos.StockItem>> Handle(GetStocksQuery request, CancellationToken cancellationToken)
         {
-            var stockEntities = await stockRepository.GetStocksAsync(cancellationToken);
+            using var _ = Traces.DefaultSource.StartActivity("GetStockQuery");
 
-            IList<Dtos.StockItem> stockItems = stockEntities.Select(entity => mapper.Map<StockItem, Dtos.StockItem>(entity)).ToList();
+            using var _1 = _logger.BeginScope("Get stock {CraigValue}", "here");
 
+            _logger.LogDebug("Retrieving stock items...");
+            var stockEntities = await _stockRepository.GetStocksAsync(cancellationToken);
+            _logger.LogInformation("Retrieved {StockItemCount} stock items", stockEntities.Count);
+
+            IList<Dtos.StockItem> stockItems = stockEntities
+                .Select(_mapper.Map<StockItem, Dtos.StockItem>)
+                .ToList();
             return stockItems;
         }
     }
