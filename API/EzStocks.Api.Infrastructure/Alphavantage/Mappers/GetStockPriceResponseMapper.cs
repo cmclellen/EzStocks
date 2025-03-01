@@ -1,6 +1,5 @@
 ﻿using EzStocks.Api.Application.Services;
 using System.Globalization;
-using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json.Nodes;
 
 namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
