@@ -159,17 +159,17 @@ resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssig
   }
 }
 
-// resource stgBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
-//   scope: subscription()
-//   name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
-// }
+resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '4633458b-17de-408a-b874-0445c86b69e6'
+}
 
-// resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-//   name: guid(keyVault.id, stgBlobDataContributorRoleDefinition.id)
-//   scope: keyVault
-//   properties: {
-//     roleDefinitionId: stgBlobDataContributorRoleDefinition.id
-//     principalId: functionApp.identity.principalId
-//     principalType: 'ServicePrincipal'
-//   }
-// }
+resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id)
+  scope: keyVault
+  properties: {
+    roleDefinitionId: kvSecretsUserRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
