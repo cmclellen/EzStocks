@@ -25,10 +25,9 @@ namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
         public async Task MapFromJson_ShouldReturnGetStockPriceResponse()
         {
             // ARRANGE
-            var assembly = Assembly.GetExecutingAssembly();            
+            var assembly = GetType().Assembly;            
             var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage\\Mappers");
-            Console.WriteLine("Path1: " + path);
-            Debug.WriteLine("Path2: " + path);
+            this.TestContext.WriteLine("PATH: " + path);
             var json = await File.ReadAllTextAsync(Path.Join(path, "TIME_SERIES_DAILY.Response.json"));
             
             // ACT
