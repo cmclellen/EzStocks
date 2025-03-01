@@ -158,3 +158,18 @@ resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssig
     principalType: 'ServicePrincipal'
   }
 }
+
+// resource stgBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+//   scope: subscription()
+//   name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+// }
+
+// resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+//   name: guid(keyVault.id, stgBlobDataContributorRoleDefinition.id)
+//   scope: keyVault
+//   properties: {
+//     roleDefinitionId: stgBlobDataContributorRoleDefinition.id
+//     principalId: functionApp.identity.principalId
+//     principalType: 'ServicePrincipal'
+//   }
+// }

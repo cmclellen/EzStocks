@@ -46,7 +46,7 @@ module queue 'modules/queue.bicep' = {
 
 module function 'modules/function.bicep' = {
   name: 'function'
-  dependsOn: [insights, queue]
+  dependsOn: [insights, queue, keyvault]
   params: {
     location: location
     resourceNameFormat: resourceNameFormat
