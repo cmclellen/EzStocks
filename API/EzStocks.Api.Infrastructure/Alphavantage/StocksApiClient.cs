@@ -15,6 +15,8 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
 
         public async Task<Application.Services.GetStockPriceResponse> GetStockPriceAsync(GetStockPriceRequest request, CancellationToken cancellationToken)
         {
+            using var scope = _logger.BeginScope("GetStockPriceAsync {Symbol}", request.Symbol);
+
             // https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo
             var options = new RestClientOptions(AlphavantageSettings.ApiBaseUrl);
             var client = new RestClient(options);
