@@ -25,9 +25,9 @@ namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
         {
             // ARRANGE
             var assembly = Assembly.GetExecutingAssembly();            
-            var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage\\Mappers");
+            var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage", "Mappers");
             var json = await File.ReadAllTextAsync(Path.Join(path, "TIME_SERIES_DAILY.Response.json"));
-
+            
             // ACT
             var actual = _sut.MapFromJson(json);
 
