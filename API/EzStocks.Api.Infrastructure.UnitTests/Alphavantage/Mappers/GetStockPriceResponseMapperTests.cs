@@ -2,7 +2,6 @@
 using AutoFixture.AutoMoq;
 using EzStocks.Api.Infrastructure.Alphavantage.Mappers;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
@@ -25,9 +24,8 @@ namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
         public async Task MapFromJson_ShouldReturnGetStockPriceResponse()
         {
             // ARRANGE
-            var assembly = GetType().Assembly;            
-            var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage\\Mappers");
-            this.TestContext.WriteLine("PATH: " + path);
+            var assembly = Assembly.GetExecutingAssembly();            
+            var path = Path.Join(Path.GetDirectoryName(assembly.GetAssemblyLocation()), "Alphavantage", "Mappers");
             var json = await File.ReadAllTextAsync(Path.Join(path, "TIME_SERIES_DAILY.Response.json"));
             
             // ACT
