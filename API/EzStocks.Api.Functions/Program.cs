@@ -1,6 +1,4 @@
 using Azure.Identity;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
-using EzStocks.Api.Application.Observability;
 using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Persistence;
@@ -39,10 +37,8 @@ var host = new HostBuilder()
         var conn = configuration.GetConnectionString("DefaultConnection")!;
         services.AddDbContext<EzStockDbContext>((sp, options) => options.UseCosmos(conn, databaseName: "EzStocks"));
 
-        services.AddOpenTelemetry()
-            .UseAzureMonitor()
-            .WithTracing(opt=>opt.AddSource(Traces.DefaultSource.Name));
-        
+        services.ConfigureOpenTelemetry();
+
         services.Scan(selector => selector
             .FromAssemblies(
                 EzStocks.Api.Application.AssemblyReference.Assembly,
