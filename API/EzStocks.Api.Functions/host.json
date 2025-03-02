@@ -3,13 +3,6 @@
   "logging": {
     "logLevel": {
       "default": "Debug"
-    },    
-    "applicationInsights": {
-      "samplingSettings": {
-        "isEnabled": true,
-        "excludedTypes": "Request"
-      },
-      "enableLiveMetricsFilters": true
     }
   },
   "extensions": {
