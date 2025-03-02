@@ -1,7 +1,15 @@
 {
   "version": "2.0",
   "logging": {
-    "applicationInsights": {
+    "logLevel": {
+      "default": "Debug",
+      "Host": "Error",
+      "Function": "Error",
+      "Host.Aggregator": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    },
+    "applicationInsights": {      
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"

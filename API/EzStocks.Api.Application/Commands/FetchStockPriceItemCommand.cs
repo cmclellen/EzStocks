@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EzStocks.Api.Application.Commands
 {
-    public record FetchStockPriceItemCommand(string Symbol) : IRequest;
+    public record FetchStockPriceItemCommand(string Symbol, int? MaxItemCount = 3) : IRequest;
 
     public class FetchStockPriceItemCommandHandler(
         ILogger<FetchStockPriceItemCommandHandler> _logger,
@@ -29,7 +29,7 @@ namespace EzStocks.Api.Application.Commands
                 AsAtDate = item.Date
             }).ToList();
 
-            var stockPriceItemsToSave = stockPriceItems.Take(3);
+            var stockPriceItemsToSave = stockPriceItems.Take(request.MaxItemCount!.Value);
 
             _logger.LogDebug("Retrieving existing stock prices...");
             var asAtDates = stockPriceItemsToSave.Select(item => item.AsAtDate).ToList();
