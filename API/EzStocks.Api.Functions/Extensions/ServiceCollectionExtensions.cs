@@ -1,7 +1,11 @@
 ﻿using Azure.Monitor.OpenTelemetry.AspNetCore;
 using EzStocks.Api.Application.Observability;
+using EzStocks.Api.Persistence;
+using Microsoft.Azure.Functions.Worker.OpenTelemetry;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 
 namespace EzStocks.Api.Functions.Extensions
@@ -18,6 +22,14 @@ namespace EzStocks.Api.Functions.Extensions
             return services;
         }
 
+        public static IServiceCollection ConfigureEFCore(this IServiceCollection services, IConfiguration configuration)
+        {
+            var conn = configuration.GetConnectionString("DefaultConnection")!;
+            services.AddDbContext<EzStockDbContext>((sp, options) => options.UseCosmos(conn, databaseName: "EzStocks"));
+
+            return services;
+        }
+
         public static IServiceCollection ConfigureOpenTelemetry(this IServiceCollection services)
         {
             services.Configure<OpenTelemetryLoggerOptions>(options =>
@@ -25,8 +37,10 @@ namespace EzStocks.Api.Functions.Extensions
                 options.IncludeScopes = true;
             });
 
-            services.AddOpenTelemetry()
-                .UseAzureMonitor()
+            var ot = services.AddOpenTelemetry();
+
+            ot.UseFunctionsWorkerDefaults();
+            ot.UseAzureMonitor()
                 .WithTracing(opt => opt.AddSource(Traces.DefaultSource.Name));
 
             return services;

@@ -20,8 +20,6 @@ var host = new HostBuilder()
     .ConfigureServices((ctx, services) =>
     {
         var configuration = ctx.Configuration;
-        //services.AddApplicationInsightsTelemetryWorkerService();
-        //services.ConfigureFunctionsApplicationInsights();
 
         services.AddOption<AlphavantageSettings>(configuration, AlphavantageSettings.ConfigurationSection);
 
@@ -34,10 +32,9 @@ var host = new HostBuilder()
                 clientBuilder.UseCredential(new DefaultAzureCredential());
             });
 
-        var conn = configuration.GetConnectionString("DefaultConnection")!;
-        services.AddDbContext<EzStockDbContext>((sp, options) => options.UseCosmos(conn, databaseName: "EzStocks"));
-
-        services.ConfigureOpenTelemetry();
+        services
+            .ConfigureEFCore(configuration)
+            .ConfigureOpenTelemetry();
 
         services.Scan(selector => selector
             .FromAssemblies(
