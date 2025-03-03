@@ -15,9 +15,9 @@ namespace EzStocks.Api.Application.Commands
     {
         public async Task Handle(FetchStockPriceItemCommand request, CancellationToken cancellationToken)
         {
-            _logger.BeginScope("Fetch stock prices for {Symbol}", request.Symbol);
+            using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Symbol"] = request.Symbol });
 
-            _logger.LogDebug("Fetching stock prices...");
+            _logger.LogDebug($"Fetching stock prices...");
             var getStockPriceResponse = await _stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(request.Symbol), cancellationToken);
             _logger.LogInformation("Successfully fetched stock prices");
 

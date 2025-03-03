@@ -38,9 +38,10 @@ namespace EzStocks.Api.Functions.Functions
 
         [Function(nameof(FetchStockPricesTimer))]
         [ServiceBusOutput("fetch-stock-prices", Connection = "ServiceBusConnection")]
-        public FetchStockPriceItemCommand[] FetchStockPricesTimer([TimerTrigger("0 30 20 * * *")] TimerInfo timerInfo, FunctionContext context)
+        public async Task<FetchStockPriceItemCommand[]> FetchStockPricesTimer([TimerTrigger("0 30 20 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
         {
-            List<string> symbols = ["MSFT", "AAPL"];
+            var stockItems = await _sender.Send(new Application.Queries.GetStocksQuery(), cancellationToken);
+            List<string> symbols = stockItems.Select(item => item.Symbol).ToList();
             return symbols.Select(symbol => new FetchStockPriceItemCommand(symbol)).ToArray();
         }
     }

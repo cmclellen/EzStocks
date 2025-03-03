@@ -9,6 +9,9 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Domain.Entities.StockItem, Dtos.StockItem>();
             CreateMap<Dtos.StockItem, Domain.Entities.StockItem>();
             CreateMap<Dtos.StockPriceItem, Domain.Entities.StockPriceItem>();
+            CreateMap<Dtos.User, Domain.Entities.User>()
+                .ForMember(d => d.StockItems, o => o.Ignore());
+            CreateMap<Domain.Entities.StockItem, Domain.Entities.UserStockItem>();
         }
     }
 }

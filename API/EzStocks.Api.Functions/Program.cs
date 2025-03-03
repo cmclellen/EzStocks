@@ -1,3 +1,4 @@
+using Azure.Core;
 using Azure.Identity;
 using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
@@ -29,7 +30,16 @@ var host = new HostBuilder()
         services.AddAzureClients(clientBuilder =>
             {
                 clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
-                clientBuilder.UseCredential(new DefaultAzureCredential());
+                TokenCredential credential;
+                if (ctx.HostingEnvironment.IsDevelopment())
+                {
+                    credential = new VisualStudioCredential();                    
+                }
+                else
+                {
+                    credential = new ManagedIdentityCredential();
+                }
+                clientBuilder.UseCredential(credential);
             });
 
         services

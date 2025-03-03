@@ -5,9 +5,7 @@
       "default": "Debug",
       "Host": "Error",
       "Function": "Error",
-      "Host.Aggregator": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
+      "Host.Aggregator": "Information"
     },
     "applicationInsights": {      
       "samplingSettings": {
