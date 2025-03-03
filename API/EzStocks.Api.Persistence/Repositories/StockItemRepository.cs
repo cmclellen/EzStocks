@@ -15,5 +15,10 @@ namespace EzStocks.Api.Persistence.Repositories
         {
             await ezStockDbContext.StockItems.AddAsync(stockItem, cancellation);
         }
+
+        public async Task<IList<StockItem>> GetStocksBySymbolsAsync(List<string> symbols, CancellationToken cancellationToken)
+        {
+            return await ezStockDbContext.StockItems.Where(item=> symbols.Contains(item.Symbol)).ToListAsync();
+        }
     }
 }

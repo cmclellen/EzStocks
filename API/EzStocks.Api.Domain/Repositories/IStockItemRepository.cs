@@ -6,5 +6,6 @@ namespace EzStocks.Api.Domain.Repositories
     {
         Task<IList<StockItem>> GetStocksAsync(CancellationToken cancellation = default);
         Task CreateStockAsync(Domain.Entities.StockItem stockItem, CancellationToken cancellation = default);
+        Task<IList<StockItem>> GetStocksBySymbolsAsync(List<string> symbols, CancellationToken cancellationToken);
     }
 }
