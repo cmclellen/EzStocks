@@ -12,6 +12,8 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Dtos.User, Domain.Entities.User>()
                 .ForMember(d => d.StockItems, o => o.Ignore());
             CreateMap<Domain.Entities.StockItem, Domain.Entities.UserStockItem>();
+            CreateMap<Domain.Entities.User, Dtos.User>();
+            CreateMap<Domain.Entities.UserStockItem, Dtos.UserStockItem>();
         }
     }
 }
