@@ -9,5 +9,10 @@ namespace EzStocks.Api.Persistence.Repositories
         {
             await ezStockDbContext.Users.AddAsync(user);
         }
+
+        public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await ezStockDbContext.Users.FindAsync(userId, cancellationToken);
+        }
     }
 }

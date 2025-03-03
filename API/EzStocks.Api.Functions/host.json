@@ -1,13 +1,16 @@
 {
   "version": "2.0",
   "logging": {
+    "fileLoggingMode": "debugOnly",
     "logLevel": {
-      "default": "Debug",
-      "Host": "Error",
-      "Function": "Error",
-      "Host.Aggregator": "Information"
+      "default": "Warning",
+      "EzStocks": "Trace",
+      "Host.Aggregator": "Trace",
+      "Host.Results": "Information",
+      "Function": "Debug",
+      "Host": "Error"
     },
-    "applicationInsights": {      
+    "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"

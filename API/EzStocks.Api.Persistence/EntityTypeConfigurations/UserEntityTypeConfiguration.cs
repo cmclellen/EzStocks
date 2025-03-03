@@ -9,7 +9,7 @@ namespace EzStocks.Api.Persistence.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToContainer("User");
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.UserId);
             builder.HasPartitionKey(e => e.UserId);
             builder.HasNoDiscriminator();
             builder.OwnsMany(e => e.StockItems);

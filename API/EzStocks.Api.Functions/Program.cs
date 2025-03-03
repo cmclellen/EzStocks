@@ -1,10 +1,6 @@
-using Azure.Core;
-using Azure.Identity;
 using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,22 +23,8 @@ var host = new HostBuilder()
         services.AddAutoMapper(EzStocks.Api.Application.AssemblyReference.Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(EzStocks.Api.Application.AssemblyReference.Assembly));
 
-        services.AddAzureClients(clientBuilder =>
-            {
-                clientBuilder.AddServiceBusClient(configuration.GetSection("ServicebusConnection"));
-                TokenCredential credential;
-                if (ctx.HostingEnvironment.IsDevelopment())
-                {
-                    credential = new VisualStudioCredential();                    
-                }
-                else
-                {
-                    credential = new ManagedIdentityCredential();
-                }
-                clientBuilder.UseCredential(credential);
-            });
-
         services
+            .ConfigureAzureClients(ctx)
             .ConfigureEFCore(configuration)
             .ConfigureOpenTelemetry();
 
