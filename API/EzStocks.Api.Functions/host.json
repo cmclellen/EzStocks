@@ -4,10 +4,14 @@
     "logLevel": {
       "default": "Debug",
       "Host": "Error",
-      "Function": "Error",
-      "Host.Aggregator": "Information"
+      "Function": "Debug",
+      "Host.Aggregator": "Debug",
+      "Host.Results": "Warning",
+      "Azure": "None",
+      "Worker": "Warning",
+      "Microsoft": "Warning"
     },
-    "applicationInsights": {      
+    "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"

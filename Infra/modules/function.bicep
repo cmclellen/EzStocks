@@ -89,6 +89,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'Alphavantage__ApiKey'
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=alphavantage-api-key)'
         }
+        {
+          name: 'AzureFunctionsJobHost__logging__logLevel__default'
+          value: 'Debug'
+        }
       ]
       connectionStrings: [
         {
