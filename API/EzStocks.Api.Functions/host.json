@@ -1,15 +1,14 @@
 {
   "version": "2.0",
   "logging": {
+    "fileLoggingMode": "debugOnly",
     "logLevel": {
-      "default": "Debug",
-      "Host": "Error",
+      "default": "Warning",
+      "EzStocks": "Trace",
+      "Host.Aggregator": "Trace",
+      "Host.Results": "Information",
       "Function": "Debug",
-      "Host.Aggregator": "Debug",
-      "Host.Results": "Warning",
-      "Azure": "None",
-      "Worker": "Warning",
-      "Microsoft": "Warning"
+      "Host": "Error"
     },
     "applicationInsights": {
       "samplingSettings": {
