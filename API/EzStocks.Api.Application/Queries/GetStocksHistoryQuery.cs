@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using AutoMapper;
 using EzStocks.Api.Application.Dtos;
 using EzStocks.Api.Application.Security;
 using EzStocks.Api.Domain.Repositories;
@@ -6,13 +7,15 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryResponse(IList<StocksPriceItem> Tickers, IList<string> Symbols);
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockItem> Tickers);
 
     public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
 
     public class GetStocksHistoryQueryHandler(
+        IMapper _mapper,
         IUserContext _userContext,
         IStockPriceItemRepository _stockPriceItemRepository,
+        IStockItemRepository _stockItemRepository,
         IUserRepository _userRepository) : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
     {
         public async Task<Result<GetStocksHistoryResponse>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
@@ -41,7 +44,10 @@ namespace EzStocks.Api.Application.Queries
                 return acc;
             });
 
-            return new GetStocksHistoryResponse(result, symbols);
+            var stockItems = await _stockItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockItem, Dtos.StockItem>).ToList();
+
+            return new GetStocksHistoryResponse(result, stockItemsDtos);
         }
     }
 }

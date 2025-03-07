@@ -4,8 +4,7 @@ namespace EzStocks.Api.Domain.Repositories
 {
     public interface IStockItemRepository
     {
-        Task<IList<StockItem>> GetStocksAsync(CancellationToken cancellation = default);
-        Task CreateStockAsync(Domain.Entities.StockItem stockItem, CancellationToken cancellation = default);
-        Task<IList<StockItem>> GetStocksBySymbolsAsync(List<string> symbols, CancellationToken cancellationToken);
+        Task<IList<StockItem>> GetBySymbolsAsync(IList<string>? symbols, CancellationToken cancellation = default);
+        Task CreateAsync(Domain.Entities.StockItem stockItem, CancellationToken cancellation = default);
     }
 }

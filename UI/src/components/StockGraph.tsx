@@ -23,17 +23,18 @@ function StockGraph() {
         aspect={4.0 / 2.0}
         className="flex items-center"
       >
-        <LineChart data={stocksHistory.tickers}>
+        <LineChart data={stocksHistory!.prices}>
           <XAxis dataKey="createdDate" />
           <YAxis />
           <Legend />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          {stocksHistory.symbols.map((symbol: string) => (
+          {stocksHistory!.tickers.map((ticker) => (
             <Line
-              name="Apple"
+              key={ticker.symbol}
+              name={`${ticker.name} (${ticker.symbol})`}
               type="monotone"
-              dataKey={`stocks[${symbol}]`}
-              stroke="#8884d8"
+              dataKey={`stocks[${ticker.symbol}]`}
+              stroke={ticker.color}
             />
           ))}
         </LineChart>

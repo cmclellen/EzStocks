@@ -1,7 +1,11 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
-@BaseApiUrl=http://localhost:7071/api
+@BaseApiUrl=http://localhost:7274/api
+
+// Stocks
 
 GET {{BaseApiUrl}}/stocks
+
+###
 
 POST {{BaseApiUrl}}/stocks
 Content-Type: application/json
@@ -9,6 +13,10 @@ Content-Type: application/json
   "symbol": "AAPL",
   "name": "Apple Inc."
 }
+
+###
+
+// Users
 
 POST {{BaseApiUrl}}/users
 Content-Type: application/json
@@ -26,7 +34,13 @@ Content-Type: application/json
   ]
 }
 
+###
+
 GET {{BaseApiUrl}}/users/B8343EAF-6C20-4A40-BADA-168FF5CEEC89
+
+###
+
+// Stock Prices
 
 POST {{BaseApiUrl}}/stockprices
 Content-Type: application/json
@@ -36,6 +50,8 @@ Content-Type: application/json
   "createdDateUtc": "2025-02-24T00:00:00"
 }
 
+###
+
 POST {{BaseApiUrl}}/stockprices/fetch
 Content-Type: application/json
 {
@@ -43,5 +59,9 @@ Content-Type: application/json
     "close": 222,
     "createdDateUtc": "2025-02-24T00:00:00"
 }
+
+###
+
+// Stock History
 
 GET {{BaseApiUrl}}/stocks/history
