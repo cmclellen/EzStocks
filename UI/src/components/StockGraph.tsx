@@ -35,7 +35,7 @@ function StockGraph() {
         <Line
           name="Google"
           type="monotone"
-          dataKey="stocks.GOOG"
+          dataKey="stocks.MSFT"
           stroke="#82ca9d"
         />
       </LineChart>

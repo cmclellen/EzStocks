@@ -13,7 +13,7 @@ namespace EzStocks.Api.Functions.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stocks/history")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stockHistory = await sender.Send(new GetStocksHistoryQuery(), cancellationToken);
-            return new OkObjectResult(stockHistory);
+            return new OkObjectResult(stockHistory.Value);
         }
     }
 }
