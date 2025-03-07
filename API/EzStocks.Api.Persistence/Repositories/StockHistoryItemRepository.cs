@@ -4,7 +4,7 @@ namespace EzStocks.Api.Persistence.Repositories
 {
     public class StockHistoryItemRepository : IStockHistoryItemRepository
     {
-        public async Task<IList<Domain.Entities.StockHistoryItem>> GetStockHistoryAsync(CancellationToken cancellationToken = default)
+        public async Task<IList<Domain.Entities.StockHistoryItem>> GetAsync(CancellationToken cancellationToken = default)
         {
             await Task.CompletedTask;
             var data = new List<Domain.Entities.StockHistoryItem> { };

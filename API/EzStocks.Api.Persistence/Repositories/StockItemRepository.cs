@@ -6,19 +6,19 @@ namespace EzStocks.Api.Persistence.Repositories
 {
     public class StockItemRepository(Persistence.EzStockDbContext ezStockDbContext) : IStockItemRepository
     {
-        public async Task<IList<StockItem>> GetStocksAsync(CancellationToken cancellation = default)
+        public async Task<IList<StockItem>> GetBySymbolsAsync(IList<string>? symbols, CancellationToken cancellation = default)
         {
-            return await ezStockDbContext.StockItems.ToListAsync();
+            IQueryable<StockItem> query = ezStockDbContext.StockItems;
+            if(symbols is not null)
+            {
+                query = query.Where(si => symbols.Contains(si.Symbol));
+            }
+            return await query.ToListAsync();
         }
 
-        public async Task CreateStockAsync(Domain.Entities.StockItem stockItem, CancellationToken cancellation = default)
+        public async Task CreateAsync(Domain.Entities.StockItem stockItem, CancellationToken cancellation = default)
         {
             await ezStockDbContext.StockItems.AddAsync(stockItem, cancellation);
-        }
-
-        public async Task<IList<StockItem>> GetStocksBySymbolsAsync(List<string> symbols, CancellationToken cancellationToken)
-        {
-            return await ezStockDbContext.StockItems.Where(item=> symbols.Contains(item.Symbol)).ToListAsync();
         }
     }
 }

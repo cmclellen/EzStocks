@@ -7,40 +7,53 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import useStocks from "../hooks/useStocks";
+import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
 
 function StockGraph() {
-  const { stocks, isLoadingStocks } = useStocks();
+  const { stocksHistory, isLoadingStocksHistory } = useStocksHistory();
 
-  if (isLoadingStocks) return <Spinner />;
+  if (isLoadingStocksHistory) return <Spinner />;
 
   return (
-    <ResponsiveContainer
-      width="100%"
-      aspect={4.0 / 2.0}
-      className="flex items-center"
-    >
-      <LineChart data={stocks}>
-        <XAxis dataKey="createdDate" />
-        <YAxis />
-        <Legend />
-        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line
-          name="Apple"
-          type="monotone"
-          dataKey="stocks.AAPL"
-          stroke="#8884d8"
-        />
-        <Line
-          name="Google"
-          type="monotone"
-          dataKey="stocks.GOOG"
-          stroke="#82ca9d"
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <>
+      {/* <pre>{JSON.stringify(stocksHistory, null, 2)}</pre> */}
+      <ResponsiveContainer
+        width="100%"
+        aspect={4.0 / 2.0}
+        className="flex items-center"
+      >
+        <LineChart data={stocksHistory!.prices}>
+          <XAxis dataKey="createdDate" />
+          <YAxis />
+          <Legend />
+          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+          {stocksHistory!.tickers.map((ticker) => (
+            <Line
+              key={ticker.symbol}
+              name={`${ticker.name} (${ticker.symbol})`}
+              type="monotone"
+              dataKey={`stocks[${ticker.symbol}]`}
+              stroke={ticker.color}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    </>
   );
 }
 
 export default StockGraph;
+
+// <Line
+//   name="Apple"
+//   type="monotone"
+//   dataKey="stocks.AAPL"
+//   stroke="#8884d8"
+// />
+// <Line
+//   name="Google"
+//   type="monotone"
+//   dataKey="stocks.MSFT"
+//   stroke="#82ca9d"
+// />

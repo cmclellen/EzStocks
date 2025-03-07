@@ -30,6 +30,7 @@ var host = new HostBuilder()
 
         services.Scan(selector => selector
             .FromAssemblies(
+                EzStocks.Api.Functions.AssemblyReference.Assembly,
                 EzStocks.Api.Application.AssemblyReference.Assembly,
                 EzStocks.Api.Domain.AssemblyReference.Assembly,
                 EzStocks.Api.Persistence.AssemblyReference.Assembly,

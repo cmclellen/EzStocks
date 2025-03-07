@@ -1,75 +1,53 @@
-﻿using EzStocks.Api.Application.Dtos;
+﻿using Ardalis.Result;
+using AutoMapper;
+using EzStocks.Api.Application.Dtos;
+using EzStocks.Api.Application.Security;
 using EzStocks.Api.Domain.Repositories;
 using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryQuery : IRequest<IList<StocksPriceItem>>;
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockItem> Tickers);
 
-    public class GetStocksHistoryQueryHandler(IStockHistoryItemRepository stockHistoryRepository) : IRequestHandler<GetStocksHistoryQuery, IList<StocksPriceItem>>
+    public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
+
+    public class GetStocksHistoryQueryHandler(
+        IMapper _mapper,
+        IUserContext _userContext,
+        IStockPriceItemRepository _stockPriceItemRepository,
+        IStockItemRepository _stockItemRepository,
+        IUserRepository _userRepository) : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
     {
-        public async Task<IList<StocksPriceItem>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetStocksHistoryResponse>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
         {
-            var stockHistory = await stockHistoryRepository.GetStockHistoryAsync(cancellationToken);
-
-            var result = new List<StocksPriceItem>
+            var user = await _userRepository.GetByIdAsync(_userContext.UserId, cancellationToken);
+            if(user is null)
             {
-                new StocksPriceItem
+                return Result<GetStocksHistoryResponse>.NotFound();
+            }
+
+            var symbols = user.StockItems.Select(i=>i.Symbol).ToList();
+            var stocks = await _stockPriceItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+
+            var result = stocks.Aggregate(new List<StocksPriceItem>(), (acc, stock) =>
+            {
+                var stockPriceItem = acc.FirstOrDefault(i => i.CreatedDate == stock.AsAtDate);
+                if(stockPriceItem is null)
                 {
-                    CreatedDate = new DateOnly(2025, 2, 1),
-                    Stocks = new Dictionary<string, decimal>
+                    acc.Add(stockPriceItem = new StocksPriceItem
                     {
-                        ["AAPL"] = 4000,
-                        ["GOOG"] = 2400,
-                    }
-                },
-                new StocksPriceItem
-                {
-                    CreatedDate = new DateOnly(2025, 2, 2),
-                    Stocks = new Dictionary<string, decimal>
-                    {
-                        ["AAPL"] = 3000,
-                        ["GOOG"] = 1398,
-                    }
-                },
-                new StocksPriceItem
-                {
-                    CreatedDate = new DateOnly(2025, 2, 3),
-                    Stocks = new Dictionary<string, decimal>{
-                        ["AAPL"] = 2000,
-                        ["GOOG"] = 9800,
-                    }
-                },
-                new StocksPriceItem                 {
-                    CreatedDate = new DateOnly(2025, 2, 4),
-                    Stocks = new Dictionary<string, decimal>{
-                        ["AAPL"] = 2780,
-                        ["GOOG"] = 3908,
-                    }
-                },
-                new StocksPriceItem                 {
-                    CreatedDate = new DateOnly(2025, 2, 5),
-                    Stocks = new Dictionary<string, decimal>{
-                        ["AAPL"] = 1890,
-                        ["GOOG"] = 4800,
-                    }
-                },
-                new StocksPriceItem                 {
-                    CreatedDate = new DateOnly(2025, 2, 6),
-                    Stocks = new Dictionary<string, decimal>{
-                        ["AAPL"] = 2390,
-                        ["GOOG"] = 3800,
-                    }
-                },
-                new StocksPriceItem                 {
-                    CreatedDate = new DateOnly(2025, 2, 7),
-                    Stocks = new Dictionary<string, decimal>{
-                        ["AAPL"] = 3490,
-                        ["GOOG"] = 4300,
-                    }
-                },
-            };
-            return result;
+                        CreatedDate = stock.AsAtDate,
+                        Stocks = new Dictionary<string, decimal>()
+                    });
+                }
+                stockPriceItem.Stocks[stock.Symbol] = stock.Close;
+                return acc;
+            });
+
+            var stockItems = await _stockItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockItem, Dtos.StockItem>).ToList();
+
+            return new GetStocksHistoryResponse(result, stockItemsDtos);
         }
     }
 }

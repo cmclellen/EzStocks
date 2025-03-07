@@ -1,6 +1,6 @@
 import AxiosInstance from "../AxiosInstance";
 
-async function getStocks() {
+async function getStocksHistory() {
   const url = "/stocks/history";
   const { data } = await AxiosInstance.get(url);
   return data;
@@ -12,4 +12,4 @@ async function addStock({ stock }: { stock: string }) {
   return data;
 }
 
-export { getStocks, addStock };
+export { getStocksHistory, addStock };

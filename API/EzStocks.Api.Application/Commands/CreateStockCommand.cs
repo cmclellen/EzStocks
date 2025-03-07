@@ -14,7 +14,7 @@ namespace EzStocks.Api.Application.Commands
         public async Task Handle(CreateStockCommand request, CancellationToken cancellationToken)
         {
             var stockItem = mapper.Map<Dtos.StockItem, Domain.Entities.StockItem>(request.StockItem);
-            await stockRepository.CreateStockAsync(stockItem, cancellationToken);
+            await stockRepository.CreateAsync(stockItem, cancellationToken);
             await unitOfWork.CommitAsync(cancellationToken);
         }
     }
