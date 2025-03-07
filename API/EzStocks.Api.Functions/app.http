@@ -1,0 +1,47 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@BaseApiUrl=http://localhost:7071/api
+
+GET {{BaseApiUrl}}/stocks
+
+POST {{BaseApiUrl}}/stocks
+Content-Type: application/json
+{
+  "symbol": "AAPL",
+  "name": "Apple Inc."
+}
+
+POST {{BaseApiUrl}}/users
+Content-Type: application/json
+{ 
+  "UserId": "B8343EAF-6C20-4A40-BADA-168FF5CEEC89",
+  "FirstNames": "Craig",
+  "LastName": "McLellen",
+  "StockItems": [
+    {
+      "Symbol": "MSFT"
+    },
+    {
+      "Symbol": "AAPL"
+    }
+  ]
+}
+
+GET {{BaseApiUrl}}/users/B8343EAF-6C20-4A40-BADA-168FF5CEEC89
+
+POST {{BaseApiUrl}}/stockprices
+Content-Type: application/json
+{
+  "symbol": "MSFT",
+  "close": 222,
+  "createdDateUtc": "2025-02-24T00:00:00"
+}
+
+POST {{BaseApiUrl}}/stockprices/fetch
+Content-Type: application/json
+{
+    "symbol": "MSFT",
+    "close": 222,
+    "createdDateUtc": "2025-02-24T00:00:00"
+}
+
+GET {{BaseApiUrl}}/stocks/history
