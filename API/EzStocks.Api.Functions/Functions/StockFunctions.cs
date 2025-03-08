@@ -19,12 +19,19 @@ namespace AzStocks.Api.Functions.Functions
             return new OkObjectResult(stocks);
         }
 
-        [Function(nameof(CreateStocks))]
-        public async Task<IActionResult> CreateStocks([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stocks")] HttpRequest req, CancellationToken cancellationToken)
+        [Function(nameof(CreateStock))]
+        public async Task<IActionResult> CreateStock([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stocks")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stockItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockItem>();
             await sender.Send(new CreateStockCommand(stockItem!), cancellationToken);
             return new CreatedResult();
+        }
+
+        [Function(nameof(SearchStocks))]
+        public async Task<IActionResult> SearchStocks([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stocks/search")] HttpRequest req, string searchText, CancellationToken cancellationToken)
+        {
+            var result = await sender.Send(new SearchStocksQuery(searchText), cancellationToken);
+            return new OkObjectResult(result);
         }
     }
 }

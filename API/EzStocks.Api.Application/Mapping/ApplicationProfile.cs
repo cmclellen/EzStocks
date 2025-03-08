@@ -14,6 +14,7 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Domain.Entities.StockItem, Domain.Entities.UserStockItem>();
             CreateMap<Domain.Entities.User, Dtos.User>();
             CreateMap<Domain.Entities.UserStockItem, Dtos.UserStockItem>();
+            CreateMap<Services.TickerSymbol, Dtos.TickerSymbol>();
         }
     }
 }

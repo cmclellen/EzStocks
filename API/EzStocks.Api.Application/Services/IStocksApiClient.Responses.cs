@@ -7,4 +7,8 @@
     }
 
     public record GetStockPriceResponse(string Symbol, TimeZoneInfo TimeZone, List<OhlcvItem> OhlcvItems);
+
+    public record SearchForSymbolResponse(IList<TickerSymbol> Symbols);
+
+    public record TickerSymbol(string Symbol, string Name, string Region, string TimeZone, string Currency);
 }
