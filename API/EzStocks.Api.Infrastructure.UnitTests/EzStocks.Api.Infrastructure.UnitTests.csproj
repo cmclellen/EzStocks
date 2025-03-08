@@ -16,10 +16,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Alphavantage\Mappers\SYMBOL_SEARCH.Response.json" />
     <None Remove="Alphavantage\Mappers\TIME_SERIES_DAILY.Response.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Alphavantage\Mappers\SYMBOL_SEARCH.Response.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Alphavantage\Mappers\TIME_SERIES_DAILY.Response.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
