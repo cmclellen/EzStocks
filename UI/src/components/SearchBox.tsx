@@ -1,22 +1,40 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { useDebounce } from "@uidotdev/usehooks";
+import useSearchStocks from "../hooks/useSearchStock";
+import { searchStock } from "../services/StocksApi";
 
-const initialState = {
+interface SearchBoxState {
+  searchText: string;
+  suggestions: string[];
+  showSuggestions: boolean;
+  selectedItem?: string;
+  status: "loading" | "searching";
+}
+
+const initialState: SearchBoxState = {
+  searchText: "",
   suggestions: ["here"],
   showSuggestions: false,
   selectedItem: undefined,
   status: "loading",
 };
 
-function reducer(state: any, action: any) {
+function reducer(state: SearchBoxState, action: any): SearchBoxState {
   switch (action.type) {
     case "SET_SUGGESTIONS":
       return { ...state, suggestions: action.payload, showSuggestions: true };
     case "SET_SELECTED":
       return {
         ...state,
-        selected: action.payload,
+        selectedItem: action.payload,
         suggestions: [],
         showSuggestions: false,
+      };
+    case "SET_SEARCH_TEXT":
+      return {
+        ...state,
+        searchText: action.payload,
+        status: "searching",
       };
     default:
       throw new Error("Unknown action");
@@ -58,16 +76,32 @@ function SuggestionList({
 }
 
 function SearchBox() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  // const {searchStockResponse} = useSearchStocks(searchTerm);
 
   function onSuggestionSelected(selectedItem: string) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
   }
 
-  function onSearchTextChange(e) {
-    const userInput = e.currentTarget.value;
-    console.log(userInput);
+  function onSearchTextChange(e: any) {
+    setSearchTerm((i) => i + e.target.value);
   }
+
+  useEffect(() => {
+    dispatch({
+      type: "SET_SEARCH_TEXT",
+      payload: debouncedSearchTerm,
+    });
+    if (!debouncedSearchTerm) return;
+
+    async function searchStocks() {
+      const response = await searchStock({ symbol: debouncedSearchTerm });
+      console.log(response);
+    }
+    searchStocks();
+  }, [debouncedSearchTerm]);
 
   return (
     <>
@@ -75,10 +109,11 @@ function SearchBox() {
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="stock"
         type="text"
-        value={state.selected}
+        value={state.selectedItem || ""}
         onChange={onSearchTextChange}
         placeholder="Search for your stock..."
       />
+      <div>{state.status}</div>
       <SuggestionList
         showSuggestions={state.showSuggestions}
         suggestions={state.suggestions}

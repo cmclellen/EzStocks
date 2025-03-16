@@ -1,15 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getStocksHistory } from "../services/StocksApi";
-
-interface StockPrice {
-  createdDate: Date;
-  stocks: { [symbol: string]: number };
-}
-
-interface StocksHistory {
-  prices: StockPrice[];
-  tickers: { symbol: string; name: string; color: string }[];
-}
+import { getStocksHistory, StocksHistory } from "../services/StocksApi";
 
 export default function useStocksHistory() {
   const {
