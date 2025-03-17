@@ -1,6 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
-import useSearchStocks from "../hooks/useSearchStock";
 import { searchStock } from "../services/StocksApi";
 
 interface SearchBoxState {
@@ -8,7 +7,7 @@ interface SearchBoxState {
   suggestions: string[];
   showSuggestions: boolean;
   selectedItem?: string;
-  status: "loading" | "searching";
+  status: "ready" | "searching";
 }
 
 const initialState: SearchBoxState = {
@@ -16,13 +15,18 @@ const initialState: SearchBoxState = {
   suggestions: ["here"],
   showSuggestions: false,
   selectedItem: undefined,
-  status: "loading",
+  status: "ready",
 };
 
 function reducer(state: SearchBoxState, action: any): SearchBoxState {
   switch (action.type) {
     case "SET_SUGGESTIONS":
-      return { ...state, suggestions: action.payload, showSuggestions: true };
+      return {
+        ...state,
+        status: "ready",
+        suggestions: action.payload,
+        showSuggestions: true,
+      };
     case "SET_SELECTED":
       return {
         ...state,
@@ -86,7 +90,8 @@ function SearchBox() {
   }
 
   function onSearchTextChange(e: any) {
-    setSearchTerm((i) => i + e.target.value);
+    const { value } = e.target;
+    setSearchTerm(value);
   }
 
   useEffect(() => {
@@ -98,7 +103,11 @@ function SearchBox() {
 
     async function searchStocks() {
       const response = await searchStock({ symbol: debouncedSearchTerm });
-      console.log(response);
+
+      dispatch({
+        type: "SET_SUGGESTIONS",
+        payload: response.items.map((item) => item.symbol),
+      });
     }
     searchStocks();
   }, [debouncedSearchTerm]);
@@ -109,11 +118,10 @@ function SearchBox() {
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="stock"
         type="text"
-        value={state.selectedItem || ""}
+        value={state.selectedItem || state.searchText}
         onChange={onSearchTextChange}
         placeholder="Search for your stock..."
       />
-      <div>{state.status}</div>
       <SuggestionList
         showSuggestions={state.showSuggestions}
         suggestions={state.suggestions}
