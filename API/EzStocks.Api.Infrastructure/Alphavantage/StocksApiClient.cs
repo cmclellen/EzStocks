@@ -34,7 +34,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
 
             var response = await client.GetAsync(restRequest, cancellationToken);
             var json = response.Content!;
-            _logger.LogInformation("Response receieved [{JsonResponse}]", json);
+            _logger.LogInformation("Response received [{JsonResponse}]", json);
 
             return _getStockPriceResponseMapper.MapFromJson(json);
         }
@@ -50,10 +50,15 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
             restRequest.AddQueryParameter("keywords", request.SearchText);
 
             var response = await client.GetAsync(restRequest, cancellationToken);
+            if(!response.IsSuccessful)
+            {                
+                throw new Exception($"Failed to search for symbol [{response.StatusCode}: {response.ErrorMessage}]", response.ErrorException);
+            }
             var json = response.Content!;
-            _logger.LogInformation("Response receieved [{JsonResponse}]", json);
+            _logger.LogInformation("Response received [{JsonResponse}]", json);
 
-            return _searchForSymbolResponseMapper.MapFromJson(json);
+            var result = _searchForSymbolResponseMapper.MapFromJson(json);
+            return result;
         }
     }
 }
