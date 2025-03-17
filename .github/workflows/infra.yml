@@ -51,5 +51,5 @@ jobs:
           template: ./Infra/main.bicep
           parameters: |
             ./Infra/main.dev.bicepparam \
-            alphavantageApiKey=${{ secrets.ALPHAVANTAGE_API_KEY }} \
-            polygonioApiKey=${{ secrets.POLYGONIO_API_KEY }}
+              alphavantageApiKey=${{ secrets.ALPHAVANTAGE_API_KEY }} \
+              polygonioApiKey=${{ secrets.POLYGONIO_API_KEY }}
