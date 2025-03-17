@@ -1,5 +1,8 @@
+using EzStocks.Api.Application.Services;
+using EzStocks.Api.Domain.Utils;
 using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
+using EzStocks.Api.Infrastructure.PolygonIO;
 using EzStocks.Api.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +21,9 @@ var host = new HostBuilder()
     {
         var configuration = ctx.Configuration;
 
-        services.AddOption<AlphavantageSettings>(configuration, AlphavantageSettings.ConfigurationSection);
+        services
+            .AddOption<AlphavantageSettings>(configuration, AlphavantageSettings.ConfigurationSection)
+            .AddOption<PolygonIOSettings>(configuration, PolygonIOSettings.ConfigurationSection);
 
         services.AddAutoMapper(EzStocks.Api.Application.AssemblyReference.Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(EzStocks.Api.Application.AssemblyReference.Assembly));
@@ -28,6 +33,8 @@ var host = new HostBuilder()
             .ConfigureEFCore(configuration)
             .ConfigureOpenTelemetry();
 
+        services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();
+
         services.Scan(selector => selector
             .FromAssemblies(
                 EzStocks.Api.Functions.AssemblyReference.Assembly,
@@ -35,7 +42,7 @@ var host = new HostBuilder()
                 EzStocks.Api.Domain.AssemblyReference.Assembly,
                 EzStocks.Api.Persistence.AssemblyReference.Assembly,
                 EzStocks.Api.Infrastructure.AssemblyReference.Assembly)
-            .AddClasses(false)
+            .AddClasses(f=>f.Where(t=>!t.IsAssignableTo(typeof(IDateTimeProvider))), false)
             .UsingRegistrationStrategy(RegistrationStrategy.Skip)
             .AsMatchingInterface()
             .WithTransientLifetime());
