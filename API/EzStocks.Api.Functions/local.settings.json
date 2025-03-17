@@ -5,6 +5,7 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_EXTENSION_VERSION": "~4",
     "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/",
+    "PolygonIO__ApiBaseUrl": "https://api.polygon.io/",
     "ServicebusConnection__fullyQualifiedNamespace": "https://sbns-ezstocks-dev-aue.servicebus.windows.net:443/"
   },
   "Host": {

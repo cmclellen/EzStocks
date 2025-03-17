@@ -12,8 +12,6 @@ namespace EzStocks.Api.Functions.Functions
         ISender _sender)
     {
         [Function(nameof(CreateStockPrice))]
-        [Produces("application/json")]
-        [Consumes("application/json")]
         public async Task<IActionResult> CreateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stockPriceItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockPriceItem>();
@@ -21,15 +19,15 @@ namespace EzStocks.Api.Functions.Functions
             return new CreatedResult();
         }
 
-        //[Function(nameof(FetchStockPrice))]
-        //public async Task<IActionResult> FetchStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices/fetch")] HttpRequest req, CancellationToken cancellationToken)
-        //{
-        //    await sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
-        //    return new OkResult();
-        //}
-
         [Function(nameof(FetchStockPrice))]
-        public async Task<IActionResult> FetchStockPrice([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
+        public async Task<IActionResult> FetchStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stockprices/fetch")] HttpRequest req, CancellationToken cancellationToken)
+        {
+            await _sender.Send(new Application.Commands.FetchStockPriceItemCommand("MSFT"), cancellationToken);
+            return new OkResult();
+        }
+
+        [Function(nameof(FetchStockPriceCommand))]
+        public async Task<IActionResult> FetchStockPriceCommand([ServiceBusTrigger("fetch-stock-prices", Connection = "ServiceBusConnection")]
         FetchStockPriceItemCommand fetchStockPriceItemCommand, CancellationToken cancellationToken)
         {   
             await _sender.Send(fetchStockPriceItemCommand, cancellationToken);

@@ -5,6 +5,9 @@ param resourceNameFormat string
 @secure()
 param alphavantageApiKey string
 
+@secure()
+param polygonioApiKey string
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: format(resourceNameFormat, 'appi')
 }
@@ -90,6 +93,14 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=alphavantage-api-key)'
         }
         {
+          name: 'PolygonIO__ApiBaseUrl'
+          value: 'https://api.polygon.io/'
+        }
+        {
+          name: 'PolygonIO__ApiKey'
+          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=polygonio-api-key)'
+        }
+        {
           name: 'AzureFunctionsJobHost__logging__logLevel__default'
           value: 'Debug'
         }
@@ -111,6 +122,14 @@ resource alphavantageApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-
   parent: keyVault
   properties: {
     value: alphavantageApiKey
+  }
+}
+
+resource polygonioApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
+  name: 'polygonio-api-key'
+  parent: keyVault
+  properties: {
+    value: polygonioApiKey
   }
 }
 

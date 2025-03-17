@@ -6,8 +6,8 @@ using RestSharp;
 
 namespace EzStocks.Api.Infrastructure.Alphavantage
 {
-    public class StocksApiClient(
-        ILogger<StocksApiClient> _logger,
+    public class AlphavantageStocksApiClient(
+        ILogger<AlphavantageStocksApiClient> _logger,
         IOptions<AlphavantageSettings> _alphavantageSettingsOptions, 
         IGetStockPriceResponseMapper _getStockPriceResponseMapper,
         ISearchForSymbolResponseMapper _searchForSymbolResponseMapper) : IStocksApiClient

@@ -47,6 +47,7 @@ namespace EzStocks.Api.Application.Commands
                 else if(existingItem.Close != stockPriceItem.Close)
                 {
                     existingItem.Close = stockPriceItem.Close;
+                    existingItem.IanaTimeZoneId = stockPriceItem.IanaTimeZoneId;
                     await _stockPriceItemRepository.UpdateAsync(existingItem, cancellationToken);
                 }
             }

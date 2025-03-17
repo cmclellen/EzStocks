@@ -10,6 +10,9 @@ param environment string
 @secure()
 param alphavantageApiKey string
 
+@secure()
+param polygonioApiKey string
+
 var resourceNameFormat = format('{{0}}-ezstocks-{0}-aue', environment)
 
 module keyvault 'modules/keyvault.bicep' = {
@@ -51,5 +54,6 @@ module function 'modules/function.bicep' = {
     location: location
     resourceNameFormat: resourceNameFormat
     alphavantageApiKey: alphavantageApiKey
+    polygonioApiKey: polygonioApiKey
   }
 }
