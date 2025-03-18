@@ -27,6 +27,9 @@
     <Content Include="Alphavantage\Mappers\TIME_SERIES_DAILY.Response.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="PolygonIO\v3_reference_tickers.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

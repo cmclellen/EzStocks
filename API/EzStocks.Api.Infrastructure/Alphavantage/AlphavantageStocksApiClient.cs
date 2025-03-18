@@ -60,5 +60,10 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
             var result = _searchForSymbolResponseMapper.MapFromJson(json);
             return result;
         }
+
+        public Task<GetAllTickersResponse> GetAllTickersAsync(GetAllTickersRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

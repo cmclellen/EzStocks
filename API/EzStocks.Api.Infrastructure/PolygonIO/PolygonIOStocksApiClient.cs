@@ -47,7 +47,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
 
         public async Task<GetStockPriceResponse> GetStockPriceAsync(GetStockPriceRequest request, CancellationToken cancellationToken)
         {
-            var client = GetClient();
+            using var client = GetClient();
 
             var dt = GetEasternTime(DateTimeProvider.Current.UtcNow.AddDays(-3));
             var queryRequest = CreateQueryRequest("/v1/open-close/{stocksTicker}/{date}")
@@ -69,6 +69,27 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
 
         public Task<SearchForSymbolResponse> SearchForSymbolAsync(SearchForSymbolRequest request, CancellationToken cancellationToken)
         {
+            throw new NotImplementedException();
+        }
+
+        public Task<GetAllTickersResponse> GetAllTickersAsync(GetAllTickersRequest request, CancellationToken cancellationToken)
+        {
+            using var client = GetClient();
+
+            var dt = GetEasternTime(DateTimeProvider.Current.UtcNow.AddDays(-3));
+            var queryRequest = CreateQueryRequest("/v3/reference/tickers")
+                .AddQueryParameter("market", "stocks")
+                .AddQueryParameter("active", "true")
+                .AddQueryParameter("order", "asc")
+                .AddQueryParameter("limit", "100")
+                .AddQueryParameter("sort", "ticker");
+
+            //var ohlcvItem = await client.GetAsync<DTOs.OhlcvItem>(queryRequest, cancellationToken);
+            //if (ohlcvItem is null)
+            //{
+            //    throw new Exception($"Failed to search for symbol");
+            //}
+
             throw new NotImplementedException();
         }
     }
