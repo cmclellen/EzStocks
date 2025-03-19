@@ -1,0 +1,34 @@
+﻿{
+  Items: [
+    {
+      Ticker: A
+    },
+    {
+      Ticker: AA
+    },
+    {
+      Ticker: AAA
+    },
+    {
+      Ticker: AAAU
+    },
+    {
+      Ticker: AACBU
+    },
+    {
+      Ticker: AACG
+    },
+    {
+      Ticker: AACT
+    },
+    {
+      Ticker: AACT.U
+    },
+    {
+      Ticker: AACT.WS
+    },
+    {
+      Ticker: AADI
+    }
+  ]
+}
