@@ -12,5 +12,7 @@
 
     public record TickerSymbol(string Symbol, string Name, string Region, string TimeZone, string Currency);
 
-    public record GetAllTickersResponse();
+    public record TickerItem(string Ticker);
+
+    public record GetAllTickersResponse(List<TickerItem> Items);
 }

@@ -2,7 +2,7 @@
 
 namespace EzStocks.Api.Infrastructure.PolygonIO.DTOs
 {
-    public class OhlcvItem
+    public class OhlcvItemDto
     {
         public required decimal Close { get; set; }
         public required string Symbol { get; set; }
