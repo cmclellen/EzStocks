@@ -1,4 +1,5 @@
 ﻿using EzStocks.Api.Application.Services;
+using EzStocks.Api.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +10,8 @@ namespace EzStocks.Api.Application.Commands
     public class UpdateStockTickersCommandHandler(
         ILogger<UpdateStockTickersCommandHandler> _logger,
         IStocksApiClient _stocksApiClient,
-        Domain.Repositories.IStockTickerRepository _stockTickerRepository) : IRequestHandler<UpdateStockTickersCommand>
+        IStockTickerRepository _stockTickerRepository,
+        IUnitOfWork _unitOfWork) : IRequestHandler<UpdateStockTickersCommand>
     {
         public async Task Handle(UpdateStockTickersCommand request, CancellationToken cancellationToken)
         {
@@ -24,7 +26,9 @@ namespace EzStocks.Api.Application.Commands
                 _logger.LogDebug("Successfully fetched {StockTickerPageCount} stock tickers", getStockTickersResponse.Count);
                 totalStockTickerCount += getStockTickersResponse.Count;
 
-                await _stockTickerRepository.UpsertAsync(getStockTickersResponse.Items.Select(i => i.Ticker).ToList(), cancellationToken);
+                await _stockTickerRepository.UpsertAsync(getStockTickersResponse.Items.Select(i => new Domain.Entities.StockTicker { Symbol = i.Ticker }).ToList(), cancellationToken);
+
+                //await _unitOfWork.CommitAsync(cancellationToken);
 
                 if (string.IsNullOrEmpty(cursor = getStockTickersResponse.Cursor))
                 {
