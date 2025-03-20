@@ -11,8 +11,6 @@ namespace AzStocks.Api.Functions.Functions
         ISender sender)
     {
         [Function(nameof(GetStocks))]
-        [Produces("application/json")]
-        [Consumes("application/json")]
         public async Task<IActionResult> GetStocks([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stocks")] HttpRequest req, CancellationToken cancellationToken)
         {
             var stocks = await sender.Send(new GetStocksQuery(), cancellationToken);
@@ -25,13 +23,6 @@ namespace AzStocks.Api.Functions.Functions
             var stockItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockItem>();
             await sender.Send(new CreateStockCommand(stockItem!), cancellationToken);
             return new CreatedResult();
-        }
-
-        [Function(nameof(SearchStocks))]
-        public async Task<IActionResult> SearchStocks([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stocks/search")] HttpRequest req, string searchText, CancellationToken cancellationToken)
-        {
-            var result = await sender.Send(new SearchStocksQuery(searchText), cancellationToken);
-            return new OkObjectResult(result);
         }
     }
 }

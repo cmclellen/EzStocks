@@ -14,5 +14,5 @@
 
     public record TickerItem(string Ticker);
 
-    public record GetAllTickersResponse(List<TickerItem> Items);
+    public record GetStockTickersResponse(List<TickerItem> Items, int Count, string? Cursor);
 }

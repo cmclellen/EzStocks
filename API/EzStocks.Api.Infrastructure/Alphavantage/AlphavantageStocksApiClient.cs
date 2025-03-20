@@ -6,6 +6,7 @@ using RestSharp;
 
 namespace EzStocks.Api.Infrastructure.Alphavantage
 {
+    [Obsolete("This class is obsolete, use PolygonIOStocksApiClient instead")]
     public class AlphavantageStocksApiClient(
         ILogger<AlphavantageStocksApiClient> _logger,
         IOptions<AlphavantageSettings> _alphavantageSettingsOptions, 
@@ -61,7 +62,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
             return result;
         }
 
-        public Task<GetAllTickersResponse> GetAllTickersAsync(GetAllTickersRequest request, CancellationToken cancellationToken)
+        public Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

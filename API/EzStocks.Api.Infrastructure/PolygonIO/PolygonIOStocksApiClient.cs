@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using RestSharp;
 using RestSharp.Serializers.Json;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace EzStocks.Api.Infrastructure.PolygonIO
 {
@@ -73,17 +74,28 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
             throw new NotImplementedException();
         }
 
-        public async Task<GetAllTickersResponse> GetAllTickersAsync(GetAllTickersRequest request, CancellationToken cancellationToken)
+        public async Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken)
         {
             using var client = GetClient();
 
-            var queryRequest = CreateQueryRequest("/v3/reference/tickers")
-                .AddQueryParameter("market", "stocks")
-                .AddQueryParameter("active", "true")
-                .AddQueryParameter("order", "asc")
-                .AddQueryParameter("limit", "100")
-                .AddQueryParameter("sort", "ticker");
-
+            var url = "/v3/reference/tickers";
+            var queryRequest = CreateQueryRequest(url);
+            if(request.Cursor is not null)
+            {
+                queryRequest = queryRequest
+                    .AddQueryParameter("cursor", request.Cursor);
+            } 
+            else
+            {
+                queryRequest = queryRequest
+                    .AddQueryParameter("exchange", "XNAS")
+                    .AddQueryParameter("type", "CS")                    
+                    .AddQueryParameter("market", "stocks")
+                    .AddQueryParameter("active", "true")
+                    .AddQueryParameter("order", "asc")
+                    .AddQueryParameter("limit", request.Limit)
+                    .AddQueryParameter("sort", "ticker");
+            }
             
             var v3ReferenceTickersResponseDto = await client.GetAsync<V3ReferenceTickersResponseDto>(queryRequest, cancellationToken);
             if(v3ReferenceTickersResponseDto is null)
@@ -93,7 +105,14 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
 
             var items = v3ReferenceTickersResponseDto.Results.Select(i=>new TickerItem(i.Ticker)).ToList();
 
-            return new GetAllTickersResponse(items);
+            return new GetStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
+        }
+
+        private string? GetCursor(string? nextUrl)
+        {
+            var regex = new Regex(@"cursor=(?<cursor>.+)$");
+            regex.Match(nextUrl ?? string.Empty).Groups.TryGetValue("cursor", out var cursor);
+            return cursor?.Value;
         }
     }
 }

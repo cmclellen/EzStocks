@@ -49,7 +49,7 @@ namespace EzStocks.Api.Infrastructure.UnitTests.PolygonIO
                );
 
             // ACT
-            var actual = await _sut.GetAllTickersAsync(new Application.Services.GetAllTickersRequest(), default);
+            var actual = await _sut.GetStockTickersAsync(new Application.Services.GetStockTickersRequest(), default);
 
             // ASSERT
             await Verify(actual);
