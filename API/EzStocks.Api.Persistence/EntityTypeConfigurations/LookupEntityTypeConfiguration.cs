@@ -12,7 +12,8 @@ namespace EzStocks.Api.Persistence.EntityTypeConfigurations
             builder.HasKey(e => e.Id);
             builder.HasDiscriminator(e => e.Type)
                 .HasValue<StockItem>(nameof(StockItem))
-                .HasValue<StockPriceItem>(nameof(StockPriceItem));
+                .HasValue<StockPriceItem>(nameof(StockPriceItem))
+                .HasValue<StockTicker>(nameof(StockTicker));
             builder.HasPartitionKey(e => e.Type);
         }
     }
