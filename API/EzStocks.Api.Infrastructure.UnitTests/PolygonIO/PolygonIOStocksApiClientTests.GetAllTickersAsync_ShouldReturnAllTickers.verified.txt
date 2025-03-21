@@ -1,44 +1,64 @@
 ﻿{
-  Items: [
+  TickerSymbols: [
     {
-      Ticker: A,
-      Name: Agilent Technologies Inc.
+      Symbol: A,
+      Name: Agilent Technologies Inc.,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AA,
-      Name: Alcoa Corporation
+      Symbol: AA,
+      Name: Alcoa Corporation,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AAA,
-      Name: Alternative Access First Priority CLO Bond ETF
+      Symbol: AAA,
+      Name: Alternative Access First Priority CLO Bond ETF,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AAAU,
-      Name: Goldman Sachs Physical Gold ETF Shares
+      Symbol: AAAU,
+      Name: Goldman Sachs Physical Gold ETF Shares,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AACBU,
-      Name: Artius II Acquisition Inc. Units
+      Symbol: AACBU,
+      Name: Artius II Acquisition Inc. Units,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AACG,
-      Name: ATA Creativity Global American Depositary Shares
+      Symbol: AACG,
+      Name: ATA Creativity Global American Depositary Shares,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AACT,
-      Name: Ares Acquisition Corporation II
+      Symbol: AACT,
+      Name: Ares Acquisition Corporation II,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AACT.U,
-      Name: Ares Acquisition Corporation II Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant
+      Symbol: AACT.U,
+      Name: Ares Acquisition Corporation II Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AACT.WS,
-      Name: Ares Acquisition Corporation II Redeemable Warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50
+      Symbol: AACT.WS,
+      Name: Ares Acquisition Corporation II Redeemable Warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50,
+      Region: us,
+      Currency: usd
     },
     {
-      Ticker: AADI,
-      Name: Aadi Bioscience, Inc. Common Stock
+      Symbol: AADI,
+      Name: Aadi Bioscience, Inc. Common Stock,
+      Region: us,
+      Currency: usd
     }
   ],
   Count: 10,

@@ -38,7 +38,7 @@ namespace EzStocks.Api.Functions.Functions
         [ServiceBusOutput("populate-stock-prices", Connection = "ServiceBusConnection")]
         public async Task<PopulateStockPriceItemCommand[]> PopulateStockPricesTimer([TimerTrigger("0 30 20 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
         {
-            var stockItems = await _sender.Send(new Application.Queries.GetStocksQuery(), cancellationToken);
+            var stockItems = await _sender.Send(new Application.Queries.GetAllStockTickersQuery(), cancellationToken);
             List<string> symbols = stockItems.Select(item => item.Symbol).ToList();
             return symbols.Select(symbol => new PopulateStockPriceItemCommand(symbol)).ToArray();
         }

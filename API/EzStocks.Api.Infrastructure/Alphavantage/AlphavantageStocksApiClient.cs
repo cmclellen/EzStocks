@@ -40,7 +40,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
             return _getStockPriceResponseMapper.MapFromJson(json);
         }
 
-        public async Task<SearchForSymbolResponse> SearchForSymbolAsync(SearchForSymbolRequest request, CancellationToken cancellationToken)
+        public async Task<SearchStockTickersResponse> SearchStockTickersAsync(SearchStockTickersRequest request, CancellationToken cancellationToken)
         {
             const string FUNCTION = "SYMBOL_SEARCH";
             using var _ = _logger.BeginScope(new Dictionary<string, object> { ["SearchText"] = request.SearchText, ["Function"] = FUNCTION });
@@ -60,11 +60,6 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
 
             var result = _searchForSymbolResponseMapper.MapFromJson(json);
             return result;
-        }
-
-        public Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

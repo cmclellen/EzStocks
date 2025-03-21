@@ -8,11 +8,11 @@
 
     public record GetStockPriceResponse(string Symbol, TimeZoneInfo TimeZone, List<OhlcvItem> OhlcvItems);
 
-    public record SearchForSymbolResponse(IList<TickerSymbol> Symbols);
+    public record SearchStockTickersResponse(IList<TickerSymbol> TickerSymbols, int Count, string? Cursor);
 
-    public record TickerSymbol(string Symbol, string Name, string Region, string TimeZone, string Currency);
+    public record TickerSymbol(string Symbol, string Name, string Region, string Currency);
 
-    public record TickerItem(string Ticker, string Name);
+    //public record TickerItem(string Ticker, string Name);
 
-    public record GetStockTickersResponse(List<TickerItem> Items, int Count, string? Cursor);
+    //public record GetStockTickersResponse(List<TickerItem> Items, int Count, string? Cursor);
 }

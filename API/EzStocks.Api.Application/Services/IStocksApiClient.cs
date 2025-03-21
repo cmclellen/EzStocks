@@ -4,8 +4,6 @@
     {
         Task<GetStockPriceResponse> GetStockPriceAsync(GetStockPriceRequest request, CancellationToken cancellationToken);
 
-        Task<SearchForSymbolResponse> SearchForSymbolAsync(SearchForSymbolRequest request, CancellationToken cancellationToken);
-
-        Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken);
+        Task<SearchStockTickersResponse> SearchStockTickersAsync(SearchStockTickersRequest request, CancellationToken cancellationToken);
     }
 }

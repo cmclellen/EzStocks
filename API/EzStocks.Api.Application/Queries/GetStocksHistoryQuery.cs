@@ -44,10 +44,12 @@ namespace EzStocks.Api.Application.Queries
                 return acc;
             });
 
-            var stockItems = await _stockTickerRepository.GetBySymbolsAsync(symbols, cancellationToken);
-            var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockTicker, Dtos.StockTicker>).ToList();
+            // TODO: Get user stock tickers
+            var userStockTickers = new List<Dtos.StockTicker>();
+            //var stockItems = await _stockTickerRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            //var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockTicker, Dtos.StockTicker>).ToList();
 
-            return new GetStocksHistoryResponse(result, stockItemsDtos);
+            return new GetStocksHistoryResponse(result, userStockTickers);
         }
     }
 }
