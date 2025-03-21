@@ -10,15 +10,15 @@ namespace EzStocks.Api.Application.Commands
         IMapper _mapper,
         IUnitOfWork _unitOfWork,
         IUserRepository _userRepository,
-        IStockItemRepository _stockItemRepository) : IRequestHandler<CreateUserCommand>
+        IStockTickerRepository _stockTickerRepository) : IRequestHandler<CreateUserCommand>
     {
         public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var symbols = request.User.StockItems.Select(item => item.Symbol).ToList();
-            var stockItems = await _stockItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            var stockItems = await _stockTickerRepository.GetBySymbolsAsync(symbols, cancellationToken);
 
             var user = _mapper.Map<Dtos.User, Domain.Entities.User>(request.User);            
-            user.StockItems = stockItems!.Select(item=>_mapper.Map<Domain.Entities.StockItem, Domain.Entities.UserStockItem>(item)).ToList();
+            user.StockItems = stockItems!.Select(item=>_mapper.Map<Domain.Entities.StockTicker, Domain.Entities.UserStockTicker>(item)).ToList();
 
             await _userRepository.CreateAsync(user, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);

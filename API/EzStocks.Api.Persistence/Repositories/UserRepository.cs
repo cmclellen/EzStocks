@@ -1,5 +1,6 @@
 ﻿using EzStocks.Api.Domain.Entities;
 using EzStocks.Api.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace EzStocks.Api.Persistence.Repositories
 {
@@ -12,7 +13,8 @@ namespace EzStocks.Api.Persistence.Repositories
 
         public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await ezStockDbContext.Users.FindAsync(userId, cancellationToken);
+            return await ezStockDbContext.Users.Include(e => e.StockItems)
+                .FirstOrDefaultAsync(e=>e.UserId == userId);
         }
     }
 }

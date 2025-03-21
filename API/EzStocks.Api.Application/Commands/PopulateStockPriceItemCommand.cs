@@ -5,21 +5,21 @@ using Microsoft.Extensions.Logging;
 
 namespace EzStocks.Api.Application.Commands
 {
-    public record FetchStockPriceItemCommand(string Symbol, int? MaxItemCount = 3) : IRequest;
+    public record PopulateStockPriceItemCommand(string Symbol, int? MaxItemCount = 3) : IRequest;
 
-    public class FetchStockPriceItemCommandHandler(
-        ILogger<FetchStockPriceItemCommandHandler> _logger,
+    public class PopulateStockPriceItemCommandHandler(
+        ILogger<PopulateStockPriceItemCommandHandler> _logger,
         IUnitOfWork _unitOfWork,
         IStockPriceItemRepository _stockPriceItemRepository,
-        IStocksApiClient _stocksApiClient) : IRequestHandler<FetchStockPriceItemCommand>
+        IStocksApiClient _stocksApiClient) : IRequestHandler<PopulateStockPriceItemCommand>
     {
-        public async Task Handle(FetchStockPriceItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(PopulateStockPriceItemCommand request, CancellationToken cancellationToken)
         {
             using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Symbol"] = request.Symbol });
 
-            _logger.LogDebug($"Fetching stock prices...");
+            _logger.LogDebug($"Populating stock prices...");
             var getStockPriceResponse = await _stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(request.Symbol), cancellationToken);
-            _logger.LogInformation("Successfully fetched stock prices");
+            _logger.LogInformation("Successfully populated stock prices");
 
             var stockPriceItems = getStockPriceResponse.OhlcvItems.Select(item => new Domain.Entities.StockPriceItem
             {

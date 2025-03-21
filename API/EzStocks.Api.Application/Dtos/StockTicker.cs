@@ -1,6 +1,6 @@
 ﻿namespace EzStocks.Api.Application.Dtos
 {
-    public class StockItem
+    public class StockTicker
     {
         public Guid? Id { get; set; }
         public required string Symbol { get; set; }

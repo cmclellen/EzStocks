@@ -17,12 +17,12 @@ namespace AzStocks.Api.Functions.Functions
             return new OkObjectResult(stocks);
         }
 
-        [Function(nameof(CreateStock))]
-        public async Task<IActionResult> CreateStock([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stocks")] HttpRequest req, CancellationToken cancellationToken)
-        {
-            var stockItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockItem>();
-            await sender.Send(new CreateStockCommand(stockItem!), cancellationToken);
-            return new CreatedResult();
-        }
+        //[Function(nameof(CreateStock))]
+        //public async Task<IActionResult> CreateStock([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stocks")] HttpRequest req, CancellationToken cancellationToken)
+        //{
+        //    var stockItem = await req.ReadFromJsonAsync<EzStocks.Api.Application.Dtos.StockTicker>();
+        //    await sender.Send(new CreateStockCommand(stockItem!), cancellationToken);
+        //    return new CreatedResult();
+        //}
     }
 }

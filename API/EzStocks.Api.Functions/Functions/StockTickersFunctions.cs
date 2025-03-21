@@ -17,17 +17,17 @@ namespace AzStocks.Api.Functions.Functions
             return new OkObjectResult(result);
         }
 
-        [Function(nameof(UpdateStockTickersTimer))]
-        public async Task<IActionResult> UpdateStockTickersTimer([TimerTrigger("0 0 23 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
+        [Function(nameof(PopulateStockTickersTimer))]
+        public async Task<IActionResult> PopulateStockTickersTimer([TimerTrigger("0 0 23 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
         {
-            await sender.Send(new UpdateStockTickersCommand(), cancellationToken);
+            await sender.Send(new PopulateStockTickersCommand(), cancellationToken);
             return new OkResult();
         }
 
-        [Function(nameof(UpdateStockTickers))]
-        public async Task<IActionResult> UpdateStockTickers([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers/update")] HttpRequest req, CancellationToken cancellationToken)
+        [Function(nameof(PopulateStockTickers))]
+        public async Task<IActionResult> PopulateStockTickers([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers/populate")] HttpRequest req, string? ticker = null, CancellationToken cancellationToken = default)
         {
-            await sender.Send(new UpdateStockTickersCommand(), cancellationToken);         
+            await sender.Send(new PopulateStockTickersCommand(ticker), cancellationToken);
             return new AcceptedResult();
         }
     }

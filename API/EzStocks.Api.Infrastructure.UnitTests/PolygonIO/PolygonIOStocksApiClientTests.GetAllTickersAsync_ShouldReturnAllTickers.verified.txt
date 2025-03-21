@@ -1,34 +1,44 @@
 ﻿{
   Items: [
     {
-      Ticker: A
+      Ticker: A,
+      Name: Agilent Technologies Inc.
     },
     {
-      Ticker: AA
+      Ticker: AA,
+      Name: Alcoa Corporation
     },
     {
-      Ticker: AAA
+      Ticker: AAA,
+      Name: Alternative Access First Priority CLO Bond ETF
     },
     {
-      Ticker: AAAU
+      Ticker: AAAU,
+      Name: Goldman Sachs Physical Gold ETF Shares
     },
     {
-      Ticker: AACBU
+      Ticker: AACBU,
+      Name: Artius II Acquisition Inc. Units
     },
     {
-      Ticker: AACG
+      Ticker: AACG,
+      Name: ATA Creativity Global American Depositary Shares
     },
     {
-      Ticker: AACT
+      Ticker: AACT,
+      Name: Ares Acquisition Corporation II
     },
     {
-      Ticker: AACT.U
+      Ticker: AACT.U,
+      Name: Ares Acquisition Corporation II Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant
     },
     {
-      Ticker: AACT.WS
+      Ticker: AACT.WS,
+      Name: Ares Acquisition Corporation II Redeemable Warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50
     },
     {
-      Ticker: AADI
+      Ticker: AADI,
+      Name: Aadi Bioscience, Inc. Common Stock
     }
   ],
   Count: 10,

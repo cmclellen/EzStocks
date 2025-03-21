@@ -15,6 +15,8 @@ function StockGraph() {
 
   if (isLoadingStocksHistory) return <Spinner />;
 
+  console.log(stocksHistory);
+
   return (
     <>
       {/* <pre>{JSON.stringify(stocksHistory, null, 2)}</pre> */}

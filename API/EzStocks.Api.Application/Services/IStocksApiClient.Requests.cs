@@ -4,5 +4,5 @@
 
     public record SearchForSymbolRequest(string SearchText);
 
-    public record GetStockTickersRequest(int Limit = 100, string? Cursor = null);
+    public record GetStockTickersRequest(string? Ticker = null, int Limit = 100, string? Cursor = null);
 }

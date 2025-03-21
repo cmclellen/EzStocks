@@ -3,5 +3,6 @@
     public class TickerItemDto
     {
         public required string Ticker { get; set; }
+        public required string Name { get; set; }
     }
 }

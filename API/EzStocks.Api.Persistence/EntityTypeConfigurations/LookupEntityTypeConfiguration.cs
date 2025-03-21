@@ -11,7 +11,7 @@ namespace EzStocks.Api.Persistence.EntityTypeConfigurations
             builder.ToContainer("Lookup");
             builder.HasKey(e => e.Id);
             builder.HasDiscriminator(e => e.Type)
-                .HasValue<StockItem>(nameof(StockItem))
+                //.HasValue<StockItem>(nameof(StockItem))
                 .HasValue<StockPriceItem>(nameof(StockPriceItem))
                 .HasValue<StockTicker>(nameof(StockTicker));
             builder.HasPartitionKey(e => e.Type);

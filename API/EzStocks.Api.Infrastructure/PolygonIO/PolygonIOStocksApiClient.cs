@@ -95,6 +95,10 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
                     .AddQueryParameter("order", "asc")
                     .AddQueryParameter("limit", request.Limit)
                     .AddQueryParameter("sort", "ticker");
+                if(request.Ticker is not null)
+                {
+                    queryRequest = queryRequest.AddQueryParameter("ticker", request.Ticker);
+                }
             }
             
             var v3ReferenceTickersResponseDto = await client.GetAsync<V3ReferenceTickersResponseDto>(queryRequest, cancellationToken);
@@ -103,7 +107,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
                 throw new Exception($"Failed retrieving tickers.");
             }
 
-            var items = v3ReferenceTickersResponseDto.Results.Select(i=>new TickerItem(i.Ticker)).ToList();
+            var items = v3ReferenceTickersResponseDto.Results.Select(i=>new TickerItem(i.Ticker, i.Name)).ToList();
 
             return new GetStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
         }
