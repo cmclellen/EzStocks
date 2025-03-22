@@ -36,9 +36,9 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Builders
             return this;
         }
 
-        public TickerSymbol Build()
+        public StockTicker Build()
         {
-            return new TickerSymbol(_symbol!, _name!, _region!, _timeZone!, _currency!);
+            return new StockTicker(_symbol!, _name!, _region!, _currency!);
         }
     }
 }

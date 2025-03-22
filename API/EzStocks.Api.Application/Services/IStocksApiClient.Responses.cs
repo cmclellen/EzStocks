@@ -6,13 +6,9 @@
         public decimal Close { get; set; }
     }
 
-    public record GetStockPriceResponse(string Symbol, TimeZoneInfo TimeZone, List<OhlcvItem> OhlcvItems);
+    public record GetStockPriceResponse(string Ticker, TimeZoneInfo TimeZone, List<OhlcvItem> OhlcvItems);
 
-    public record SearchForSymbolResponse(IList<TickerSymbol> Symbols);
+    public record SearchStockTickersResponse(IList<StockTicker> StockTickers, int Count, string? Cursor);
 
-    public record TickerSymbol(string Symbol, string Name, string Region, string TimeZone, string Currency);
-
-    public record TickerItem(string Ticker);
-
-    public record GetStockTickersResponse(List<TickerItem> Items, int Count, string? Cursor);
+    public record StockTicker(string Ticker, string Name, string Region, string Currency);
 }

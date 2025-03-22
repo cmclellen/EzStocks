@@ -12,7 +12,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
 // @description('The name for the SQL API container')
 // param containerName string = 'stockscontainer1'
 
-resource account 'Microsoft.DocumentDB/databaseAccounts@2024-11-15' = {
+resource account 'Microsoft.DocumentDB/databaseAccounts@2024-12-01-preview' = {
   name: format(resourceNameFormat, 'cosmos')
   kind: 'GlobalDocumentDB'
   location: location
@@ -20,6 +20,8 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2024-11-15' = {
     enableFreeTier: true
     consistencyPolicy: { defaultConsistencyLevel: 'Session' }
     databaseAccountOfferType: 'Standard'
+    // Cheaper to go with serverless
+    capacityMode: 'Serverless'
     locations: [
       {
         locationName: location
@@ -34,9 +36,9 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2024-11-15' = {
       resource: {
         id: databaseName
       }
-      options: {
-        throughput: 1000
-      }
+      // options: {
+      //   throughput: 1000
+      // }
     }
 
     //   resource container 'containers' = {

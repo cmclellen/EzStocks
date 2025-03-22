@@ -26,12 +26,12 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
         public async Task<GetStockPriceResponse> GetStockPriceAsync(GetStockPriceRequest request, CancellationToken cancellationToken)
         {
             const string FUNCTION = "TIME_SERIES_DAILY";
-            using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Symbol"] = request.Symbol, ["Function"] = FUNCTION });
+            using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Symbol"] = request.Ticker, ["Function"] = FUNCTION });
 
             var options = new RestClientOptions(AlphavantageSettings.ApiBaseUrl);
             var client = new RestClient(options);
             var restRequest = CreateQueryRequest(FUNCTION);
-            restRequest.AddQueryParameter("symbol", request.Symbol);
+            restRequest.AddQueryParameter("symbol", request.Ticker);
 
             var response = await client.GetAsync(restRequest, cancellationToken);
             var json = response.Content!;
@@ -40,7 +40,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
             return _getStockPriceResponseMapper.MapFromJson(json);
         }
 
-        public async Task<SearchForSymbolResponse> SearchForSymbolAsync(SearchForSymbolRequest request, CancellationToken cancellationToken)
+        public async Task<SearchStockTickersResponse> SearchStockTickersAsync(SearchStockTickersRequest request, CancellationToken cancellationToken)
         {
             const string FUNCTION = "SYMBOL_SEARCH";
             using var _ = _logger.BeginScope(new Dictionary<string, object> { ["SearchText"] = request.SearchText, ["Function"] = FUNCTION });
@@ -60,11 +60,6 @@ namespace EzStocks.Api.Infrastructure.Alphavantage
 
             var result = _searchForSymbolResponseMapper.MapFromJson(json);
             return result;
-        }
-
-        public Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

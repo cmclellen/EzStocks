@@ -1,8 +1,6 @@
 ﻿namespace EzStocks.Api.Application.Services
 {
-    public record GetStockPriceRequest(string Symbol);
+    public record GetStockPriceRequest(string Ticker);
 
-    public record SearchForSymbolRequest(string SearchText);
-
-    public record GetStockTickersRequest(int Limit = 100, string? Cursor = null);
+    public record SearchStockTickersRequest(string SearchText, int Limit = 20, string? Cursor = null);
 }

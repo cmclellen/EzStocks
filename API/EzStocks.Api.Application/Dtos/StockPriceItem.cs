@@ -2,7 +2,7 @@
 {
     public class StockPriceItem
     {
-        public required string Symbol { get; set; }
+        public required string Ticker { get; set; }
         public decimal Close { get; set; }
         public DateTime CreatedDateUtc { get; set; }
     }

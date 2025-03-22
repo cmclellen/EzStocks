@@ -53,7 +53,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
 
             var dt = GetEasternTime(DateTimeProvider.Current.UtcNow.AddDays(-3));
             var queryRequest = CreateQueryRequest("/v1/open-close/{stocksTicker}/{date}")
-                .AddUrlSegment("stocksTicker", request.Symbol)
+                .AddUrlSegment("stocksTicker", request.Ticker)
                 .AddUrlSegment("date", ToDateString(dt));
             var ohlcvItem = await client.GetAsync<DTOs.OhlcvItemDto>(queryRequest, cancellationToken);
             if (ohlcvItem is null)
@@ -69,43 +69,42 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
             return new GetStockPriceResponse(ohlcvItem.Symbol, ETTimeZoneInfo, new List<OhlcvItem> { appOhlcvItem });
         }
 
-        public Task<SearchForSymbolResponse> SearchForSymbolAsync(SearchForSymbolRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<GetStockTickersResponse> GetStockTickersAsync(GetStockTickersRequest request, CancellationToken cancellationToken)
+        public async Task<SearchStockTickersResponse> SearchStockTickersAsync(SearchStockTickersRequest request, CancellationToken cancellationToken)
         {
             using var client = GetClient();
 
             var url = "/v3/reference/tickers";
             var queryRequest = CreateQueryRequest(url);
-            if(request.Cursor is not null)
+            if (request.Cursor is not null)
             {
                 queryRequest = queryRequest
                     .AddQueryParameter("cursor", request.Cursor);
-            } 
+            }
             else
             {
                 queryRequest = queryRequest
                     .AddQueryParameter("exchange", "XNAS")
-                    .AddQueryParameter("type", "CS")                    
+                    .AddQueryParameter("type", "CS")
                     .AddQueryParameter("market", "stocks")
                     .AddQueryParameter("active", "true")
                     .AddQueryParameter("order", "asc")
                     .AddQueryParameter("limit", request.Limit)
                     .AddQueryParameter("sort", "ticker");
+                if (request.SearchText is not null)
+                {
+                    queryRequest = queryRequest.AddQueryParameter("ticker.gte", request.SearchText);
+                }
             }
-            
+
             var v3ReferenceTickersResponseDto = await client.GetAsync<V3ReferenceTickersResponseDto>(queryRequest, cancellationToken);
-            if(v3ReferenceTickersResponseDto is null)
+            if (v3ReferenceTickersResponseDto is null)
             {
                 throw new Exception($"Failed retrieving tickers.");
             }
 
-            var items = v3ReferenceTickersResponseDto.Results.Select(i=>new TickerItem(i.Ticker)).ToList();
+            var items = v3ReferenceTickersResponseDto.Results.Select(i => new StockTicker(i.Ticker, i.Name, i.Locale, i.CurrencyName)).ToList();
 
-            return new GetStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
+            return new SearchStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
         }
 
         private string? GetCursor(string? nextUrl)

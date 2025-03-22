@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 param resourceNameFormat string
 
 var queueNames = [
-  'fetch-stock-prices'
+  'populate-stock-prices'
 ]
 
 resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {

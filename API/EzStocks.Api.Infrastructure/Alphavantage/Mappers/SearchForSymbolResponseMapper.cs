@@ -5,17 +5,17 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
 {
     public interface ISearchForSymbolResponseMapper
     {
-        SearchForSymbolResponse MapFromJson(string json);
+        SearchStockTickersResponse MapFromJson(string json);
     }
 
     public class SearchForSymbolResponseMapper : ISearchForSymbolResponseMapper
     {
-        public SearchForSymbolResponse MapFromJson(string json)
+        public SearchStockTickersResponse MapFromJson(string json)
         {
             var root = JsonNode.Parse(json)!;
             var bestMatches = root["bestMatches"]!;
             var builder = new Builders.TickerSymbolBuilder();
-            var tickerSymbols = bestMatches.AsArray().Aggregate(new List<TickerSymbol>(), (acc, item) =>
+            var tickerSymbols = bestMatches.AsArray().Aggregate(new List<StockTicker>(), (acc, item) =>
             {
                 var obj = item!.AsObject().AsEnumerable();
                 foreach (var objItem in obj)
@@ -47,7 +47,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
                 return acc;
             });
 
-            return new SearchForSymbolResponse(tickerSymbols);
+            return new SearchStockTickersResponse(tickerSymbols, tickerSymbols.Count, null);
         }
     }
 }

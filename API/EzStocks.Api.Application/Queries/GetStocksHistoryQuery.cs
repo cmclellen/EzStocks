@@ -7,7 +7,7 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockItem> Tickers);
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTickerTiny> Tickers);
 
     public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
 
@@ -15,7 +15,6 @@ namespace EzStocks.Api.Application.Queries
         IMapper _mapper,
         IUserContext _userContext,
         IStockPriceItemRepository _stockPriceItemRepository,
-        IStockItemRepository _stockItemRepository,
         IUserRepository _userRepository) : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
     {
         public async Task<Result<GetStocksHistoryResponse>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
@@ -26,8 +25,8 @@ namespace EzStocks.Api.Application.Queries
                 return Result<GetStocksHistoryResponse>.NotFound();
             }
 
-            var symbols = user.StockItems.Select(i=>i.Symbol).ToList();
-            var stocks = await _stockPriceItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            var tickers = user.StockTickers.Select(i=>i.Ticker).ToList();
+            var stocks = await _stockPriceItemRepository.GetByTickersAsync(tickers, cancellationToken);
 
             var result = stocks.Aggregate(new List<StocksPriceItem>(), (acc, stock) =>
             {
@@ -40,14 +39,13 @@ namespace EzStocks.Api.Application.Queries
                         Stocks = new Dictionary<string, decimal>()
                     });
                 }
-                stockPriceItem.Stocks[stock.Symbol] = stock.Close;
+                stockPriceItem.Stocks[stock.Ticker] = stock.Close;
                 return acc;
             });
 
-            var stockItems = await _stockItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
-            var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockItem, Dtos.StockItem>).ToList();
+            var stockTickerDtos = user.StockTickers.Select(_mapper.Map<Domain.Entities.UserStockTicker, Dtos.StockTickerTiny>).ToList();
 
-            return new GetStocksHistoryResponse(result, stockItemsDtos);
+            return new GetStocksHistoryResponse(result, stockTickerDtos);
         }
     }
 }

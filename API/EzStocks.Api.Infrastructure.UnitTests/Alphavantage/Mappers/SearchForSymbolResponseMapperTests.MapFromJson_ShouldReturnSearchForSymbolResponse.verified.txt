@@ -1,39 +1,35 @@
 ﻿{
-  Symbols: [
+  StockTickers: [
     {
-      Symbol: TSCO.LON,
+      Ticker: TSCO.LON,
       Name: Tesco PLC,
       Region: United Kingdom,
-      TimeZone: UTC+01,
       Currency: GBX
     },
     {
-      Symbol: TSCDF,
+      Ticker: TSCDF,
       Name: Tesco plc,
       Region: United States,
-      TimeZone: UTC-04,
       Currency: USD
     },
     {
-      Symbol: TSCDY,
+      Ticker: TSCDY,
       Name: Tesco plc,
       Region: United States,
-      TimeZone: UTC-04,
       Currency: USD
     },
     {
-      Symbol: TCO2.FRK,
+      Ticker: TCO2.FRK,
       Name: TESCO PLC ADR/1 LS-05,
       Region: Frankfurt,
-      TimeZone: UTC+02,
       Currency: EUR
     },
     {
-      Symbol: TCO0.FRK,
+      Ticker: TCO0.FRK,
       Name: TESCO PLC LS-0633333,
       Region: Frankfurt,
-      TimeZone: UTC+02,
       Currency: EUR
     }
-  ]
+  ],
+  Count: 5
 }

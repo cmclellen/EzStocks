@@ -11,10 +11,9 @@ namespace EzStocks.Api.Persistence
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<StockItem> StockItems { get; set; }
+        //public DbSet<StockItem> StockItems { get; set; }
         public DbSet<StockPriceItem> StockPriceItems { get; set; }
         public DbSet<StockTicker> StockTickers { get; set; }
-
         public DbSet<StockHistoryItem> StockHistoryItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

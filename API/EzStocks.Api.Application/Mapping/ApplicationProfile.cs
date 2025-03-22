@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EzStocks.Api.Application.Commands;
 
 namespace EzStocks.Api.Application.Mapping
 {
@@ -6,15 +7,17 @@ namespace EzStocks.Api.Application.Mapping
     {
         public ApplicationProfile()
         {
-            CreateMap<Domain.Entities.StockItem, Dtos.StockItem>();
-            CreateMap<Dtos.StockItem, Domain.Entities.StockItem>();
+            CreateMap<Domain.Entities.StockTicker, Dtos.StockTicker>();
+            CreateMap<Dtos.StockTicker, Domain.Entities.StockTicker>();
             CreateMap<Dtos.StockPriceItem, Domain.Entities.StockPriceItem>();
             CreateMap<Dtos.User, Domain.Entities.User>()
-                .ForMember(d => d.StockItems, o => o.Ignore());
-            CreateMap<Domain.Entities.StockItem, Domain.Entities.UserStockItem>();
+                .ForMember(d => d.StockTickers, o => o.Ignore());
+            CreateMap<Domain.Entities.StockTicker, Domain.Entities.UserStockTicker>();
             CreateMap<Domain.Entities.User, Dtos.User>();
-            CreateMap<Domain.Entities.UserStockItem, Dtos.UserStockItem>();
-            CreateMap<Services.TickerSymbol, Dtos.TickerSymbol>();
+            CreateMap<Domain.Entities.UserStockTicker, Dtos.StockTickerTiny>();
+            CreateMap<Services.StockTicker, Dtos.StockTickerSmall>();
+            CreateMap<Services.SearchStockTickersResponse, Queries.SearchStockTickersResponse>();
+            CreateMap<CreateStockTickerCommand, Domain.Entities.StockTicker>();
         }
     }
 }
