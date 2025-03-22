@@ -4,6 +4,7 @@ param resourceNameFormat string
 
 var queueNames = [
   'populate-stock-prices'
+  'populate-all-stock-prices'
 ]
 
 resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
