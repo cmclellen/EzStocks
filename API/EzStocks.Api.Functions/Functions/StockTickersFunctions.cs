@@ -18,7 +18,7 @@ namespace AzStocks.Api.Functions.Functions
         }
 
         [Function(nameof(CreateStockTicker))]
-        public async Task<IActionResult> CreateStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers")] HttpRequest req, string? ticker = null, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers")] HttpRequest req, string ticker, CancellationToken cancellationToken = default)
         {
             await sender.Send(new CreateStockTickerCommand(ticker), cancellationToken);
             return new AcceptedResult();

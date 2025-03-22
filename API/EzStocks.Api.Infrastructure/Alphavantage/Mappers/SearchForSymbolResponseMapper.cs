@@ -15,7 +15,7 @@ namespace EzStocks.Api.Infrastructure.Alphavantage.Mappers
             var root = JsonNode.Parse(json)!;
             var bestMatches = root["bestMatches"]!;
             var builder = new Builders.TickerSymbolBuilder();
-            var tickerSymbols = bestMatches.AsArray().Aggregate(new List<TickerSymbol>(), (acc, item) =>
+            var tickerSymbols = bestMatches.AsArray().Aggregate(new List<StockTicker>(), (acc, item) =>
             {
                 var obj = item!.AsObject().AsEnumerable();
                 foreach (var objItem in obj)

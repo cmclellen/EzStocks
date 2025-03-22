@@ -12,7 +12,7 @@ namespace EzStocks.Api.Persistence.EntityTypeConfigurations
             builder.HasKey(e => e.UserId);
             builder.HasPartitionKey(e => e.UserId);
             builder.HasNoDiscriminator();
-            builder.OwnsMany(e => e.StockItems);
+            builder.OwnsMany(e => e.StockTickers);
         }
     }
 }

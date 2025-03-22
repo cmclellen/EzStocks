@@ -5,7 +5,7 @@ namespace EzStocks.Api.Domain.Repositories
 {
     public interface IStockTickerRepository
     {
-        Task<StockTicker?> GetBySymbolAsync(string symbol, CancellationToken cancellationToken);
+        Task<IList<StockTicker>> GetByTickersAsync(IList<string>? tickers, CancellationToken cancellationToken);
         Task UpsertAsync(IList<StockTicker> stockTickers, CancellationToken cancellationToken);
     }
 }

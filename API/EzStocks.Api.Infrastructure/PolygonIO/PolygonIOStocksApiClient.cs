@@ -102,7 +102,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
                 throw new Exception($"Failed retrieving tickers.");
             }
 
-            var items = v3ReferenceTickersResponseDto.Results.Select(i => new TickerSymbol(i.Ticker, i.Name, i.Locale, i.CurrencyName)).ToList();
+            var items = v3ReferenceTickersResponseDto.Results.Select(i => new StockTicker(i.Ticker, i.Name, i.Locale, i.CurrencyName)).ToList();
 
             return new SearchStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
         }

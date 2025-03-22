@@ -26,8 +26,8 @@ namespace EzStocks.Api.Application.Queries
                 return Result<GetStocksHistoryResponse>.NotFound();
             }
 
-            var symbols = user.StockItems.Select(i=>i.Symbol).ToList();
-            var stocks = await _stockPriceItemRepository.GetBySymbolsAsync(symbols, cancellationToken);
+            var tickers = user.StockTickers.Select(i=>i.Ticker).ToList();
+            var stocks = await _stockPriceItemRepository.GetByTickersAsync(tickers, cancellationToken);
 
             var result = stocks.Aggregate(new List<StocksPriceItem>(), (acc, stock) =>
             {
@@ -40,7 +40,7 @@ namespace EzStocks.Api.Application.Queries
                         Stocks = new Dictionary<string, decimal>()
                     });
                 }
-                stockPriceItem.Stocks[stock.Symbol] = stock.Close;
+                stockPriceItem.Stocks[stock.Ticker] = stock.Close;
                 return acc;
             });
 

@@ -13,7 +13,7 @@ namespace EzStocks.Api.Persistence.Repositories
 
         public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await ezStockDbContext.Users.Include(e => e.StockItems)
+            return await ezStockDbContext.Users//.Include(e => e.StockTickers)
                 .FirstOrDefaultAsync(e=>e.UserId == userId);
         }
     }

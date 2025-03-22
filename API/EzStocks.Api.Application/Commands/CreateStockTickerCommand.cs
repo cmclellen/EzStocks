@@ -7,35 +7,37 @@ namespace EzStocks.Api.Application.Commands
 {
     public record CreateStockTickerCommand(string Ticker) : IRequest;
 
-    public class PopulateStockTickersCommandHandler(
-        ILogger<PopulateStockTickersCommandHandler> _logger,
+    public class CreateStockTickersCommandHandler(
+        ILogger<CreateStockTickersCommandHandler> _logger,
         IStocksApiClient _stocksApiClient,
         IStockTickerRepository _stockTickerRepository,
         IUnitOfWork _unitOfWork) : IRequestHandler<CreateStockTickerCommand>
     {
         public async Task Handle(CreateStockTickerCommand request, CancellationToken cancellationToken)
         {
+            using var scopeTicker = _logger.BeginScope(new Dictionary<string, object> { ["Ticker"] = request.Ticker });
+
             _logger.LogDebug("Creating stock ticker...");
 
-            var existingStockTicker = await _stockTickerRepository.GetBySymbolAsync(request.Ticker, cancellationToken);
+            var existingStockTicker = await _stockTickerRepository.GetByTickersAsync([request.Ticker], cancellationToken);
             if(existingStockTicker is null)
             {
-                throw new Exception("Stock ticker not found");
+                throw new Exception($"Stock ticker {request.Ticker} not found");
             }
 
             int totalStockTickerCount = 0;
             string? cursor = null;
             for (int i = 0; ; i++)
             {
-                using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Page"] = i + 1 });
+                using var scopePage = _logger.BeginScope(new Dictionary<string, object> { ["Page"] = i + 1 });
                 _logger.LogDebug("Populating stock tickers...");
-                var getStockTickersResponse = await _stocksApiClient.SearchStockTickersAsync(new SearchStockTickersRequest(request.Ticker, 1000, cursor), cancellationToken);
+                var getStockTickersResponse = await _stocksApiClient.SearchStockTickersAsync(new SearchStockTickersRequest(request.Ticker, Cursor: cursor), cancellationToken);
                 _logger.LogDebug("Successfully populated {StockTickerPageCount} stock tickers", getStockTickersResponse.Count);
                 totalStockTickerCount += getStockTickersResponse.Count;
 
-                var stockTickersToAdd = getStockTickersResponse.TickerSymbols
-                    .Where(i=> existingStockTicker.Symbol != i.Symbol)
-                    .Select(i => new Domain.Entities.StockTicker { Symbol = i.Symbol, Name= i.Name, Color = "#000" })
+                var stockTickersToAdd = getStockTickersResponse.StockTickers
+                    .Where(i=> existingStockTicker.Any(e=>e.Ticker != i.Ticker))
+                    .Select(i => new Domain.Entities.StockTicker { Ticker = i.Ticker, Name= i.Name, Color = "#000" })
                     .ToList();
 
                 if(stockTickersToAdd.Any())

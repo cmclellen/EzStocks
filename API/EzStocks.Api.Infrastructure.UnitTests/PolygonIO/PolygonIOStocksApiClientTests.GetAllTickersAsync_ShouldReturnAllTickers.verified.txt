@@ -1,61 +1,61 @@
 ﻿{
-  TickerSymbols: [
+  StockTickers: [
     {
-      Symbol: A,
+      Ticker: A,
       Name: Agilent Technologies Inc.,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AA,
+      Ticker: AA,
       Name: Alcoa Corporation,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AAA,
+      Ticker: AAA,
       Name: Alternative Access First Priority CLO Bond ETF,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AAAU,
+      Ticker: AAAU,
       Name: Goldman Sachs Physical Gold ETF Shares,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AACBU,
+      Ticker: AACBU,
       Name: Artius II Acquisition Inc. Units,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AACG,
+      Ticker: AACG,
       Name: ATA Creativity Global American Depositary Shares,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AACT,
+      Ticker: AACT,
       Name: Ares Acquisition Corporation II,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AACT.U,
+      Ticker: AACT.U,
       Name: Ares Acquisition Corporation II Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AACT.WS,
+      Ticker: AACT.WS,
       Name: Ares Acquisition Corporation II Redeemable Warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50,
       Region: us,
       Currency: usd
     },
     {
-      Symbol: AADI,
+      Ticker: AADI,
       Name: Aadi Bioscience, Inc. Common Stock,
       Region: us,
       Currency: usd

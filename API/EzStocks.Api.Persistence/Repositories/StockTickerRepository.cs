@@ -6,9 +6,15 @@ namespace EzStocks.Api.Persistence.Repositories
 {
     public class StockTickerRepository(EzStockDbContext ezStockDbContext) : IStockTickerRepository
     {
-        public Task<StockTicker?> GetBySymbolAsync(string symbol, CancellationToken cancellationToken)
+        public async Task<IList<StockTicker>> GetByTickersAsync(IList<string>? tickers, CancellationToken cancellationToken)
         {
-            return ezStockDbContext.StockTickers.FirstOrDefaultAsync(si => symbol == si.Symbol);
+            var query = ezStockDbContext.StockTickers.AsQueryable();
+            if(tickers is not null)
+            {
+                query = query.Where(si => tickers.Contains(si.Ticker));
+            }
+            IList<StockTicker> stockTickers = await query.ToListAsync();
+            return stockTickers;
         }
 
         public async Task UpsertAsync(IList<StockTicker> stockTickers, CancellationToken cancellationToken)
