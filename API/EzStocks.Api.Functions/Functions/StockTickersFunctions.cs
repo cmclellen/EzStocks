@@ -18,10 +18,19 @@ namespace AzStocks.Api.Functions.Functions
         }
 
         [Function(nameof(CreateStockTicker))]
-        public async Task<IActionResult> CreateStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers")] HttpRequest req, string ticker, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-tickers")] HttpRequest req, string ticker, string name, string color, CancellationToken cancellationToken = default)
         {
-            await sender.Send(new CreateStockTickerCommand(ticker), cancellationToken);
+            await sender.Send(new CreateStockTickerCommand(ticker, name, color), cancellationToken);
             return new AcceptedResult();
+        }
+
+        [Function(nameof(GetStockTickers))]
+        public async Task<IActionResult> GetStockTickers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stock-tickers")] HttpRequest req, CancellationToken cancellationToken = default)
+        {
+            string inputString = req.Query["Tickers"];
+            List<string>? tickers = string.IsNullOrEmpty(inputString)? null : inputString.Split(',').ToList();
+            var result = await sender.Send(new GetStockTickersCommand(tickers), cancellationToken);
+            return new OkObjectResult(result);
         }
     }
 }

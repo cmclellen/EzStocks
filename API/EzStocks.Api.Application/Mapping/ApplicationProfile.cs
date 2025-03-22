@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EzStocks.Api.Application.Commands;
 
 namespace EzStocks.Api.Application.Mapping
 {
@@ -16,6 +17,7 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Domain.Entities.UserStockTicker, Dtos.UserStockItem>();
             CreateMap<Services.StockTicker, Dtos.StockTickerSmall>();
             CreateMap<Services.SearchStockTickersResponse, Queries.SearchStockTickersResponse>();
+            CreateMap<CreateStockTickerCommand, Domain.Entities.StockTicker>();
         }
     }
 }
