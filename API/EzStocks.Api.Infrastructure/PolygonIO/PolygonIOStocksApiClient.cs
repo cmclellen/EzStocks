@@ -53,7 +53,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
 
             var dt = GetEasternTime(DateTimeProvider.Current.UtcNow.AddDays(-3));
             var queryRequest = CreateQueryRequest("/v1/open-close/{stocksTicker}/{date}")
-                .AddUrlSegment("stocksTicker", request.Symbol)
+                .AddUrlSegment("stocksTicker", request.Ticker)
                 .AddUrlSegment("date", ToDateString(dt));
             var ohlcvItem = await client.GetAsync<DTOs.OhlcvItemDto>(queryRequest, cancellationToken);
             if (ohlcvItem is null)

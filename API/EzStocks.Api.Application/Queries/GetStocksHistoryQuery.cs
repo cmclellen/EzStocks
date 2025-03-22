@@ -7,7 +7,7 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTicker> Tickers);
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTickerTiny> Tickers);
 
     public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
 
@@ -15,7 +15,6 @@ namespace EzStocks.Api.Application.Queries
         IMapper _mapper,
         IUserContext _userContext,
         IStockPriceItemRepository _stockPriceItemRepository,
-        IStockTickerRepository _stockTickerRepository,
         IUserRepository _userRepository) : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
     {
         public async Task<Result<GetStocksHistoryResponse>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
@@ -44,12 +43,9 @@ namespace EzStocks.Api.Application.Queries
                 return acc;
             });
 
-            // TODO: Get user stock tickers
-            var userStockTickers = new List<Dtos.StockTicker>();
-            //var stockItems = await _stockTickerRepository.GetBySymbolsAsync(symbols, cancellationToken);
-            //var stockItemsDtos = stockItems.Select(_mapper.Map<Domain.Entities.StockTicker, Dtos.StockTicker>).ToList();
+            var stockTickerDtos = user.StockTickers.Select(_mapper.Map<Domain.Entities.UserStockTicker, Dtos.StockTickerTiny>).ToList();
 
-            return new GetStocksHistoryResponse(result, userStockTickers);
+            return new GetStocksHistoryResponse(result, stockTickerDtos);
         }
     }
 }

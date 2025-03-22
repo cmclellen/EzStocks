@@ -2,9 +2,11 @@
 using EzStocks.Api.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace EzStocks.Api.Application.Commands
 {
+    [DebuggerDisplay("{Ticker}")]
     public record PopulateStockPriceItemCommand(string Ticker, int? MaxItemCount = 3) : IRequest;
 
     public class PopulateStockPriceItemCommandHandler(
@@ -15,11 +17,11 @@ namespace EzStocks.Api.Application.Commands
     {
         public async Task Handle(PopulateStockPriceItemCommand request, CancellationToken cancellationToken)
         {
-            using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Symbol"] = request.Ticker });
+            using var _ = _logger.BeginScope(new Dictionary<string, object> { ["Ticker"] = request.Ticker });
 
-            _logger.LogDebug($"Populating stock prices...");
+            _logger.LogDebug($"Retrieving stock prices...");
             var getStockPriceResponse = await _stocksApiClient.GetStockPriceAsync(new GetStockPriceRequest(request.Ticker), cancellationToken);
-            _logger.LogInformation("Successfully populated stock prices");
+            _logger.LogInformation("Successfully retrieved stock price");
 
             var stockPriceItems = getStockPriceResponse.OhlcvItems.Select(item => new Domain.Entities.StockPriceItem
             {
@@ -55,5 +57,4 @@ namespace EzStocks.Api.Application.Commands
             _logger.LogInformation("Saved stock prices");
         }
     }
-
 }

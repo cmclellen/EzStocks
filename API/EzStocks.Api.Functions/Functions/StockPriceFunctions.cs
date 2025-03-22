@@ -1,9 +1,13 @@
 ﻿using EzStocks.Api.Application.Commands;
+using EzStocks.Api.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace EzStocks.Api.Functions.Functions
 {
@@ -19,11 +23,35 @@ namespace EzStocks.Api.Functions.Functions
             return new CreatedResult();
         }
 
-        [Function(nameof(PopulateStockPrice))]
-        public async Task<IActionResult> PopulateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-prices/populate")] HttpRequest req, CancellationToken cancellationToken)
+        public class PopulateStockPriceOutput 
         {
-            await _sender.Send(new Application.Commands.PopulateStockPriceItemCommand("MSFT"), cancellationToken);
-            return new OkResult();
+            [ServiceBusOutput("populate-stock-prices", Connection = "ServiceBusConnection")]
+            public PopulateStockPriceItemCommand[] OutputEvents { get; set; }
+
+            public HttpResponseData HttpResponse { get; set; }
+        }
+
+        [Function(nameof(PopulateStockPrice))]
+        public async Task<PopulateStockPriceOutput> PopulateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-prices/populate")] HttpRequestData req, string? ticker = null, CancellationToken cancellationToken = default)
+        {
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.Accepted);
+            
+            List<PopulateStockPriceItemCommand> commands = new List<PopulateStockPriceItemCommand>();
+            if (ticker is not null)
+            {
+                commands.Add(new Application.Commands.PopulateStockPriceItemCommand(ticker));
+            }
+            else
+            {
+                var allStockTickers = await _sender.Send(new Application.Queries.GetStockTickersQuery(), cancellationToken);
+                List<string> allTickers = allStockTickers.Select(item => item.Ticker).ToList();
+                commands.AddRange(allTickers.Select(ticker => new PopulateStockPriceItemCommand(ticker)).ToList());
+            }
+            return new PopulateStockPriceOutput
+            {
+                OutputEvents = commands.ToArray(),
+                HttpResponse = response
+            };
         }
 
         [Function(nameof(PopulateStockPriceCommand))]
@@ -41,6 +69,13 @@ namespace EzStocks.Api.Functions.Functions
             var allStockTickers = await _sender.Send(new Application.Queries.GetStockTickersQuery(), cancellationToken);
             List<string> allTickers = allStockTickers.Select(item => item.Ticker).ToList();
             return allTickers.Select(ticker => new PopulateStockPriceItemCommand(ticker)).ToArray();
+        }
+
+        [Function(nameof(GetStockPricesHistory))]
+        public async Task<IActionResult> GetStockPricesHistory([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stock-prices/history")] HttpRequest req, CancellationToken cancellationToken)
+        {
+            var stockHistory = await _sender.Send(new GetStocksHistoryQuery(), cancellationToken);
+            return new OkObjectResult(stockHistory.Value);
         }
     }
 }

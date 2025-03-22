@@ -5,11 +5,6 @@
         public Guid UserId { get; set; }
         public required string FirstNames { get; set; }
         public required string LastName { get; set; }
-        public required UserStockItem[] StockItems { get; set; }
-    }
-
-    public class UserStockItem
-    {
-        public required string Symbol { get; set; }
+        public required IList<StockTickerTiny> StockTickers { get; set; } = new List<StockTickerTiny>();
     }
 }

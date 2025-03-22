@@ -14,9 +14,9 @@ namespace EzStocks.Api.Application.Commands
     {
         public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var symbols = request.User.StockItems.Select(item => item.Symbol).ToList();
+            var tickers = request.User.StockTickers.Select(item => item.Ticker).ToList();
 
-            var stockTickers = await _stockTickerRepository.GetByTickersAsync(symbols, cancellationToken);
+            var stockTickers = await _stockTickerRepository.GetByTickersAsync(tickers, cancellationToken);
             
             var user = _mapper.Map<Dtos.User, Domain.Entities.User>(request.User);            
             user.StockTickers = stockTickers!.Select(item=>_mapper.Map<Domain.Entities.StockTicker, Domain.Entities.UserStockTicker>(item)).ToList();
