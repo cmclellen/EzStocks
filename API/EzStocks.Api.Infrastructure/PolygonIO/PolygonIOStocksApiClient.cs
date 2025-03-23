@@ -1,4 +1,5 @@
-﻿using EzStocks.Api.Application.Services;
+﻿using EzStocks.Api.Application.Json;
+using EzStocks.Api.Application.Services;
 using EzStocks.Api.Domain.Utils;
 using EzStocks.Api.Infrastructure.PolygonIO.DTOs;
 using Microsoft.Extensions.Options;
@@ -10,7 +11,8 @@ using System.Text.RegularExpressions;
 namespace EzStocks.Api.Infrastructure.PolygonIO
 {
     public class PolygonIOStocksApiClient(
-        IOptions<PolygonIOSettings> _polygonIOSettingsOptions) : IStocksApiClient
+        IOptions<PolygonIOSettings> _polygonIOSettingsOptions,
+        IJsonSerializer _jsonSerializer) : IStocksApiClient
     {
         private PolygonIOSettings PolygonIOSettings => _polygonIOSettingsOptions.Value;
 
@@ -55,12 +57,13 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
             var queryRequest = CreateQueryRequest("/v1/open-close/{stocksTicker}/{date}")
                 .AddUrlSegment("stocksTicker", request.Ticker)
                 .AddUrlSegment("date", ToDateString(dt));
-            var ohlcvItem = await client.GetAsync<DTOs.OhlcvItemDto>(queryRequest, cancellationToken);
-            if (ohlcvItem is null)
+            var restResponse = await client.GetAsync(queryRequest, cancellationToken);
+            if (!restResponse.IsSuccessful)
             {
                 throw new Exception($"Failed to search for symbol");
             }
 
+            DTOs.OhlcvItemDto ohlcvItem = _jsonSerializer.Deserialize<OhlcvItemDto>(restResponse.Content!)!;
             var appOhlcvItem = new OhlcvItem
             {
                 Date = DateOnly.FromDateTime(dt),
