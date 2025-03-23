@@ -1,5 +1,18 @@
 ﻿# EZ Stock
 
+## Setup the user secrets
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "AccountEndpoint=https://cosmos-ezstocks-dev-aue.documents.azure.com:443/;AccountKey=xxx;"
+  },
+  "PolygonIO": {
+    "ApiKey": "yyy"
+  },
+  "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=zzz;IngestionEndpoint=https://australiaeast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiaeast.livediagnostics.monitor.azure.com/;ApplicationId=ppp"
+}
+```
+
 ## Trigger fetching a stock price
 ```json
 { "Symbol": "MSFT" }
