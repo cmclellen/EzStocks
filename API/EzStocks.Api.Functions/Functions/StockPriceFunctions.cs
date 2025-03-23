@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -26,15 +25,16 @@ namespace EzStocks.Api.Functions.Functions
         public class PopulateStockPriceOutput 
         {
             [ServiceBusOutput("populate-stock-prices", Connection = "ServiceBusConnection")]
-            public PopulateStockPriceItemCommand[] OutputEvents { get; set; }
+            public IEnumerable<PopulateStockPriceItemCommand> OutputEvents { get; set; }
 
-            public HttpResponseData HttpResponse { get; set; }
+            [HttpResult]
+            public IActionResult Result { get; set; }
         }
 
         [Function(nameof(PopulateStockPrice))]
         public async Task<PopulateStockPriceOutput> PopulateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-prices/populate")] HttpRequestData req, string? ticker = null, CancellationToken cancellationToken = default)
         {
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.Accepted);
+            //HttpResponseData response = req.CreateResponse(HttpStatusCode.Accepted);
             
             List<PopulateStockPriceItemCommand> commands = new List<PopulateStockPriceItemCommand>();
             if (ticker is not null)
@@ -49,8 +49,8 @@ namespace EzStocks.Api.Functions.Functions
             }
             return new PopulateStockPriceOutput
             {
-                OutputEvents = commands.ToArray(),
-                HttpResponse = response
+                OutputEvents = commands,
+                Result = new OkResult()
             };
         }
 
