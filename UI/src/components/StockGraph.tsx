@@ -4,6 +4,7 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
@@ -14,8 +15,6 @@ function StockGraph() {
   const { stocksHistory, isLoadingStocksHistory } = useStocksHistory();
 
   if (isLoadingStocksHistory) return <Spinner />;
-
-  console.log(stocksHistory);
 
   return (
     <>
@@ -29,13 +28,14 @@ function StockGraph() {
           <XAxis dataKey="createdDate" />
           <YAxis />
           <Legend />
+          <Tooltip />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
           {stocksHistory!.tickers.map((ticker) => (
             <Line
-              key={ticker.symbol}
-              name={`${ticker.name} (${ticker.symbol})`}
+              key={ticker.ticker}
+              name={`${ticker.name} (${ticker.ticker})`}
               type="monotone"
-              dataKey={`stocks[${ticker.symbol}]`}
+              dataKey={`stocks[${ticker.ticker}]`}
               stroke={ticker.color}
             />
           ))}

@@ -1,7 +1,7 @@
 import Form from "../components/Form";
 import FormButton from "../components/FormButton";
 import FormRow from "../components/FormRow";
-import SearchBox from "../components/SearchBox";
+import StockTickerSearchBox from "../components/StockTickerSearchBox";
 import { addStock } from "../services/StocksApi";
 
 interface AddStockProps {
@@ -18,7 +18,7 @@ function AddStock({ onCloseModal }: AddStockProps) {
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow label="Stock">
-        <SearchBox />
+        <StockTickerSearchBox />
       </FormRow>
       <div className="flex justify-end space-x-2">
         <FormButton onClick={() => onCloseModal?.()}>Cancel</FormButton>
