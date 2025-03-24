@@ -1,0 +1,11 @@
+meta {
+  name: Get stock history
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{API_BASE_URL}}/api/stocks/history
+  body: none
+  auth: inherit
+}
