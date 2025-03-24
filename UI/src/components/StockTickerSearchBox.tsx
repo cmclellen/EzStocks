@@ -70,8 +70,8 @@ function SuggestionList({
 
   if (suggestions.length == 0)
     return (
-      <div className="no-suggestions">
-        <em>No suggestions available.</em>
+      <div className="border border-gray-300 rounded-md shadow-md p-2 text-gray-700">
+        <em>No suggestions available</em>
       </div>
     );
 

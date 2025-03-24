@@ -3,14 +3,6 @@ import { http, HttpResponse, delay } from "msw";
 import StockTickerSearchBox from "./StockTickerSearchBox";
 import { SearchStockTickersResponse } from "../services/StocksApi";
 
-//👇 This default export determines where your story goes in the story list
-const meta: Meta<typeof StockTickerSearchBox> = {
-  component: StockTickerSearchBox,
-};
-
-export default meta;
-type Story = StoryObj<typeof StockTickerSearchBox>;
-
 const testData: SearchStockTickersResponse = {
   stockTickers: [
     {
@@ -64,6 +56,22 @@ const testData: SearchStockTickersResponse = {
   ],
 };
 
+function filterByTicker(searchText: string) {
+  const result = structuredClone(testData);
+  result.stockTickers = result.stockTickers.filter((i) =>
+    i.ticker.startsWith(searchText!.toUpperCase())
+  );
+  return result;
+}
+
+//👇 This default export determines where your story goes in the story list
+const meta: Meta<typeof StockTickerSearchBox> = {
+  component: StockTickerSearchBox,
+};
+
+export default meta;
+type Story = StoryObj<typeof StockTickerSearchBox>;
+
 export const Default: Story = {
   args: {
     //👇 The args you need here will depend on your component
@@ -71,9 +79,11 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get("/api/stock-tickers/search", async () => {
+        http.get("/api/stock-tickers/search", async ({ request }) => {
           await delay(100);
-          return HttpResponse.json(testData);
+          const url = new URL(request.url);
+          const searchText = url.searchParams.get("searchText");
+          return HttpResponse.json(filterByTicker(searchText!));
         }),
       ],
     },
