@@ -13,7 +13,7 @@ interface StockTickerSearchBoxState {
   searchText: string;
   suggestions: Suggestion[];
   showSuggestions: boolean;
-  selectedItem?: string;
+  selectedItem?: Suggestion;
   status: "ready" | "searching";
 }
 
@@ -58,7 +58,7 @@ function reducer(
 interface SuggestionListProps {
   showSuggestions: boolean;
   suggestions: Suggestion[];
-  onSuggestionSelected: (selectedItem: Suggestion) => void;
+  onSuggestionSelected: (selectedItem?: Suggestion) => void;
 }
 
 function SuggestionList({
@@ -81,7 +81,14 @@ function SuggestionList({
         <li
           className="hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
           key={suggestion.ticker}
-          onClick={(e) => console.log(e.currentTarget.id)} // onSuggestionSelected(e.currentTarget.innerText)
+          data-ticker={suggestion.ticker}
+          onClick={(e) =>
+            onSuggestionSelected(
+              suggestions.find(
+                (o) => o.ticker === e.currentTarget.dataset.ticker
+              )
+            )
+          }
         >
           {suggestion.ticker}{" "}
           <span className="text-sm font-light text-gray-500">
@@ -102,12 +109,13 @@ function StockTickerSearchBox() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
 
-  function onSuggestionSelected(selectedItem: Suggestion) {
+  function onSuggestionSelected(selectedItem?: Suggestion) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
   }
 
   function onSearchTextChange(e: any) {
     const { value } = e.target;
+    onSuggestionSelected(undefined);
     setSearchTerm(value);
   }
 
@@ -138,8 +146,9 @@ function StockTickerSearchBox() {
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="stock"
         type="text"
-        value={state.selectedItem || searchTerm}
+        value={state.selectedItem?.ticker || searchTerm}
         onChange={onSearchTextChange}
+        autoComplete="off"
         placeholder="Search for your stock..."
       />
       <SuggestionList
