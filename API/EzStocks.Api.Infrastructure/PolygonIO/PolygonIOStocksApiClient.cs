@@ -95,7 +95,7 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
                     .AddQueryParameter("sort", "ticker");
                 if (request.SearchText is not null)
                 {
-                    queryRequest = queryRequest.AddQueryParameter("ticker.gte", request.SearchText);
+                    queryRequest = queryRequest.AddQueryParameter("ticker.gte", request.SearchText.ToUpperInvariant());
                 }
             }
 
