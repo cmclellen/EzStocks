@@ -1,0 +1,19 @@
+meta {
+  name: Create stock ticker
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{API_BASE_URL}}/api/stock-tickers/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "color": "#000"
+  }
+}

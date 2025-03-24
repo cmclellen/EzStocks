@@ -1,0 +1,27 @@
+meta {
+  name: Create user
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{API_BASE_URL}}/api/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  { 
+    "UserId": "B8343EAF-6C20-4A40-BADA-168FF5CEEC89",
+    "FirstNames": "Craig",
+    "LastName": "McLellen",
+    "StockItems": [
+      {
+        "Symbol": "MSFT"
+      },
+      {
+        "Symbol": "AAPL"
+      }
+    ]
+  }
+}

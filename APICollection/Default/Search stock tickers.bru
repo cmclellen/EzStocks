@@ -1,0 +1,15 @@
+meta {
+  name: Search stock tickers
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{API_BASE_URL}}/api/stock-tickers/search?searchText=AAP
+  body: none
+  auth: inherit
+}
+
+params:query {
+  searchText: AAP
+}
