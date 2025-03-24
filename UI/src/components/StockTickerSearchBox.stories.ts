@@ -25,10 +25,46 @@ const testData: SearchStockTickersResponse = {
       name: "Amazon.com Inc.",
       ticker: "AMZN",
     },
+    {
+      name: "Meta Platforms Inc.",
+      ticker: "META",
+    },
+    {
+      name: "Alphabet Inc.",
+      ticker: "GOOGL",
+    },
+    {
+      name: "Tesla Inc.",
+      ticker: "TSLA",
+    },
+    {
+      ticker: "MSA",
+      name: "Mine Safety Incorporated",
+    },
+    {
+      ticker: "MSAI",
+      name: "MultiSensor AI Holdings, Inc. Common Stock",
+    },
+    {
+      ticker: "MSB",
+      name: "Mesabi Trust",
+    },
+    {
+      ticker: "MSBI",
+      name: "Midland States Bancorp, Inc. Common Stock",
+    },
+    {
+      ticker: "MSCI",
+      name: "MSCI, Inc.",
+    },
+    {
+      ticker: "MSDL",
+      name: "Morgan Stanley Direct Lending Fund",
+    },
   ],
 };
 
-export const FirstStory: Story = {
+export const Default: Story = {
   args: {
     //👇 The args you need here will depend on your component
   },
