@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { searchStock } from "../services/StocksApi";
 
-interface SearchBoxState {
+interface StockTickerSearchBoxState {
   searchText: string;
   suggestions: string[];
   showSuggestions: boolean;
@@ -10,7 +10,7 @@ interface SearchBoxState {
   status: "ready" | "searching";
 }
 
-const initialState: SearchBoxState = {
+const initialState: StockTickerSearchBoxState = {
   searchText: "",
   suggestions: ["here"],
   showSuggestions: false,
@@ -18,7 +18,10 @@ const initialState: SearchBoxState = {
   status: "ready",
 };
 
-function reducer(state: SearchBoxState, action: any): SearchBoxState {
+function reducer(
+  state: StockTickerSearchBoxState,
+  action: any
+): StockTickerSearchBoxState {
   switch (action.type) {
     case "SET_SUGGESTIONS":
       return {
@@ -79,7 +82,7 @@ function SuggestionList({
   );
 }
 
-function SearchBox() {
+function StockTickerSearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, 1500);
@@ -131,4 +134,4 @@ function SearchBox() {
   );
 }
 
-export default SearchBox;
+export default StockTickerSearchBox;
