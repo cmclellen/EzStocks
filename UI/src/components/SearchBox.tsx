@@ -82,7 +82,7 @@ function SuggestionList({
 function SearchBox() {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const debouncedSearchTerm = useDebounce(searchTerm, 1500);
   // const {searchStockResponse} = useSearchStocks(searchTerm);
 
   function onSuggestionSelected(selectedItem: string) {
@@ -102,11 +102,11 @@ function SearchBox() {
     if (!debouncedSearchTerm) return;
 
     async function searchStocks() {
-      const response = await searchStock({ symbol: debouncedSearchTerm });
+      const response = await searchStock({ ticker: debouncedSearchTerm });
 
       dispatch({
         type: "SET_SUGGESTIONS",
-        payload: response.items.map((item) => item.symbol),
+        payload: response.stockTickers.map((item) => item.ticker),
       });
     }
     searchStocks();

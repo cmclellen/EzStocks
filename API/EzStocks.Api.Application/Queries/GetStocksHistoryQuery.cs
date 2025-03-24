@@ -7,16 +7,32 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTickerTiny> Tickers);
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTicker> Tickers);
 
     public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
 
-    public class GetStocksHistoryQueryHandler(
-        IMapper _mapper,
-        IUserContext _userContext,
-        IStockPriceItemRepository _stockPriceItemRepository,
-        IUserRepository _userRepository) : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
+    public class GetStocksHistoryQueryHandler : IRequestHandler<GetStocksHistoryQuery, Result<GetStocksHistoryResponse>>
     {
+        private readonly IMapper _mapper;
+        private readonly IUserContext _userContext;
+        private readonly IStockPriceItemRepository _stockPriceItemRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IStockTickerRepository _stockTickerRepository;
+
+        public GetStocksHistoryQueryHandler(
+            IMapper mapper,
+            IUserContext userContext,
+            IStockPriceItemRepository stockPriceItemRepository,
+            IUserRepository userRepository,
+            IStockTickerRepository stockTickerRepository)
+        {
+            _mapper = mapper;
+            _userContext = userContext;
+            _stockPriceItemRepository = stockPriceItemRepository;
+            _userRepository = userRepository;
+            _stockTickerRepository = stockTickerRepository;
+        }
+
         public async Task<Result<GetStocksHistoryResponse>> Handle(GetStocksHistoryQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(_userContext.UserId, cancellationToken);
@@ -27,6 +43,7 @@ namespace EzStocks.Api.Application.Queries
 
             var tickers = user.StockTickers.Select(i=>i.Ticker).ToList();
             var stocks = await _stockPriceItemRepository.GetByTickersAsync(tickers, cancellationToken);
+            var stockTickers = await _stockTickerRepository.GetByTickersAsync(tickers, cancellationToken);
 
             var result = stocks.Aggregate(new List<StocksPriceItem>(), (acc, stock) =>
             {
@@ -43,7 +60,7 @@ namespace EzStocks.Api.Application.Queries
                 return acc;
             });
 
-            var stockTickerDtos = user.StockTickers.Select(_mapper.Map<Domain.Entities.UserStockTicker, Dtos.StockTickerTiny>).ToList();
+            var stockTickerDtos = stockTickers.Select(_mapper.Map<Domain.Entities.StockTicker, Dtos.StockTicker>).ToList();
 
             return new GetStocksHistoryResponse(result, stockTickerDtos);
         }

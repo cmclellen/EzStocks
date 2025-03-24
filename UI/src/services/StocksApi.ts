@@ -7,33 +7,33 @@ interface StockPrice {
 
 export interface StocksHistory {
   prices: StockPrice[];
-  tickers: { symbol: string; name: string; color: string }[];
+  tickers: { ticker: string; name: string; color: string }[];
 }
 
 async function getStocksHistory(): Promise<StocksHistory> {
-  const url = "/stocks/history";
+  const url = "/stock-prices/history";
   const { data } = await AxiosInstance.get<StocksHistory>(url);
   return data;
 }
 
 async function addStock({ stock }: { stock: string }) {
-  const url = "/stocks";
+  const url = "/stock-tickers";
   const { data } = await AxiosInstance.post(url, { stock });
   return data;
 }
 
-export interface SearchStockResponse {
-  items: { symbol: string; name: string }[];
+export interface SearchStockTickersResponse {
+  stockTickers: { ticker: string; name: string }[];
 }
 
 async function searchStock({
-  symbol,
+  ticker,
 }: {
-  symbol: string;
-}): Promise<SearchStockResponse> {
-  const url = "/stocks/search";
-  const { data } = await AxiosInstance.get<SearchStockResponse>(url, {
-    params: { searchText: symbol },
+  ticker: string;
+}): Promise<SearchStockTickersResponse> {
+  const url = "/stock-tickers/search";
+  const { data } = await AxiosInstance.get<SearchStockTickersResponse>(url, {
+    params: { searchText: ticker },
   });
   return data;
 }

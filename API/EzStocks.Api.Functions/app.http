@@ -1,21 +1,6 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 @BaseApiUrl=http://localhost:7274/api
 
-// Stocks
-
-GET {{BaseApiUrl}}/stocks
-
-###
-
-POST {{BaseApiUrl}}/stocks
-Content-Type: application/json
-{
-  "symbol": "AAPL",
-  "name": "Apple Inc."
-}
-
-###
-
 // Users
 
 POST {{BaseApiUrl}}/users
@@ -42,7 +27,7 @@ GET {{BaseApiUrl}}/users/B8343EAF-6C20-4A40-BADA-168FF5CEEC89
 
 // Stock Prices
 
-POST {{BaseApiUrl}}/stockprices
+POST {{BaseApiUrl}}/stock-prices
 Content-Type: application/json
 {
   "symbol": "MSFT",
@@ -52,7 +37,7 @@ Content-Type: application/json
 
 ###
 
-POST {{BaseApiUrl}}/stockprices/fetch
+POST {{BaseApiUrl}}/stock-prices/fetch
 Content-Type: application/json
 {
     "symbol": "MSFT",
@@ -64,4 +49,4 @@ Content-Type: application/json
 
 // Stock History
 
-GET {{BaseApiUrl}}/stocks/history
+GET {{BaseApiUrl}}/stock-prices/history
