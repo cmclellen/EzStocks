@@ -89,7 +89,7 @@ function SuggestionList({
 
   return (
     
-      <ul className="border border-gray-300 rounded-md shadow-md z-10 top-0 right-0">
+      <ul className="border border-gray-300 rounded-md shadow-md z-10 max-h-[220px] overflow-y-auto scrollbar">
         {suggestions.map((suggestion) => (
           <li
             className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
@@ -177,7 +177,7 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
         autoComplete="off"
         placeholder="Search for your stock..."
       />
-      <div className="absolute w-full">
+      <div className="relative w-full">
         <SuggestionList
           showSuggestions={state.showSuggestions}
           suggestions={state.suggestions}
