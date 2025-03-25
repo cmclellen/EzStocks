@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { searchStock } from "../services/StocksApi";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -13,7 +14,7 @@ interface StockTickerSearchBoxState {
   searchText: string;
   suggestions: Suggestion[];
   showSuggestions: boolean;
-  selectedItem?: Suggestion;
+  selectedItem: Suggestion | undefined;
   status: "ready" | "searching";
 }
 
@@ -29,6 +30,12 @@ function reducer(
   state: StockTickerSearchBoxState,
   action: any
 ): StockTickerSearchBoxState {
+
+  const hideSuggestions = {
+    suggestions: [],
+    showSuggestions: false,
+  };
+
   switch (action.type) {
     case "SET_SUGGESTIONS":
       return {
@@ -41,8 +48,12 @@ function reducer(
       return {
         ...state,
         selectedItem: action.payload,
-        suggestions: [],
-        showSuggestions: false,
+        ...hideSuggestions
+      };
+    case "HIDE_SUGGESTIONS":
+      return {
+        ...state,
+        ...hideSuggestions
       };
     case "SET_SEARCH_TEXT":
       return {
@@ -56,9 +67,9 @@ function reducer(
 }
 
 interface SuggestionListProps {
-  showSuggestions: boolean;
-  suggestions: Suggestion[];
-  onSuggestionSelected: (selectedItem?: Suggestion) => void;
+  readonly showSuggestions: boolean;
+  readonly suggestions: Suggestion[];
+  readonly onSuggestionSelected: (selectedItem?: Suggestion) => void;
 }
 
 function SuggestionList({
@@ -66,6 +77,7 @@ function SuggestionList({
   suggestions,
   onSuggestionSelected,
 }: SuggestionListProps) {
+
   if (!showSuggestions) return null;
 
   if (suggestions.length == 0)
@@ -77,24 +89,24 @@ function SuggestionList({
 
   return (
     
-      <ul className="border border-gray-300 rounded-md shadow-md z-10 top-0 right-0">
+      <ul className="border border-gray-300 rounded-md shadow-md z-10 max-h-[220px] overflow-y-auto scrollbar">
         {suggestions.map((suggestion) => (
           <li
             className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
             key={suggestion.ticker}
-            data-ticker={suggestion.ticker}
-            onClick={(e) =>
+          >
+            <button className="w-full text-left" data-ticker={suggestion.ticker} onClick={(e) =>
               onSuggestionSelected(
                 suggestions.find(
                   (o) => o.ticker === e.currentTarget.dataset.ticker
                 )
               )
-            }
-          >
+            }>
             {suggestion.ticker}{" "}
             <span className="text-sm font-light text-gray-500">
               {suggestion.name}
             </span>
+            </button>
           </li>
         ))}
       </ul>
@@ -107,15 +119,20 @@ const sortBy = (key: string) => {
 };
 
 interface StockTickerSearchBoxProps {
-  onSelectedSuggestion: (suggestion?: Suggestion) => void;
+  readonly onSelectedSuggestion: (suggestion: Suggestion | undefined) => void;
 }
 
 function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
+  const ref = useOutsideClick(handleClickOutside);
 
-  function onSuggestionSelected(selectedItem?: Suggestion) {
+  function handleClickOutside() {
+    dispatch({ type: "HIDE_SUGGESTIONS" });
+  }
+
+  function onSuggestionSelected(selectedItem: Suggestion | undefined) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
     onSelectedSuggestion(selectedItem);
   }
@@ -150,24 +167,24 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
   }, [debouncedSearchTerm]);
 
   return (
-    <>
+    <div ref={ref}>
       <input
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="stock"
         type="text"
-        value={state.selectedItem?.ticker || searchTerm}
+        value={state.selectedItem?.ticker ?? searchTerm}
         onChange={onSearchTextChange}
         autoComplete="off"
         placeholder="Search for your stock..."
       />
-      <div className="absolute w-full">
+      <div className="relative w-full">
         <SuggestionList
           showSuggestions={state.showSuggestions}
           suggestions={state.suggestions}
           onSuggestionSelected={onSuggestionSelected}
         />
       </div>
-    </>
+    </div>
   );
 }
 
