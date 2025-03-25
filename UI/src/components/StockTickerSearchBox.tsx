@@ -56,9 +56,9 @@ function reducer(
 }
 
 interface SuggestionListProps {
-  showSuggestions: boolean;
-  suggestions: Suggestion[];
-  onSuggestionSelected: (selectedItem?: Suggestion) => void;
+  readonly showSuggestions: boolean;
+  readonly suggestions: Suggestion[];
+  readonly onSuggestionSelected: (selectedItem?: Suggestion) => void;
 }
 
 function SuggestionList({
@@ -82,19 +82,19 @@ function SuggestionList({
           <li
             className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
             key={suggestion.ticker}
-            data-ticker={suggestion.ticker}
-            onClick={(e) =>
+          >
+            <button className="w-full text-left" data-ticker={suggestion.ticker} onClick={(e) =>
               onSuggestionSelected(
                 suggestions.find(
                   (o) => o.ticker === e.currentTarget.dataset.ticker
                 )
               )
-            }
-          >
+            }>
             {suggestion.ticker}{" "}
             <span className="text-sm font-light text-gray-500">
               {suggestion.name}
             </span>
+            </button>
           </li>
         ))}
       </ul>
