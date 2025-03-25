@@ -4,7 +4,7 @@ import { searchStock } from "../services/StocksApi";
 
 const DEBOUNCE_INTERVAL = 300;
 
-interface Suggestion {
+export interface Suggestion {
   ticker: string;
   name: string;
 }
@@ -70,33 +70,35 @@ function SuggestionList({
 
   if (suggestions.length == 0)
     return (
-      <div className="border border-gray-300 rounded-md shadow-md p-2 text-gray-700">
+      <div className="bg-white border border-gray-300 rounded-md shadow-md p-2 text-gray-700 z-10">
         <em>No suggestions available</em>
       </div>
     );
 
   return (
-    <ul className="border border-gray-300 rounded-md shadow-md">
-      {suggestions.map((suggestion) => (
-        <li
-          className="hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
-          key={suggestion.ticker}
-          data-ticker={suggestion.ticker}
-          onClick={(e) =>
-            onSuggestionSelected(
-              suggestions.find(
-                (o) => o.ticker === e.currentTarget.dataset.ticker
+    
+      <ul className="border border-gray-300 rounded-md shadow-md z-10 top-0 right-0">
+        {suggestions.map((suggestion) => (
+          <li
+            className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
+            key={suggestion.ticker}
+            data-ticker={suggestion.ticker}
+            onClick={(e) =>
+              onSuggestionSelected(
+                suggestions.find(
+                  (o) => o.ticker === e.currentTarget.dataset.ticker
+                )
               )
-            )
-          }
-        >
-          {suggestion.ticker}{" "}
-          <span className="text-sm font-light text-gray-500">
-            {suggestion.name}
-          </span>
-        </li>
-      ))}
-    </ul>
+            }
+          >
+            {suggestion.ticker}{" "}
+            <span className="text-sm font-light text-gray-500">
+              {suggestion.name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    
   );
 }
 
@@ -104,18 +106,25 @@ const sortBy = (key: string) => {
   return (a: any, b: any) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
 };
 
-function StockTickerSearchBox() {
+interface StockTickerSearchBoxProps {
+  onSelectedSuggestion: (suggestion?: Suggestion) => void;
+}
+
+function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
 
   function onSuggestionSelected(selectedItem?: Suggestion) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
+    onSelectedSuggestion(selectedItem);
   }
 
   function onSearchTextChange(e: any) {
     const { value } = e.target;
-    onSuggestionSelected(undefined);
+    if(state.selectedItem) {
+      onSuggestionSelected(undefined);
+    }
     setSearchTerm(value);
   }
 
@@ -151,11 +160,13 @@ function StockTickerSearchBox() {
         autoComplete="off"
         placeholder="Search for your stock..."
       />
-      <SuggestionList
-        showSuggestions={state.showSuggestions}
-        suggestions={state.suggestions}
-        onSuggestionSelected={onSuggestionSelected}
-      />
+      <div className="absolute w-full">
+        <SuggestionList
+          showSuggestions={state.showSuggestions}
+          suggestions={state.suggestions}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </div>
     </>
   );
 }
