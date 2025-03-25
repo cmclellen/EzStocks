@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { searchStock } from "../services/StocksApi";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -13,7 +14,7 @@ interface StockTickerSearchBoxState {
   searchText: string;
   suggestions: Suggestion[];
   showSuggestions: boolean;
-  selectedItem?: Suggestion;
+  selectedItem: Suggestion | undefined;
   status: "ready" | "searching";
 }
 
@@ -29,6 +30,12 @@ function reducer(
   state: StockTickerSearchBoxState,
   action: any
 ): StockTickerSearchBoxState {
+
+  const hideSuggestions = {
+    suggestions: [],
+    showSuggestions: false,
+  };
+
   switch (action.type) {
     case "SET_SUGGESTIONS":
       return {
@@ -41,8 +48,12 @@ function reducer(
       return {
         ...state,
         selectedItem: action.payload,
-        suggestions: [],
-        showSuggestions: false,
+        ...hideSuggestions
+      };
+    case "HIDE_SUGGESTIONS":
+      return {
+        ...state,
+        ...hideSuggestions
       };
     case "SET_SEARCH_TEXT":
       return {
@@ -66,6 +77,7 @@ function SuggestionList({
   suggestions,
   onSuggestionSelected,
 }: SuggestionListProps) {
+
   if (!showSuggestions) return null;
 
   if (suggestions.length == 0)
@@ -107,15 +119,20 @@ const sortBy = (key: string) => {
 };
 
 interface StockTickerSearchBoxProps {
-  onSelectedSuggestion: (suggestion?: Suggestion) => void;
+  readonly onSelectedSuggestion: (suggestion: Suggestion | undefined) => void;
 }
 
 function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
+  const ref = useOutsideClick(handleClickOutside);
 
-  function onSuggestionSelected(selectedItem?: Suggestion) {
+  function handleClickOutside() {
+    dispatch({ type: "HIDE_SUGGESTIONS" });
+  }
+
+  function onSuggestionSelected(selectedItem: Suggestion | undefined) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
     onSelectedSuggestion(selectedItem);
   }
@@ -150,12 +167,12 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
   }, [debouncedSearchTerm]);
 
   return (
-    <>
+    <div ref={ref}>
       <input
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="stock"
         type="text"
-        value={state.selectedItem?.ticker || searchTerm}
+        value={state.selectedItem?.ticker ?? searchTerm}
         onChange={onSearchTextChange}
         autoComplete="off"
         placeholder="Search for your stock..."
@@ -167,7 +184,7 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
           onSuggestionSelected={onSuggestionSelected}
         />
       </div>
-    </>
+    </div>
   );
 }
 
