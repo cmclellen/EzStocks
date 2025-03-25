@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { http, HttpResponse, delay } from "msw";
-import StockTickerSearchBox from "./StockTickerSearchBox";
+import StockTickerSearchBox, { Suggestion } from "./StockTickerSearchBox";
 import { SearchStockTickersResponse } from "../services/StocksApi";
+import { useState } from "react";
 
 const testData: SearchStockTickersResponse = {
   stockTickers: [
@@ -73,6 +74,21 @@ export default meta;
 type Story = StoryObj<typeof StockTickerSearchBox>;
 
 export const Default: Story = {
+  render: () => {
+    const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion>();
+
+    function onSelectedSuggestion(selected?: Suggestion) {
+      setSelectedSuggestion(selected);
+    }
+    return (
+      <>
+        <StockTickerSearchBox onSelectedSuggestion={onSelectedSuggestion} />
+        {selectedSuggestion && <div>Selection: {selectedSuggestion?.ticker} - {selectedSuggestion?.name}</div>}
+        {!selectedSuggestion && <div>No selection</div>}
+        
+      </>
+    );
+  },
   args: {
     //👇 The args you need here will depend on your component
   },

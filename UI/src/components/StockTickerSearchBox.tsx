@@ -4,7 +4,7 @@ import { searchStock } from "../services/StocksApi";
 
 const DEBOUNCE_INTERVAL = 300;
 
-interface Suggestion {
+export interface Suggestion {
   ticker: string;
   name: string;
 }
@@ -104,18 +104,25 @@ const sortBy = (key: string) => {
   return (a: any, b: any) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
 };
 
-function StockTickerSearchBox() {
+interface StockTickerSearchBoxProps {
+  onSelectedSuggestion: (suggestion?: Suggestion) => void;
+}
+
+function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
 
   function onSuggestionSelected(selectedItem?: Suggestion) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
+    onSelectedSuggestion(selectedItem);
   }
 
   function onSearchTextChange(e: any) {
     const { value } = e.target;
-    onSuggestionSelected(undefined);
+    if(state.selectedItem) {
+      onSuggestionSelected(undefined);
+    }
     setSearchTerm(value);
   }
 
