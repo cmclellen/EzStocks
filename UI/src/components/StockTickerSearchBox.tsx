@@ -70,33 +70,35 @@ function SuggestionList({
 
   if (suggestions.length == 0)
     return (
-      <div className="border border-gray-300 rounded-md shadow-md p-2 text-gray-700">
+      <div className="bg-white border border-gray-300 rounded-md shadow-md p-2 text-gray-700 z-10">
         <em>No suggestions available</em>
       </div>
     );
 
   return (
-    <ul className="border border-gray-300 rounded-md shadow-md">
-      {suggestions.map((suggestion) => (
-        <li
-          className="hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
-          key={suggestion.ticker}
-          data-ticker={suggestion.ticker}
-          onClick={(e) =>
-            onSuggestionSelected(
-              suggestions.find(
-                (o) => o.ticker === e.currentTarget.dataset.ticker
+    
+      <ul className="border border-gray-300 rounded-md shadow-md z-10 top-0 right-0">
+        {suggestions.map((suggestion) => (
+          <li
+            className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
+            key={suggestion.ticker}
+            data-ticker={suggestion.ticker}
+            onClick={(e) =>
+              onSuggestionSelected(
+                suggestions.find(
+                  (o) => o.ticker === e.currentTarget.dataset.ticker
+                )
               )
-            )
-          }
-        >
-          {suggestion.ticker}{" "}
-          <span className="text-sm font-light text-gray-500">
-            {suggestion.name}
-          </span>
-        </li>
-      ))}
-    </ul>
+            }
+          >
+            {suggestion.ticker}{" "}
+            <span className="text-sm font-light text-gray-500">
+              {suggestion.name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    
   );
 }
 
@@ -158,11 +160,13 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
         autoComplete="off"
         placeholder="Search for your stock..."
       />
-      <SuggestionList
-        showSuggestions={state.showSuggestions}
-        suggestions={state.suggestions}
-        onSuggestionSelected={onSuggestionSelected}
-      />
+      <div className="absolute w-full">
+        <SuggestionList
+          showSuggestions={state.showSuggestions}
+          suggestions={state.suggestions}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </div>
     </>
   );
 }
