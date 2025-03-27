@@ -1,7 +1,7 @@
 import FormButton from "../components/FormButton";
 import Modal, { useModal } from "../components/Modal";
 import StockGraph from "../components/StockGraph";
-import AddStock from "../features/AddStock";
+import AddStockTicker from "../features/AddStockTicker";
 
 function ViewStock() {
   const { close } = useModal();
@@ -12,7 +12,7 @@ function ViewStock() {
         <FormButton>Add Stock</FormButton>
       </Modal.Open>
       <Modal.Window name={`add-stock`}>
-        <AddStock />
+        <AddStockTicker />
       </Modal.Window>
     </div>
   );

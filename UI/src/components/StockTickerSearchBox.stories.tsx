@@ -3,6 +3,7 @@ import { http, HttpResponse, delay } from "msw";
 import StockTickerSearchBox, { Suggestion } from "./StockTickerSearchBox";
 import { SearchStockTickersResponse } from "../services/StocksApi";
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const testData: SearchStockTickersResponse = {
   stockTickers: [
@@ -57,6 +58,14 @@ const testData: SearchStockTickersResponse = {
   ],
 };
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+    },
+  },
+});
+
 function filterByTicker(searchText: string) {
   const result = structuredClone(testData);
   result.stockTickers = result.stockTickers.filter((i) =>
@@ -82,10 +91,16 @@ export const Default: Story = {
     }
     return (
       <>
-        <StockTickerSearchBox onSelectedSuggestion={onSelectedSuggestion} />
-        {selectedSuggestion && <div>Selection: {selectedSuggestion?.ticker} - {selectedSuggestion?.name}</div>}
-        {!selectedSuggestion && <div>No selection</div>}
-        
+        <QueryClientProvider client={queryClient}>
+          <StockTickerSearchBox onSelectedSuggestion={onSelectedSuggestion} />
+          {selectedSuggestion && (
+            <div>
+              Selection: {selectedSuggestion?.ticker} -{" "}
+              {selectedSuggestion?.name}
+            </div>
+          )}
+          {!selectedSuggestion && <div>No selection</div>}
+        </QueryClientProvider>
       </>
     );
   },
@@ -96,7 +111,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get("/api/stock-tickers/search", async ({ request }) => {
-          await delay(100);
+          await delay(1500);
           const url = new URL(request.url);
           const searchText = url.searchParams.get("searchText");
           return HttpResponse.json(filterByTicker(searchText!));

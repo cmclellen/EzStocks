@@ -31,16 +31,18 @@ export interface SearchStockTickersResponse {
   stockTickers: { ticker: string; name: string }[];
 }
 
-async function searchStock({
-  ticker,
-}: {
-  ticker: string;
-}): Promise<SearchStockTickersResponse> {
+export interface SearchStockTickersRequest {
+  searchText: string;
+}
+
+async function searchStockTickers({
+  searchText,
+}: SearchStockTickersRequest): Promise<SearchStockTickersResponse> {
   const url = "/stock-tickers/search";
   const { data } = await AxiosInstance.get<SearchStockTickersResponse>(url, {
-    params: { searchText: ticker },
+    params: { searchText },
   });
   return data;
 }
 
-export { getStocksHistory, addStockTicker, searchStock };
+export { getStocksHistory, addStockTicker, searchStockTickers };
