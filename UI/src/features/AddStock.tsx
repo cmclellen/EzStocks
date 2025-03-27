@@ -6,12 +6,10 @@ import StockTickerSearchBox, {
   Suggestion,
 } from "../components/StockTickerSearchBox";
 import useAddStockTicker from "../hooks/useAddStockTicker";
+import { useModal } from "../components/Modal";
 
-interface AddStockProps {
-  readonly onCloseModal?: () => void;
-}
-
-function AddStock({ onCloseModal }: AddStockProps) {
+function AddStock() {
+  const { close } = useModal();
   const [stockTicker, setStockTicker] = useState<Suggestion | undefined>();
   const { addStockTicker } = useAddStockTicker();
 
@@ -21,7 +19,7 @@ function AddStock({ onCloseModal }: AddStockProps) {
       { ...stockTicker!, color: "#000" },
       {
         onSuccess: () => {
-          onCloseModal!();
+          close();
         },
       }
     );
