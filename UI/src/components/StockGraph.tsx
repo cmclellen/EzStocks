@@ -12,9 +12,18 @@ import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
 
 function StockGraph() {
-  const { stocksHistory, isLoadingStocksHistory } = useStocksHistory();
+  const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
 
   if (isLoadingStocksHistory) return <Spinner />;
+
+  if (error)
+    return (
+      <div className="w-full text-center">
+        <span className="border py-2 px-4 rounded-lg text-center font-semibold">
+          An unexpected error has occurred while loading the graph
+        </span>
+      </div>
+    );
 
   return (
     <>

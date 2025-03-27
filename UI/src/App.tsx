@@ -27,6 +27,7 @@ function App() {
             {/* <Route path="add-stock" element={<AddStock />}></Route> */}
           </Route>
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </QueryClientProvider>
   );

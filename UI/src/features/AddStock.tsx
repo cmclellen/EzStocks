@@ -2,8 +2,9 @@ import { useState } from "react";
 import Form from "../components/Form";
 import FormButton from "../components/FormButton";
 import FormRow from "../components/FormRow";
-import StockTickerSearchBox, { Suggestion } from "../components/StockTickerSearchBox";
-import { addStock } from "../services/StocksApi";
+import StockTickerSearchBox, {
+  Suggestion,
+} from "../components/StockTickerSearchBox";
 import useAddStockTicker from "../hooks/useAddStockTicker";
 
 interface AddStockProps {
@@ -11,21 +12,28 @@ interface AddStockProps {
 }
 
 function AddStock({ onCloseModal }: AddStockProps) {
-  const [ticker, setTicker] = useState<Suggestion|undefined>();
-  const {mutate} = useAddStockTicker();
+  const [stockTicker, setStockTicker] = useState<Suggestion | undefined>();
+  const { addStockTicker } = useAddStockTicker();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const ticker = event.currentTarget.stock.value;
-    // addStock({ stock: ticker });
-
-    mutate(ticker)
+    addStockTicker(
+      { ...stockTicker!, color: "#000" },
+      {
+        onSuccess: () => {
+          onCloseModal!();
+        },
+      }
+    );
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow label="Stock">
-        <StockTickerSearchBox id="stock" onSelectedSuggestion={setTicker} />
+        <StockTickerSearchBox
+          id="stock"
+          onSelectedSuggestion={setStockTicker}
+        />
       </FormRow>
       <div className="flex justify-end space-x-2">
         <FormButton onClick={() => onCloseModal?.()}>Cancel</FormButton>
