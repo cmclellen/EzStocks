@@ -34,7 +34,7 @@ function AddStock() {
         />
       </FormRow>
       <div className="flex justify-end space-x-2">
-        <FormButton onClick={() => onCloseModal?.()}>Cancel</FormButton>
+        <FormButton onClick={() => close()}>Cancel</FormButton>
         <FormButton type="submit">Add</FormButton>
       </div>
     </Form>
