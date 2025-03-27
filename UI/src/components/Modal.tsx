@@ -57,11 +57,11 @@ function Open({ children, opensWindowName }: OpenProps) {
 
 interface WindowProps {
   name: string;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 function Window({ children, name }: WindowProps) {
-  const { openName, close } = useContext(ModalContext);
+  const { openName } = useContext(ModalContext);
   if (openName !== name) return null;
   return createPortal(
     <div className="relative z-10">
@@ -72,9 +72,7 @@ function Window({ children, name }: WindowProps) {
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full justify-center text-center items-center p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-background text-left shadow-xl transition-all my-8 w-full max-w-xl p-4">
-            {cloneElement<{ onCloseModal: unknown }>(children, {
-              onCloseModal: close,
-            })}
+            {children}
           </div>
         </div>
       </div>

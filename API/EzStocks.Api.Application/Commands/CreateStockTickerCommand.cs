@@ -1,12 +1,24 @@
-﻿using AutoMapper;
-using EzStocks.Api.Application.Services;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using EzStocks.Api.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace EzStocks.Api.Application.Commands
 {
-    public record CreateStockTickerCommand(string Ticker, string Name, string Color) : IRequest;
+    public record CreateStockTickerCommand : IRequest
+    {
+        public CreateStockTickerCommand(string ticker, string name, string color)
+        {
+            Ticker = Guard.Against.NullOrWhiteSpace(ticker, nameof(ticker));
+            Name = Guard.Against.NullOrWhiteSpace(name, nameof(name)); ;
+            Color = color;
+        }
+
+        public string Ticker { get; init; }
+        public string Name { get; init; }
+        public string Color { get; init; }
+    }
 
     public class CreateStockTickersCommandHandler(
         ILogger<CreateStockTickersCommandHandler> _logger,

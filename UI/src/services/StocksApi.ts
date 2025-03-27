@@ -16,9 +16,14 @@ async function getStocksHistory(): Promise<StocksHistory> {
   return data;
 }
 
-async function addStock({ stock }: { stock: string }) {
+export interface AddStockTickerRequest {
+  ticker: string;
+  name: string;
+  color: string;
+}
+async function addStockTicker(req: AddStockTickerRequest): Promise<void> {
   const url = "/stock-tickers";
-  const { data } = await AxiosInstance.post(url, { stock });
+  const { data } = await AxiosInstance.post(url, req);
   return data;
 }
 
@@ -38,4 +43,4 @@ async function searchStock({
   return data;
 }
 
-export { getStocksHistory, addStock, searchStock };
+export { getStocksHistory, addStockTicker, searchStock };

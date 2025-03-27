@@ -119,10 +119,11 @@ const sortBy = (key: string) => {
 };
 
 interface StockTickerSearchBoxProps {
-  readonly onSelectedSuggestion: (suggestion: Suggestion | undefined) => void;
+  readonly id: string;
+  readonly onSelectedSuggestion?: (suggestion: Suggestion | undefined) => void;
 }
 
-function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps) {
+function StockTickerSearchBox({id, onSelectedSuggestion}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
@@ -134,7 +135,7 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
 
   function onSuggestionSelected(selectedItem: Suggestion | undefined) {
     dispatch({ type: "SET_SELECTED", payload: selectedItem });
-    onSelectedSuggestion(selectedItem);
+    onSelectedSuggestion?.(selectedItem);
   }
 
   function onSearchTextChange(e: any) {
@@ -170,7 +171,7 @@ function StockTickerSearchBox({onSelectedSuggestion}: StockTickerSearchBoxProps)
     <div ref={ref}>
       <input
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="stock"
+        id={id}
         type="text"
         value={state.selectedItem?.ticker ?? searchTerm}
         onChange={onSearchTextChange}

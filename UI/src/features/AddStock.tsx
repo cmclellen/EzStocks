@@ -1,27 +1,40 @@
+import { useState } from "react";
 import Form from "../components/Form";
 import FormButton from "../components/FormButton";
 import FormRow from "../components/FormRow";
-import StockTickerSearchBox from "../components/StockTickerSearchBox";
-import { addStock } from "../services/StocksApi";
+import StockTickerSearchBox, {
+  Suggestion,
+} from "../components/StockTickerSearchBox";
+import useAddStockTicker from "../hooks/useAddStockTicker";
+import { useModal } from "../components/Modal";
 
-interface AddStockProps {
-  onCloseModal?: () => void;
-}
+function AddStock() {
+  const { close } = useModal();
+  const [stockTicker, setStockTicker] = useState<Suggestion | undefined>();
+  const { addStockTicker } = useAddStockTicker();
 
-function AddStock({ onCloseModal }: AddStockProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    addStock({ stock: event.currentTarget.stock.value });
+    addStockTicker(
+      { ...stockTicker!, color: "#000" },
+      {
+        onSuccess: () => {
+          close();
+        },
+      }
+    );
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow label="Stock">
-        <StockTickerSearchBox />
+        <StockTickerSearchBox
+          id="stock"
+          onSelectedSuggestion={setStockTicker}
+        />
       </FormRow>
       <div className="flex justify-end space-x-2">
-        <FormButton onClick={() => onCloseModal?.()}>Cancel</FormButton>
+        <FormButton onClick={() => close()}>Cancel</FormButton>
         <FormButton type="submit">Add</FormButton>
       </div>
     </Form>
