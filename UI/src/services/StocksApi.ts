@@ -16,7 +16,7 @@ async function getStocksHistory(): Promise<StocksHistory> {
   return data;
 }
 
-async function addStock({ stock }: { stock: string }) {
+async function addStock({ stock }: { stock: string }): Promise<void> {
   const url = "/stock-tickers";
   const { data } = await AxiosInstance.post(url, { stock });
   return data;

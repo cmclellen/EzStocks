@@ -1,9 +1,9 @@
 import Error from "./Error";
 
 interface FormRowProps {
-  label: string;
-  children?: React.ReactNode;
-  error?: string;
+  readonly label: string;
+  readonly children?: React.ReactNode;
+  readonly error?: string;
 }
 
 function FormRow({ label, children, error }: FormRowProps) {

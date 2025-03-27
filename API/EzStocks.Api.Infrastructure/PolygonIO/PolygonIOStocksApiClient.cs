@@ -105,9 +105,9 @@ namespace EzStocks.Api.Infrastructure.PolygonIO
                 throw new Exception($"Failed retrieving tickers.");
             }
 
-            var items = v3ReferenceTickersResponseDto.Results.Select(i => new StockTicker(i.Ticker, i.Name, i.Locale, i.CurrencyName)).ToList();
+            var items = new HashSet<StockTicker>(v3ReferenceTickersResponseDto.Results.Select(i => new StockTicker(i.Ticker, i.Name, i.Locale, i.CurrencyName)).ToList());
 
-            return new SearchStockTickersResponse(items, v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
+            return new SearchStockTickersResponse(items.ToList(), v3ReferenceTickersResponseDto.Count, GetCursor(v3ReferenceTickersResponseDto.NextUrl));
         }
 
         private string? GetCursor(string? nextUrl)

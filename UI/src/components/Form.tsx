@@ -1,6 +1,6 @@
 interface FormProps {
-  children?: React.ReactNode;
-  onSubmit: () => void;
+  readonly children?: React.ReactNode;
+  readonly onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 function Form({ children, onSubmit }: FormProps) {

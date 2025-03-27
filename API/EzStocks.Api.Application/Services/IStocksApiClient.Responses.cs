@@ -10,5 +10,5 @@
 
     public record SearchStockTickersResponse(IList<StockTicker> StockTickers, int Count, string? Cursor);
 
-    public record StockTicker(string Ticker, string Name, string Region, string Currency);
+    public record struct StockTicker(string Ticker, string Name, string Region, string Currency);
 }
