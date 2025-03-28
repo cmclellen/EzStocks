@@ -8,7 +8,7 @@ import StockTickerSearchBox, {
 import useAddStockTicker from "../hooks/useAddStockTicker";
 import { useModal } from "../components/Modal";
 
-function AddStock() {
+function AddStockTicker() {
   const { close } = useModal();
   const [stockTicker, setStockTicker] = useState<Suggestion | undefined>();
   const { addStockTicker } = useAddStockTicker();
@@ -41,4 +41,4 @@ function AddStock() {
   );
 }
 
-export default AddStock;
+export default AddStockTicker;

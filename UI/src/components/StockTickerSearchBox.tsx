@@ -1,7 +1,8 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
-import { searchStock } from "../services/StocksApi";
 import useOutsideClick from "../hooks/useOutsideClick";
+import useSearchStockTicker from "../hooks/useSearchStockTicker";
+import { ImSpinner9 } from "react-icons/im";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -30,7 +31,6 @@ function reducer(
   state: StockTickerSearchBoxState,
   action: any
 ): StockTickerSearchBoxState {
-
   const hideSuggestions = {
     suggestions: [],
     showSuggestions: false,
@@ -48,12 +48,12 @@ function reducer(
       return {
         ...state,
         selectedItem: action.payload,
-        ...hideSuggestions
+        ...hideSuggestions,
       };
     case "HIDE_SUGGESTIONS":
       return {
         ...state,
-        ...hideSuggestions
+        ...hideSuggestions,
       };
     case "SET_SEARCH_TEXT":
       return {
@@ -77,7 +77,6 @@ function SuggestionList({
   suggestions,
   onSuggestionSelected,
 }: SuggestionListProps) {
-
   if (!showSuggestions) return null;
 
   if (suggestions.length == 0)
@@ -88,29 +87,31 @@ function SuggestionList({
     );
 
   return (
-    
-      <ul className="border border-gray-300 rounded-md shadow-md z-10 max-h-[220px] overflow-y-auto scrollbar">
-        {suggestions.map((suggestion) => (
-          <li
-            className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
-            key={suggestion.ticker}
-          >
-            <button className="w-full text-left" data-ticker={suggestion.ticker} onClick={(e) =>
+    <ul className="border border-gray-300 rounded-md shadow-md z-10 max-h-[220px] overflow-y-auto scrollbar">
+      {suggestions.map((suggestion) => (
+        <li
+          className="bg-white hover:bg-gray-100 hover:font-bold hover:cursor-pointer p-2 text-gray-700"
+          key={suggestion.ticker}
+        >
+          <button
+            className="w-full text-left"
+            data-ticker={suggestion.ticker}
+            onClick={(e) =>
               onSuggestionSelected(
                 suggestions.find(
                   (o) => o.ticker === e.currentTarget.dataset.ticker
                 )
               )
-            }>
+            }
+          >
             {suggestion.ticker}{" "}
             <span className="text-sm font-light text-gray-500">
               {suggestion.name}
             </span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -123,11 +124,19 @@ interface StockTickerSearchBoxProps {
   readonly onSelectedSuggestion?: (suggestion: Suggestion | undefined) => void;
 }
 
-function StockTickerSearchBox({id, onSelectedSuggestion}: StockTickerSearchBoxProps) {
+function StockTickerSearchBox({
+  id,
+  onSelectedSuggestion,
+}: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [state, dispatch] = useReducer(reducer, initialState);
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
   const ref = useOutsideClick(handleClickOutside);
+  const {
+    searchStockTickersResponse,
+    searchStockTickers,
+    isSearchingStockTickers,
+  } = useSearchStockTicker(debouncedSearchTerm);
 
   function handleClickOutside() {
     dispatch({ type: "HIDE_SUGGESTIONS" });
@@ -140,7 +149,7 @@ function StockTickerSearchBox({id, onSelectedSuggestion}: StockTickerSearchBoxPr
 
   function onSearchTextChange(e: any) {
     const { value } = e.target;
-    if(state.selectedItem) {
+    if (state.selectedItem) {
       onSuggestionSelected(undefined);
     }
     setSearchTerm(value);
@@ -152,32 +161,45 @@ function StockTickerSearchBox({id, onSelectedSuggestion}: StockTickerSearchBoxPr
       payload: debouncedSearchTerm,
     });
     if (!debouncedSearchTerm) return;
-
-    async function searchStocks() {
-      const response = await searchStock({ ticker: debouncedSearchTerm });
-
-      dispatch({
-        type: "SET_SUGGESTIONS",
-        payload: response.stockTickers
-          .map((item) => ({ ticker: item.ticker, name: item.name }))
-          .concat()
-          .sort(sortBy("ticker")),
-      });
+    async function search() {
+      await searchStockTickers();
     }
-    searchStocks();
-  }, [debouncedSearchTerm]);
+    search();
+  }, [debouncedSearchTerm, searchStockTickers]);
+
+  useEffect(() => {
+    const stockTickers = searchStockTickersResponse?.stockTickers;
+    if (stockTickers === undefined) return;
+    dispatch({
+      type: "SET_SUGGESTIONS",
+      payload: stockTickers
+        ?.map((item) => ({
+          ticker: item.ticker,
+          name: item.name,
+        }))
+        .concat()
+        .sort(sortBy("ticker")),
+    });
+  }, [searchStockTickersResponse]);
 
   return (
     <div ref={ref}>
-      <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id={id}
-        type="text"
-        value={state.selectedItem?.ticker ?? searchTerm}
-        onChange={onSearchTextChange}
-        autoComplete="off"
-        placeholder="Search for your stock..."
-      />
+      <div className="relative">
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id={id}
+          type="text"
+          value={state.selectedItem?.ticker ?? searchTerm}
+          onChange={onSearchTextChange}
+          autoComplete="off"
+          placeholder="Search for your stock..."
+        />
+        {isSearchingStockTickers && (
+          <div className="absolute top-0 right-0 p-3 animate-spin">
+            <ImSpinner9 />
+          </div>
+        )}
+      </div>
       <div className="relative w-full">
         <SuggestionList
           showSuggestions={state.showSuggestions}
