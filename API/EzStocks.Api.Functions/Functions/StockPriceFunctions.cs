@@ -1,12 +1,12 @@
 ﻿using EzStocks.Api.Application.Commands;
 using EzStocks.Api.Application.Queries;
+using EzStocks.Api.Functions.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace EzStocks.Api.Functions.Functions
 {
@@ -24,28 +24,26 @@ namespace EzStocks.Api.Functions.Functions
 
         public class PopulateStockPriceOutput 
         {
-            [ServiceBusOutput("populate-stock-prices", Connection = "ServiceBusConnection")]
-            public IEnumerable<PopulateStockPriceItemCommand> OutputEvents { get; set; }
+            [ServiceBusOutput(QueueName.PopulateStockPrices, Connection = "ServiceBusConnection")]
+            public required IEnumerable<PopulateStockPriceItemCommand> OutputEvents { get; set; }
 
             [HttpResult]
-            public IActionResult Result { get; set; }
+            public required IActionResult Result { get; set; }
         }
 
         [Function(nameof(PopulateStockPrice))]
-        public async Task<PopulateStockPriceOutput> PopulateStockPrice([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-prices/populate")] HttpRequestData req, string? ticker = null, CancellationToken cancellationToken = default)
+        public async Task<PopulateStockPriceOutput> PopulateStockPrice(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "stock-prices/populate")] HttpRequestData req, string? ticker = null, CancellationToken cancellationToken = default)
         {
-            //HttpResponseData response = req.CreateResponse(HttpStatusCode.Accepted);
-            
             List<PopulateStockPriceItemCommand> commands = new List<PopulateStockPriceItemCommand>();
             if (ticker is not null)
             {
-                commands.Add(new Application.Commands.PopulateStockPriceItemCommand(ticker));
+                commands.Add(new PopulateStockPriceItemCommand(ticker));
             }
             else
             {
-                var allStockTickers = await _sender.Send(new Application.Queries.GetStockTickersQuery(), cancellationToken);
-                List<string> allTickers = allStockTickers.Select(item => item.Ticker).ToList();
-                commands.AddRange(allTickers.Select(ticker => new PopulateStockPriceItemCommand(ticker)).ToList());
+                var populateStockPriceItemCommands = await GeneratePopulateStockPriceItemCommands(cancellationToken);
+                commands.AddRange(populateStockPriceItemCommands);
             }
             return new PopulateStockPriceOutput
             {
@@ -55,20 +53,25 @@ namespace EzStocks.Api.Functions.Functions
         }
 
         [Function(nameof(PopulateStockPriceCommand))]
-        public async Task<IActionResult> PopulateStockPriceCommand([ServiceBusTrigger("populate-stock-prices", Connection = "ServiceBusConnection")]
+        public async Task<IActionResult> PopulateStockPriceCommand([ServiceBusTrigger(QueueName.PopulateStockPrices, Connection = "ServiceBusConnection")]
         PopulateStockPriceItemCommand populateStockPriceItemCommand, CancellationToken cancellationToken)
         {   
             await _sender.Send(populateStockPriceItemCommand, cancellationToken);
             return new OkResult();
         }
 
-        [Function(nameof(PopulateStockPricesTimer))]
-        [ServiceBusOutput("populate-stock-prices", Connection = "ServiceBusConnection")]
-        public async Task<PopulateStockPriceItemCommand[]> PopulateStockPricesTimer([TimerTrigger("0 30 20 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
-        {            
-            var allStockTickers = await _sender.Send(new Application.Queries.GetStockTickersQuery(), cancellationToken);
+        private async Task<PopulateStockPriceItemCommand[]> GeneratePopulateStockPriceItemCommands(CancellationToken cancellationToken)
+        {
+            var allStockTickers = await _sender.Send(new GetStockTickersQuery(), cancellationToken);
             List<string> allTickers = allStockTickers.Select(item => item.Ticker).ToList();
             return allTickers.Select(ticker => new PopulateStockPriceItemCommand(ticker)).ToArray();
+        }
+
+        [Function(nameof(PopulateStockPricesTimer))]
+        [ServiceBusOutput(QueueName.PopulateStockPrices, Connection = "ServiceBusConnection")]
+        public async Task<PopulateStockPriceItemCommand[]> PopulateStockPricesTimer([TimerTrigger("0 30 20 * * *")] TimerInfo timerInfo, FunctionContext context, CancellationToken cancellationToken)
+        {            
+            return await GeneratePopulateStockPriceItemCommands(cancellationToken);
         }
 
         [Function(nameof(GetStockPricesHistory))]
