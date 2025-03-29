@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import useOutsideClick from "../hooks/useOutsideClick";
-import useSearchStockTicker from "../hooks/useSearchStockTicker";
+import useSearchStockTickerFromService from "../hooks/useSearchStockTickerFromService";
 import { ImSpinner9 } from "react-icons/im";
 
 const DEBOUNCE_INTERVAL = 300;
@@ -136,7 +136,7 @@ function StockTickerSearchBox({
     searchStockTickersResponse,
     searchStockTickers,
     isSearchingStockTickers,
-  } = useSearchStockTicker(debouncedSearchTerm);
+  } = useSearchStockTickerFromService(debouncedSearchTerm);
 
   function handleClickOutside() {
     dispatch({ type: "HIDE_SUGGESTIONS" });

@@ -5,7 +5,7 @@ import {
 } from "../services/StocksApi";
 import QueryKey from "../utils/queryKeys";
 
-export default function useSearchStockTicker(ticker: string) {
+export default function useSearchStockTickerFromService(ticker: string) {
   const {
     data: searchStockTickersResponse,
     error: searchStockTickerError,

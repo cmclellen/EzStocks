@@ -10,20 +10,14 @@ import {
 } from "recharts";
 import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
+import UnexpectedError from "./UnexpectedError";
 
 function StockGraph() {
   const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
 
   if (isLoadingStocksHistory) return <Spinner />;
 
-  if (error)
-    return (
-      <div className="w-full text-center">
-        <span className="border py-2 px-4 rounded-lg text-center font-semibold">
-          An unexpected error has occurred while loading the graph
-        </span>
-      </div>
-    );
+  if (error) return <UnexpectedError></UnexpectedError>;
 
   return (
     <>
@@ -39,7 +33,7 @@ function StockGraph() {
           <Legend />
           <Tooltip />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          {stocksHistory!.tickers.map((ticker) => (
+          {stocksHistory!.stockTickers.map((ticker) => (
             <Line
               key={ticker.ticker}
               name={`${ticker.name} (${ticker.ticker})`}

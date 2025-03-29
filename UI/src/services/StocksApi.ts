@@ -1,5 +1,11 @@
 import AxiosInstance from "../AxiosInstance";
 
+export interface StockTicker {
+  ticker: string;
+  name: string;
+  color: string;
+}
+
 interface StockPrice {
   createdDate: Date;
   stocks: { [symbol: string]: number };
@@ -7,7 +13,7 @@ interface StockPrice {
 
 export interface StocksHistory {
   prices: StockPrice[];
-  tickers: { ticker: string; name: string; color: string }[];
+  stockTickers: StockTicker[];
 }
 
 async function getStocksHistory(): Promise<StocksHistory> {
@@ -45,4 +51,19 @@ async function searchStockTickers({
   return data;
 }
 
-export { getStocksHistory, addStockTicker, searchStockTickers };
+export interface GetStockTickersResponse {
+  stockTickers: StockTicker[];
+}
+
+async function getStockTickers(): Promise<GetStockTickersResponse> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.get<GetStockTickersResponse>(url);
+  return data;
+}
+
+export {
+  getStockTickers,
+  getStocksHistory,
+  addStockTicker,
+  searchStockTickers,
+};
