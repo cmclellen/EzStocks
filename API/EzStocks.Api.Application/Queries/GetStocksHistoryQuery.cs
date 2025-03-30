@@ -7,7 +7,7 @@ using MediatR;
 
 namespace EzStocks.Api.Application.Queries
 {
-    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTicker> Tickers);
+    public record GetStocksHistoryResponse(IList<StocksPriceItem> Prices, IList<Dtos.StockTicker> StockTickers);
 
     public record GetStocksHistoryQuery : IRequest<Result<GetStocksHistoryResponse>>;
 

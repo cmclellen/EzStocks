@@ -14,7 +14,11 @@ import { AiOutlineStock } from "react-icons/ai";
 
 const navigation = [
   { name: "Dashboard", href: "/view-stock", current: true },
-  // { name: "Add Stock", href: "/add-stock", current: false },
+  {
+    name: "Manage Stock Tickers",
+    href: "/manage-stock-tickers",
+    current: false,
+  },
 ];
 
 function MobileMenu() {

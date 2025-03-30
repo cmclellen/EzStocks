@@ -18,6 +18,8 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Services.StockTicker, Dtos.StockTickerSmall>();
             CreateMap<Services.SearchStockTickersResponse, Queries.SearchStockTickersResponse>();
             CreateMap<CreateStockTickerCommand, Domain.Entities.StockTicker>();
+            CreateMap<UpdateStockTickerCommand, Domain.Entities.StockTicker>()
+                .ForMember(d => d.Ticker, o => o.Ignore()); ;
         }
     }
 }

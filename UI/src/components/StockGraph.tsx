@@ -16,14 +16,7 @@ function StockGraph() {
 
   if (isLoadingStocksHistory) return <Spinner />;
 
-  if (error)
-    return (
-      <div className="w-full text-center">
-        <span className="border py-2 px-4 rounded-lg text-center font-semibold">
-          An unexpected error has occurred while loading the graph
-        </span>
-      </div>
-    );
+  if (error) throw new Error("Failed loading stock history");
 
   return (
     <>
@@ -39,7 +32,7 @@ function StockGraph() {
           <Legend />
           <Tooltip />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          {stocksHistory!.tickers.map((ticker) => (
+          {stocksHistory!.stockTickers.map((ticker) => (
             <Line
               key={ticker.ticker}
               name={`${ticker.name} (${ticker.ticker})`}

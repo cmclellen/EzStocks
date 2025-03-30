@@ -11,6 +11,12 @@ namespace EzStocks.Api.Persistence.Repositories
             await ezStockDbContext.StockTickers.AddAsync(stockTicker, cancellationToken);
         }
 
+        public async Task DeleteAsync(StockTicker stockTicker, CancellationToken cancellationToken)
+        {
+            ezStockDbContext.StockTickers.Remove(stockTicker);
+            await Task.CompletedTask;
+        }
+
         public async Task<IList<StockTicker>> GetByTickersAsync(IList<string>? tickers, CancellationToken cancellationToken)
         {
             var query = ezStockDbContext.StockTickers.AsQueryable();
@@ -18,8 +24,15 @@ namespace EzStocks.Api.Persistence.Repositories
             {
                 query = query.Where(si => tickers.Contains(si.Ticker));
             }
-            IList<StockTicker> stockTickers = await query.ToListAsync();
+            IList<StockTicker> stockTickers = await query.OrderBy(e=>e.Ticker).ToListAsync();
             return stockTickers;
+        }
+
+        public Task UpdateAsync(StockTicker stockTicker, CancellationToken cancellationToken)
+        {
+            var entry = ezStockDbContext.StockTickers.Entry(stockTicker);
+            entry.State = EntityState.Modified;
+            return Task.CompletedTask;
         }
     }
 }

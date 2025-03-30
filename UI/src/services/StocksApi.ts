@@ -1,5 +1,11 @@
 import AxiosInstance from "../AxiosInstance";
 
+export interface StockTicker {
+  ticker: string;
+  name: string;
+  color: string;
+}
+
 interface StockPrice {
   createdDate: Date;
   stocks: { [symbol: string]: number };
@@ -7,7 +13,7 @@ interface StockPrice {
 
 export interface StocksHistory {
   prices: StockPrice[];
-  tickers: { ticker: string; name: string; color: string }[];
+  stockTickers: StockTicker[];
 }
 
 async function getStocksHistory(): Promise<StocksHistory> {
@@ -24,6 +30,12 @@ export interface AddStockTickerRequest {
 async function addStockTicker(req: AddStockTickerRequest): Promise<void> {
   const url = "/stock-tickers";
   const { data } = await AxiosInstance.post(url, req);
+  return data;
+}
+
+async function updateStockTicker(req: AddStockTickerRequest): Promise<void> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.put(url, req);
   return data;
 }
 
@@ -45,4 +57,29 @@ async function searchStockTickers({
   return data;
 }
 
-export { getStocksHistory, addStockTicker, searchStockTickers };
+export interface GetStockTickersResponse {
+  stockTickers: StockTicker[];
+}
+
+async function getStockTickers(): Promise<GetStockTickersResponse> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.get<GetStockTickersResponse>(url);
+  return data;
+}
+
+async function deleteStockTicker(ticker: string): Promise<void> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.delete(url, {
+    params: { ticker },
+  });
+  return data;
+}
+
+export {
+  getStockTickers,
+  getStocksHistory,
+  addStockTicker,
+  searchStockTickers,
+  deleteStockTicker,
+  updateStockTicker,
+};

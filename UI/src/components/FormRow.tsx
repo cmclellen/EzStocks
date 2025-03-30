@@ -1,5 +1,13 @@
 import Error from "./Error";
 
+interface ErrorProps {
+  children?: React.ReactNode;
+}
+
+function Error({ children }: ErrorProps) {
+  return <div className="text-red-500">{children}</div>;
+}
+
 interface FormRowProps {
   readonly label: string;
   readonly children?: React.ReactNode;

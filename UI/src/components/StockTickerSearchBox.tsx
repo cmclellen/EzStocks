@@ -1,8 +1,8 @@
 import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import useOutsideClick from "../hooks/useOutsideClick";
-import useSearchStockTicker from "../hooks/useSearchStockTicker";
-import { ImSpinner9 } from "react-icons/im";
+import useSearchStockTickerFromService from "../hooks/useSearchStockTickerFromService";
+import ControlSpinner from "./ControlSpinner";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -121,22 +121,27 @@ const sortBy = (key: string) => {
 
 interface StockTickerSearchBoxProps {
   readonly id: string;
+  readonly suggestion?: Suggestion;
   readonly onSelectedSuggestion?: (suggestion: Suggestion | undefined) => void;
 }
 
 function StockTickerSearchBox({
   id,
+  suggestion,
   onSelectedSuggestion,
 }: StockTickerSearchBoxProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    selectedItem: suggestion,
+  });
   const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_INTERVAL);
   const ref = useOutsideClick(handleClickOutside);
   const {
     searchStockTickersResponse,
     searchStockTickers,
     isSearchingStockTickers,
-  } = useSearchStockTicker(debouncedSearchTerm);
+  } = useSearchStockTickerFromService(debouncedSearchTerm);
 
   function handleClickOutside() {
     dispatch({ type: "HIDE_SUGGESTIONS" });
@@ -186,17 +191,22 @@ function StockTickerSearchBox({
     <div ref={ref}>
       <div className="relative">
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id={id}
+          disabled={!!suggestion}
           type="text"
-          value={state.selectedItem?.ticker ?? searchTerm}
+          value={
+            state.selectedItem
+              ? `${state.selectedItem.ticker} (${state.selectedItem.name})`
+              : searchTerm
+          }
           onChange={onSearchTextChange}
           autoComplete="off"
           placeholder="Search for your stock..."
         />
         {isSearchingStockTickers && (
-          <div className="absolute top-0 right-0 p-3 animate-spin">
-            <ImSpinner9 />
+          <div className="absolute top-0 right-0 p-3">
+            <ControlSpinner />
           </div>
         )}
       </div>
