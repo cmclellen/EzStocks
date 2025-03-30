@@ -61,9 +61,18 @@ async function getStockTickers(): Promise<GetStockTickersResponse> {
   return data;
 }
 
+async function deleteStockTicker(ticker: string): Promise<void> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.delete(url, {
+    params: { ticker },
+  });
+  return data;
+}
+
 export {
   getStockTickers,
   getStocksHistory,
   addStockTicker,
   searchStockTickers,
+  deleteStockTicker,
 };

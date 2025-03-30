@@ -11,6 +11,12 @@ namespace EzStocks.Api.Persistence.Repositories
             await ezStockDbContext.StockTickers.AddAsync(stockTicker, cancellationToken);
         }
 
+        public async Task DeleteAsync(StockTicker stockTicker, CancellationToken cancellationToken)
+        {
+            ezStockDbContext.StockTickers.Remove(stockTicker);
+            await Task.CompletedTask;
+        }
+
         public async Task<IList<StockTicker>> GetByTickersAsync(IList<string>? tickers, CancellationToken cancellationToken)
         {
             var query = ezStockDbContext.StockTickers.AsQueryable();

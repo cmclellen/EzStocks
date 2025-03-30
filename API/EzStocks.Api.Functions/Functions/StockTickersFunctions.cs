@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Ardalis.Result;
 
 namespace AzStocks.Api.Functions.Functions
 {
@@ -22,6 +23,13 @@ namespace AzStocks.Api.Functions.Functions
         {
             await sender.Send(new CreateStockTickerCommand(ticker, name, color), cancellationToken);
             return new AcceptedResult();
+        }
+
+        [Function(nameof(DeleteStockTicker))]
+        public async Task<IActionResult> DeleteStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "stock-tickers")] HttpRequest req, string ticker, string name, string color, CancellationToken cancellationToken = default)
+        {
+            var result = await sender.Send(new DeleteStockTickerCommand(ticker), cancellationToken);
+            return result.IsNotFound() ? new NotFoundResult() : new OkResult();
         }
 
         [Function(nameof(GetStockTickers))]

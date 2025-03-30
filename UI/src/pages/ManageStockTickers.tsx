@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   createColumnHelper,
   flexRender,
@@ -12,12 +12,30 @@ import Page from "../components/Page";
 import FormButton from "../components/FormButton";
 import Modal from "../components/Modal";
 import AddStockTicker from "../features/AddStockTicker";
+import { FaRegEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
+import useDeleteStockTicker from "../hooks/useDeleteStockTicker";
+
+interface ActionButtonProp {
+  icon: ReactNode;
+  onClick: () => void;
+  displayName: string;
+}
+
+function ActionButton({ onClick, displayName, icon }: ActionButtonProp) {
+  return (
+    <button className="flex space-x-1 hover:cursor-pointer" onClick={onClick}>
+      <div className="flex items-center">{icon}</div>
+      <span className="hidden md:block">{displayName}</span>
+    </button>
+  );
+}
 
 const defaultData: StockTicker[] = [];
 
 const columnHelper = createColumnHelper<StockTicker>();
 
-const columns = [
+const getColumns = (handleEdit: any, handleDelete: any) => [
   columnHelper.accessor("ticker", {
     header: () => <span>Ticker</span>,
     cell: (info) => info.getValue(),
@@ -41,18 +59,44 @@ const columns = [
         </div>
       </div>
     ),
-    // footer: (info) => info.column.id,
+  }),
+  columnHelper.display({
+    id: "actions",
+    header: () => "Action",
+    cell: (props) => (
+      <div className="flex space-x-1 md:space-x-4 justify-center">
+        <ActionButton
+          displayName="Edit"
+          icon={<FaRegEdit />}
+          onClick={() => handleEdit(props.row.original)}
+        />
+        <ActionButton
+          displayName="Delete"
+          icon={<FaRegTrashCan />}
+          onClick={() => handleDelete(props.row.original)}
+        />
+      </div>
+    ),
   }),
 ];
 
 function ManageStockTickers() {
   const [data, _setData] = useState(() => [...defaultData]);
   const { stockTickers, isLoadingStockTickers, error } = useQueryStockTickers();
+  const { deleteStockTicker, deleteStockTickerError, isDeletingStockTicker } =
+    useDeleteStockTicker();
   const table = useReactTable({
     data,
-    columns,
+    columns: getColumns(handleEdit, handleDelete),
     getCoreRowModel: getCoreRowModel(),
   });
+
+  function handleEdit(item: any) {
+    console.log(item);
+  }
+  async function handleDelete(item: any) {
+    await deleteStockTicker(item.ticker);
+  }
 
   const buttons = (
     <div className="flex justify-end">
