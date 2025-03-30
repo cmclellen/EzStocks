@@ -1,5 +1,4 @@
-import { useReducer, useState } from "react";
-import PageTitle from "../components/PageTitle";
+import { useState } from "react";
 import {
   createColumnHelper,
   flexRender,
@@ -9,6 +8,10 @@ import {
 import useQueryStockTickers from "../hooks/useQueryStockTickers";
 import Spinner from "../components/Spinner";
 import { StockTicker } from "../services/StocksApi";
+import Page from "../components/Page";
+import FormButton from "../components/FormButton";
+import Modal from "../components/Modal";
+import AddStockTicker from "../features/AddStockTicker";
 
 const defaultData: StockTicker[] = [];
 
@@ -28,7 +31,16 @@ const columns = [
   }),
   columnHelper.accessor("color", {
     header: () => "Color",
-    cell: (info) => info.renderValue(),
+    cell: (info) => (
+      <div className="text-center">
+        <div
+          className="rounded w-5 h-5 inline-block"
+          style={{ backgroundColor: info.getValue() }}
+        >
+          &nbsp;
+        </div>
+      </div>
+    ),
     // footer: (info) => info.column.id,
   }),
 ];
@@ -42,6 +54,17 @@ function ManageStockTickers() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const buttons = (
+    <div className="flex justify-end">
+      <Modal.Open opensWindowName={`add-stock`}>
+        <FormButton>Add Stock</FormButton>
+      </Modal.Open>
+      <Modal.Window name={`add-stock`}>
+        <AddStockTicker />
+      </Modal.Window>
+    </div>
+  );
+
   if (error) throw new Error("Failed loading stock tickers");
 
   if (isLoadingStockTickers) return <Spinner></Spinner>;
@@ -49,8 +72,8 @@ function ManageStockTickers() {
   table.options.data = stockTickers!;
 
   return (
-    <>
-      <PageTitle title="Manage Stock Tickers"></PageTitle>
+    <Page title="Manage Stock Tickers">
+      {buttons}
       <div className="p-2 ">
         <table className="table-auto w-full">
           <thead>
@@ -98,7 +121,7 @@ function ManageStockTickers() {
           </tfoot>
         </table>
       </div>
-    </>
+    </Page>
   );
 }
 

@@ -18,7 +18,7 @@ namespace EzStocks.Api.Persistence.Repositories
             {
                 query = query.Where(si => tickers.Contains(si.Ticker));
             }
-            IList<StockTicker> stockTickers = await query.ToListAsync();
+            IList<StockTicker> stockTickers = await query.OrderBy(e=>e.Ticker).ToListAsync();
             return stockTickers;
         }
     }
