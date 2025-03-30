@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ViewStock from "./pages/ViewStock.tsx";
 import ManageStockTickers from "./pages/ManageStockTickers.tsx";
+import AdministerStockTickers from "./pages/AdministerStockTickers.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,10 @@ function App() {
             <Route
               path="manage-stock-tickers"
               element={<ManageStockTickers />}
+            ></Route>
+            <Route
+              path="admin/manage-stock-tickers"
+              element={<AdministerStockTickers />}
             ></Route>
           </Route>
         </Routes>

@@ -19,11 +19,11 @@ const navigation = [
     href: "/manage-stock-tickers",
     current: false,
   },
-  // {
-  //   name: "Manage Stock Tickers",
-  //   href: "/admin/manage-stock-tickers",
-  //   current: false,
-  // },
+  {
+    name: "Administer Stock Tickers",
+    href: "/admin/manage-stock-tickers",
+    current: false,
+  },
 ];
 
 function MobileMenu() {
