@@ -67,7 +67,7 @@ const getColumns = (handleEdit: any, handleDelete: any) => [
           <ActionButton displayName="Edit" icon={<FaRegEdit />} />
         </Modal.Open>
         <Modal.Window name={`add-stock-${props.row.original.ticker}`}>
-          <AddStockTicker suggestion={props.row.original} />
+          <AddStockTicker stockTicker={props.row.original} />
         </Modal.Window>
 
         <ActionButton

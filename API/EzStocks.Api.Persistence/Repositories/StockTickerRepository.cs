@@ -27,5 +27,12 @@ namespace EzStocks.Api.Persistence.Repositories
             IList<StockTicker> stockTickers = await query.OrderBy(e=>e.Ticker).ToListAsync();
             return stockTickers;
         }
+
+        public Task UpdateAsync(StockTicker stockTicker, CancellationToken cancellationToken)
+        {
+            var entry = ezStockDbContext.StockTickers.Entry(stockTicker);
+            entry.State = EntityState.Modified;
+            return Task.CompletedTask;
+        }
     }
 }

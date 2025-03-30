@@ -16,7 +16,7 @@ function FormButton({
   return (
     <button
       className={clsx(
-        "bg-primary text-on-primary px-4 py-2 rounded font-bold hover:bg-primary/75 focus:outline-none focus:shadow-outline",
+        "flex bg-primary text-on-primary px-4 py-2 rounded font-bold hover:bg-primary/75 focus:outline-none focus:shadow-outline",
         className
       )}
       type={type}

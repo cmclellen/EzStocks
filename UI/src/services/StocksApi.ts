@@ -33,6 +33,12 @@ async function addStockTicker(req: AddStockTickerRequest): Promise<void> {
   return data;
 }
 
+async function updateStockTicker(req: AddStockTickerRequest): Promise<void> {
+  const url = "/stock-tickers";
+  const { data } = await AxiosInstance.put(url, req);
+  return data;
+}
+
 export interface SearchStockTickersResponse {
   stockTickers: { ticker: string; name: string }[];
 }
@@ -75,4 +81,5 @@ export {
   addStockTicker,
   searchStockTickers,
   deleteStockTicker,
+  updateStockTicker,
 };

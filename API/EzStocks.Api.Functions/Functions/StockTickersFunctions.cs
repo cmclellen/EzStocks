@@ -29,6 +29,13 @@ namespace AzStocks.Api.Functions.Functions
         public async Task<IActionResult> DeleteStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "stock-tickers")] HttpRequest req, string ticker, string name, string color, CancellationToken cancellationToken = default)
         {
             var result = await sender.Send(new DeleteStockTickerCommand(ticker), cancellationToken);
+            return result.IsNotFound() ? new NotFoundResult() : new NoContentResult();
+        }
+
+        [Function(nameof(UpdateStockTicker))]
+        public async Task<IActionResult> UpdateStockTicker([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "stock-tickers")] HttpRequest req, string ticker, string name, string color, CancellationToken cancellationToken = default)
+        {
+            var result = await sender.Send(new UpdateStockTickerCommand(ticker, name, color), cancellationToken);
             return result.IsNotFound() ? new NotFoundResult() : new OkResult();
         }
 

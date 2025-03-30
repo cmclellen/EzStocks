@@ -2,8 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import useOutsideClick from "../hooks/useOutsideClick";
 import useSearchStockTickerFromService from "../hooks/useSearchStockTickerFromService";
-import { ImSpinner9 } from "react-icons/im";
-import clsx from "clsx";
+import ControlSpinner from "./ControlSpinner";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -206,8 +205,8 @@ function StockTickerSearchBox({
           placeholder="Search for your stock..."
         />
         {isSearchingStockTickers && (
-          <div className="absolute top-0 right-0 p-3 animate-spin">
-            <ImSpinner9 />
+          <div className="absolute top-0 right-0 p-3">
+            <ControlSpinner />
           </div>
         )}
       </div>
