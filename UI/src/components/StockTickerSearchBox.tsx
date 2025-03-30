@@ -3,6 +3,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import useOutsideClick from "../hooks/useOutsideClick";
 import useSearchStockTickerFromService from "../hooks/useSearchStockTickerFromService";
 import { ImSpinner9 } from "react-icons/im";
+import clsx from "clsx";
 
 const DEBOUNCE_INTERVAL = 300;
 
@@ -191,8 +192,9 @@ function StockTickerSearchBox({
     <div ref={ref}>
       <div className="relative">
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           id={id}
+          disabled={!!suggestion}
           type="text"
           value={
             state.selectedItem
