@@ -18,7 +18,7 @@ import useDeleteStockTicker from "../hooks/useDeleteStockTicker";
 
 interface ActionButtonProp {
   icon: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   displayName: string;
 }
 
@@ -38,14 +38,12 @@ const columnHelper = createColumnHelper<StockTicker>();
 const getColumns = (handleEdit: any, handleDelete: any) => [
   columnHelper.accessor("ticker", {
     header: () => <span>Ticker</span>,
-    cell: (info) => info.getValue(),
-    // footer: (info) => info.column.id,
+    cell: (info) => <div className="text-center">{info.getValue()}</div>,
   }),
   columnHelper.accessor((row) => row.name, {
     id: "name",
     cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Name</span>,
-    // footer: (info) => info.column.id,
+    header: () => <div className="text-left">Name</div>,
   }),
   columnHelper.accessor("color", {
     header: () => "Color",
@@ -65,11 +63,13 @@ const getColumns = (handleEdit: any, handleDelete: any) => [
     header: () => "Action",
     cell: (props) => (
       <div className="flex space-x-1 md:space-x-4 justify-center">
-        <ActionButton
-          displayName="Edit"
-          icon={<FaRegEdit />}
-          onClick={() => handleEdit(props.row.original)}
-        />
+        <Modal.Open opensWindowName={`add-stock-${props.row.original.ticker}`}>
+          <ActionButton displayName="Edit" icon={<FaRegEdit />} />
+        </Modal.Open>
+        <Modal.Window name={`add-stock-${props.row.original.ticker}`}>
+          <AddStockTicker suggestion={props.row.original} />
+        </Modal.Window>
+
         <ActionButton
           displayName="Delete"
           icon={<FaRegTrashCan />}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../components/Form";
 import FormButton from "../components/FormButton";
 import FormRow from "../components/FormRow";
@@ -8,9 +8,15 @@ import StockTickerSearchBox, {
 import useAddStockTicker from "../hooks/useAddStockTicker";
 import { useModal } from "../components/Modal";
 
-function AddStockTicker() {
+interface AddStockTickerProps {
+  suggestion?: Suggestion;
+}
+
+function AddStockTicker({ suggestion }: AddStockTickerProps) {
   const { close } = useModal();
-  const [stockTicker, setStockTicker] = useState<Suggestion | undefined>();
+  const [stockTicker, setStockTicker] = useState<Suggestion | undefined>(
+    suggestion
+  );
   const { addStockTicker } = useAddStockTicker();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,6 +36,7 @@ function AddStockTicker() {
       <FormRow label="Stock">
         <StockTickerSearchBox
           id="stock"
+          suggestion={suggestion}
           onSelectedSuggestion={setStockTicker}
         />
       </FormRow>
