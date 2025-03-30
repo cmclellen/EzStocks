@@ -1,13 +1,24 @@
+import clsx from "clsx";
+
 interface FormButtonProps {
   onClick?: () => void;
   type?: "button" | "submit";
   children?: React.ReactNode;
+  className?: string;
 }
 
-function FormButton({ onClick, children, type = "button" }: FormButtonProps) {
+function FormButton({
+  onClick,
+  children,
+  type = "button",
+  className,
+}: FormButtonProps) {
   return (
     <button
-      className="bg-primary text-on-primary px-4 py-2 rounded font-bold hover:bg-primary/75 focus:outline-none focus:shadow-outline"
+      className={clsx(
+        "bg-primary text-on-primary px-4 py-2 rounded font-bold hover:bg-primary/75 focus:outline-none focus:shadow-outline",
+        className
+      )}
       type={type}
       onClick={onClick}
     >

@@ -9,7 +9,6 @@ import {
 import useQueryStockTickers from "../hooks/useQueryStockTickers";
 import Spinner from "../components/Spinner";
 import { StockTicker } from "../services/StocksApi";
-import UnexpectedError from "../components/UnexpectedError";
 
 const defaultData: StockTicker[] = [];
 
@@ -43,7 +42,7 @@ function ManageStockTickers() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (error) return <UnexpectedError></UnexpectedError>;
+  if (error) throw new Error("Failed loading stock tickers");
 
   if (isLoadingStockTickers) return <Spinner></Spinner>;
 

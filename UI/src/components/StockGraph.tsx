@@ -10,14 +10,13 @@ import {
 } from "recharts";
 import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
-import UnexpectedError from "./UnexpectedError";
 
 function StockGraph() {
   const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
 
   if (isLoadingStocksHistory) return <Spinner />;
 
-  if (error) return <UnexpectedError></UnexpectedError>;
+  if (error) throw new Error("Failed loading stock history");
 
   return (
     <>
