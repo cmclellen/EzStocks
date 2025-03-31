@@ -60,7 +60,9 @@ function AddStockTicker(props: AddStockTickerProps) {
           id="stock"
           suggestion={props.stockTicker}
           onSelectedSuggestion={setStockTicker}
-        />
+        />        
+      </FormRow>
+      <FormRow label="Color">
         <HexColorPicker color={color} onChange={setColor} />
       </FormRow>
       <div className="flex justify-end space-x-2">
