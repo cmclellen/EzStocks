@@ -13,7 +13,7 @@ import Page from "../components/Page";
 import Spinner from "../components/Spinner";
 import AddStockTicker from "../features/AddStockTicker";
 import useDeleteStockTicker from "../hooks/useDeleteStockTicker";
-import useQueryStockTickers from "../hooks/useQueryStockTickers";
+import useGetStockTickers from "../hooks/useGetStockTickers";
 import { StockTicker } from "../services/StocksApi";
 
 const defaultData: StockTicker[] = [];
@@ -67,7 +67,7 @@ const getColumns = (handleEdit: any, handleDelete: any) => [
 
 function AdministerStockTickers() {
   const [data, _setData] = useState(() => defaultData);
-  const { stockTickers, isLoadingStockTickers, error } = useQueryStockTickers();
+  const { stockTickers, isLoadingStockTickers, error } = useGetStockTickers();
   const { deleteStockTicker, isDeletingStockTicker } = useDeleteStockTicker();
   const table = useReactTable({
     data,

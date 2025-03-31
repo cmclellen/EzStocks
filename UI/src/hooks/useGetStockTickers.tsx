@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getStockTickers } from "../services/StocksApi";
 import QueryKey from "../utils/queryKeys";
 
-export default function useQueryStockTickers() {
+export default function useGetStockTickers() {
   const {
     error,
     isPending: isLoadingStockTickers,

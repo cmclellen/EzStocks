@@ -3,16 +3,16 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { FaRegTrashCan } from "react-icons/fa6";
 import FormButton from "../components/FormButton";
 import Grid from "../components/Grid";
 import Modal from "../components/Modal";
 import Page from "../components/Page";
-import AddStockTicker from "../features/AddStockTicker";
-import { StockTicker } from "../services/StocksApi";
-import { FaRegTrashCan } from "react-icons/fa6";
-import useGetUser from "../hooks/useGetUser";
-import { useCurrentUser } from "../hooks/useCurrentUser";
 import Spinner from "../components/Spinner";
+import AddUserStockTicker from "../features/AddUserStockTicker";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import useGetUser from "../hooks/useGetUser";
+import { StockTicker } from "../services/StocksApi";
 
 const columnHelper = createColumnHelper<StockTicker>();
 
@@ -44,6 +44,7 @@ const getColumns = (handleDelete: any) => [
 function ManageStockTickers() {
   const { userId } = useCurrentUser();
   const { user, isLoadingUser } = useGetUser(userId);
+  // useDeleteUserStockTicker();
 
   const data = user?.stockTickers ?? [];
   const table = useReactTable({
@@ -54,17 +55,17 @@ function ManageStockTickers() {
 
   const buttons = (
     <div className="flex justify-end">
-      <Modal.Open opensWindowName={`add-stock`}>
+      <Modal.Open opensWindowName={`add-user-stock`}>
         <FormButton>Add Stock Ticker</FormButton>
       </Modal.Open>
-      <Modal.Window name={`add-stock`}>
-        <AddStockTicker />
+      <Modal.Window name={`add-user-stock`}>
+        <AddUserStockTicker />
       </Modal.Window>
     </div>
   );
 
   async function handleDelete(item: any) {
-    console.log("delete stock ticker");
+    console.log("delete stock ticker", item);
   }
 
   if (isLoadingUser) return <Spinner />;

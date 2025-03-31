@@ -88,6 +88,19 @@ async function getUser(userId: string): Promise<GetUserResponse> {
   return data;
 }
 
+async function addUserStockTicker({
+  userId,
+  ticker,
+}: {
+  userId: string;
+  ticker: string;
+}): Promise<void> {
+  const url = `/users/${userId}/stock-tickers`;
+  await AxiosInstance.post(url, {
+    ticker,
+  });
+}
+
 export {
   getStockTickers,
   getStocksHistory,
@@ -96,4 +109,5 @@ export {
   deleteStockTicker,
   updateStockTicker,
   getUser,
+  addUserStockTicker,
 };

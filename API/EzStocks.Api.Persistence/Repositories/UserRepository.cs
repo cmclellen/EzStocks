@@ -16,5 +16,12 @@ namespace EzStocks.Api.Persistence.Repositories
             return await ezStockDbContext.Users//.Include(e => e.StockTickers)
                 .FirstOrDefaultAsync(e=>e.UserId == userId);
         }
+
+        public Task UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            var entry = ezStockDbContext.Users.Entry(user);
+            entry.State = EntityState.Modified;
+            return Task.CompletedTask;
+        }
     }
 }
