@@ -6,5 +6,6 @@ namespace EzStocks.Api.Domain.Repositories
     {
         Task CreateAsync(User user, CancellationToken cancellationToken);
         Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task UpdateAsync(User user, CancellationToken cancellationToken);
     }
 }

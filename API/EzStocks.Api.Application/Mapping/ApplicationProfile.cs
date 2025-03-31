@@ -16,6 +16,7 @@ namespace EzStocks.Api.Application.Mapping
             CreateMap<Domain.Entities.User, Dtos.User>();
             CreateMap<Domain.Entities.StockTicker, Dtos.StockTicker>();
             CreateMap<Services.StockTicker, Dtos.StockTickerSmall>();
+            CreateMap<Domain.Entities.UserStockTicker, Dtos.StockTickerTiny>();
             CreateMap<Services.SearchStockTickersResponse, Queries.SearchStockTickersResponse>();
             CreateMap<CreateStockTickerCommand, Domain.Entities.StockTicker>();
             CreateMap<UpdateStockTickerCommand, Domain.Entities.StockTicker>()
