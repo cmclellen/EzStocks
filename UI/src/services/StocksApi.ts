@@ -101,6 +101,17 @@ async function addUserStockTicker({
   });
 }
 
+async function deleteUserStockTicker({
+  userId,
+  ticker,
+}: {
+  userId: string;
+  ticker: string;
+}): Promise<void> {
+  const url = `/users/${userId}/stock-tickers/${ticker}`;
+  await AxiosInstance.delete(url);
+}
+
 export {
   getStockTickers,
   getStocksHistory,
@@ -110,4 +121,5 @@ export {
   updateStockTicker,
   getUser,
   addUserStockTicker,
+  deleteUserStockTicker,
 };

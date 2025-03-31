@@ -13,6 +13,7 @@ import AddUserStockTicker from "../features/AddUserStockTicker";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useGetUser from "../hooks/useGetUser";
 import { StockTicker } from "../services/StocksApi";
+import useDeleteUserStockTicker from "../hooks/useDeleteUserStockTicker";
 
 const columnHelper = createColumnHelper<StockTicker>();
 
@@ -44,7 +45,8 @@ const getColumns = (handleDelete: any) => [
 function ManageStockTickers() {
   const { userId } = useCurrentUser();
   const { user, isLoadingUser } = useGetUser(userId);
-  // useDeleteUserStockTicker();
+  const { deleteUserStockTicker, isDeletingUserStockTicker } =
+    useDeleteUserStockTicker();
 
   const data = user?.stockTickers ?? [];
   const table = useReactTable({
@@ -64,11 +66,11 @@ function ManageStockTickers() {
     </div>
   );
 
-  async function handleDelete(item: any) {
-    console.log("delete stock ticker", item);
+  async function handleDelete(item: StockTicker) {
+    await deleteUserStockTicker({ userId, ticker: item.ticker });
   }
 
-  if (isLoadingUser) return <Spinner />;
+  if (isLoadingUser || isDeletingUserStockTicker) return <Spinner />;
 
   return (
     <Page title="Manage Stock Tickers">

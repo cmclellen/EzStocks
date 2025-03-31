@@ -41,7 +41,6 @@ function AddUserStockTicker() {
               <option value={st.ticker}>{st.ticker}</option>
             ))}
         </select>
-        {ticker}
       </FormRow>
       <div className="flex justify-end space-x-2">
         <FormButton onClick={() => close()}>Cancel</FormButton>
