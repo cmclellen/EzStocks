@@ -75,6 +75,19 @@ async function deleteStockTicker(ticker: string): Promise<void> {
   return data;
 }
 
+export interface GetUserResponse {
+  userId: string;
+  firstNames: string;
+  lastNames: string;
+  stockTickers: StockTicker[];
+}
+
+async function getUser(userId: string): Promise<GetUserResponse> {
+  const url = `/users/${userId}`;
+  const { data } = await AxiosInstance.get(url);
+  return data;
+}
+
 export {
   getStockTickers,
   getStocksHistory,
@@ -82,4 +95,5 @@ export {
   searchStockTickers,
   deleteStockTicker,
   updateStockTicker,
+  getUser,
 };
