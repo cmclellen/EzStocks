@@ -1,0 +1,21 @@
+meta {
+  name: Add user stock ticker
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{API_BASE_URL}}/api/users/:userId/stock-tickers
+  body: json
+  auth: inherit
+}
+
+params:path {
+  userId: {{USER_ID}}
+}
+
+body:json {
+  { 
+    "ticker": "MFIC"
+  }
+}
