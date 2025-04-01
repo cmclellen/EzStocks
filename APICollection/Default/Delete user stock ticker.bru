@@ -1,0 +1,16 @@
+meta {
+  name: Delete user stock ticker
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{API_BASE_URL}}/api/users/:userId/stock-tickers/:ticker
+  body: json
+  auth: inherit
+}
+
+params:path {
+  ticker: MFIC
+  userId: {{USER_ID}}
+}

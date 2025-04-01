@@ -29,7 +29,7 @@ namespace EzStocks.Api.Functions.Functions
         {
             var result = await _sender.Send(new Application.Commands.AddUserStockTickerCommand(ticker), cancellationToken);
             if (result.IsNotFound()) {
-                return new NotFoundObjectResult(result.Errors);
+                return new NotFoundObjectResult(result.Errors.First());
             }
             return new OkResult();
         }
@@ -40,7 +40,7 @@ namespace EzStocks.Api.Functions.Functions
             var result = await _sender.Send(new Application.Commands.DeleteUserStockTickerCommand(ticker), cancellationToken);
             if (result.IsNotFound())
             {
-                return new NotFoundObjectResult(result.Errors);
+                return new NotFoundObjectResult(result.Errors.First());
             }
             return new OkResult();
         }

@@ -34,7 +34,7 @@ namespace EzStocks.Api.Application.Commands
         public async Task<Result> Handle(AddUserStockTickerCommand request, CancellationToken cancellationToken)
         {
             var stockTicker = await _stockTickerRepository.GetByTickersAsync([request.Ticker], cancellationToken);
-            if(stockTicker is null)
+            if(stockTicker is null || !stockTicker.Any())
             {
                 return Result.NotFound("Stock ticker not found");
             }
