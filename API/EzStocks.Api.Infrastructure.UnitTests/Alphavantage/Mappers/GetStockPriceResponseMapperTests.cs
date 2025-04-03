@@ -22,7 +22,7 @@ namespace EzStocks.Api.Infrastructure.UnitTests.Alphavantage.Mappers
         public async Task MapFromJson_ShouldReturnGetStockPriceResponse()
         {
             // ARRANGE
-            var json = await FileHelpers.GetFileContentAsync(Path.Join("Mappers", "TIME_SERIES_DAILY.Response.json"), CancellationToken.None);
+            var json = await FileHelpers.GetFileContentAsync(Path.Join("Alphavantage", "Mappers", "TIME_SERIES_DAILY.Response.json"), CancellationToken.None);
 
             // ACT
             var actual = _sut.MapFromJson(json);
