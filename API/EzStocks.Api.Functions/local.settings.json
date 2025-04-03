@@ -7,7 +7,8 @@
     "Alphavantage__ApiBaseUrl": "https://www.alphavantage.co/",
     "PolygonIO__ApiBaseUrl": "https://api.polygon.io/",
     "ServicebusConnection__fullyQualifiedNamespace": "https://sbns-ezstocks-dev-aue.servicebus.windows.net:443/",
-    "AZURE_TENANT_ID": "dca5775e-99b4-497c-90c1-c8e73396999e"
+    "AZURE_TENANT_ID": "dca5775e-99b4-497c-90c1-c8e73396999e",
+    "AZURE_SUBSCRIPTION_ID": "7bc8f609-efb0-4078-8e94-461c8c3df7ea"
   },
   "Host": {
     "LocalHttpPort": 7071,
