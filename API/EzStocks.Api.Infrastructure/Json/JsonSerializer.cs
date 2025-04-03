@@ -10,5 +10,10 @@ namespace EzStocks.Api.Infrastructure.Json
         {
             return System.Text.Json.JsonSerializer.Deserialize<T>(json, JsonOptions);
         }
+
+        public string Serialize<T>(T t)
+        {
+            return System.Text.Json.JsonSerializer.Serialize<T>(t, JsonOptions);
+        }
     }
 }

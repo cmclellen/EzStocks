@@ -25,7 +25,13 @@ namespace EzStocks.Api.Functions.Extensions
                 TokenCredential credential;
                 if (ctx.HostingEnvironment.IsDevelopment())
                 {
-                    credential = new VisualStudioCredential();
+                    credential = new DefaultAzureCredential(
+                        new DefaultAzureCredentialOptions
+                        {
+                            ExcludeEnvironmentCredential = true,
+                            ExcludeManagedIdentityCredential = true,
+                            ExcludeWorkloadIdentityCredential = true,
+                        });
                 }
                 else
                 {
