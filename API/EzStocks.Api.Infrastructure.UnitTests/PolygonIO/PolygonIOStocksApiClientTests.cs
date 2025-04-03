@@ -41,7 +41,7 @@ namespace EzStocks.Api.Infrastructure.UnitTests.PolygonIO
         public async Task GetAllTickersAsync_ShouldReturnAllTickers()
         {
             // ARRANGE
-            var responseBody = await FileHelpers.GetFileContentAsync("PolygonIO\\v3_reference_tickers.json");
+            var responseBody = await FileHelpers.GetFileContentAsync(Path.Combine("PolygonIO", "v3_reference_tickers.json"));
             _server
                .Given(Request.Create().WithPath("/v3/reference/tickers").UsingGet())
                .RespondWith(
