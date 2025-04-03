@@ -1,7 +1,9 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using EzStocks.Api.Infrastructure.PolygonIO;
+using EzStocks.Api.Infrastructure.UnitTests.Helpers;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -39,7 +41,7 @@ namespace EzStocks.Api.Infrastructure.UnitTests.PolygonIO
         public async Task GetAllTickersAsync_ShouldReturnAllTickers()
         {
             // ARRANGE
-            var responseBody = File.ReadAllText("PolygonIO\\v3_reference_tickers.json");
+            var responseBody = await FileHelpers.GetFileContentAsync("PolygonIO\\v3_reference_tickers.json");
             _server
                .Given(Request.Create().WithPath("/v3/reference/tickers").UsingGet())
                .RespondWith(
