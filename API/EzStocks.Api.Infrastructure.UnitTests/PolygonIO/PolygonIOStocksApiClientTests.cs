@@ -3,7 +3,6 @@ using AutoFixture.AutoMoq;
 using EzStocks.Api.Infrastructure.PolygonIO;
 using EzStocks.Api.Infrastructure.UnitTests.Helpers;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
