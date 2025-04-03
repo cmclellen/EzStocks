@@ -4,5 +4,6 @@
     {
         public DateOnly CreatedDate { get; set; }
         public required Dictionary<string, decimal> Stocks { get; set; }
+        public required Dictionary<string, double> PricePercentages { get; set; }
     }
 }

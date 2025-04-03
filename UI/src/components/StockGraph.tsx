@@ -37,7 +37,7 @@ function StockGraph() {
               key={ticker.ticker}
               name={`${ticker.name} (${ticker.ticker})`}
               type="monotone"
-              dataKey={`stocks[${ticker.ticker}]`}
+              dataKey={`pricePercentages[${ticker.ticker}]`}
               stroke={ticker.color}
             />
           ))}
