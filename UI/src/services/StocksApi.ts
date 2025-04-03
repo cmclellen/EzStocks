@@ -9,6 +9,7 @@ export interface StockTicker {
 interface StockPrice {
   createdDate: Date;
   stocks: { [symbol: string]: number };
+  pricePercentages: { [symbol: string]: number };
 }
 
 export interface StocksHistory {
