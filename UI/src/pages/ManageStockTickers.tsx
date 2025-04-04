@@ -66,8 +66,8 @@ function ManageStockTickers() {
     </div>
   );
 
-  async function handleDelete(item: StockTicker) {
-    await deleteUserStockTicker({ userId, ticker: item.ticker });
+  function handleDelete(item: StockTicker) {
+    deleteUserStockTicker({ userId, ticker: item.ticker });
   }
 
   if (isLoadingUser || isDeletingUserStockTicker) return <Spinner />;

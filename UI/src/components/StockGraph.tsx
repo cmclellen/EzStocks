@@ -11,6 +11,15 @@ import {
 import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
 
+function CustomTooltip({active, payload, label}: any) {
+
+  const prices = [...new Set(payload.map((i:any)=>i.payload.stocks))][0];
+
+  return (<div>
+    <ul>{prices && Object.keys(prices).map((key:unknown) => (<li>{key}: {prices[key]}</li>))}</ul>
+  </div>);
+}
+
 function StockGraph() {
   const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
 
@@ -30,7 +39,7 @@ function StockGraph() {
           <XAxis dataKey="createdDate" />
           <YAxis />
           <Legend />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip></CustomTooltip>} />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
           {stocksHistory!.stockTickers.map((ticker) => (
             <Line
