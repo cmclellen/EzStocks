@@ -2,18 +2,10 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
   "name": "Node.js & TypeScript",
-
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/UI,type=bind",
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind",
   "workspaceFolder": "/workspace/UI",
-  "mounts": [
-    {
-      "source": "${localWorkspaceFolder}/..",
-      "target": "/workspace",
-      "type": "bind"
-    }
-  ],
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
@@ -22,8 +14,7 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "WATCHPACK_POLLING=true npm install && npm run dev -- --host",
-
+  "postCreateCommand": "npm install && npm run dev",
   // Configure tool-specific properties.
   "customizations": {
     // Configure properties specific to VS Code.
