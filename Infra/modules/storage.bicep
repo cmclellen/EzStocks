@@ -2,6 +2,8 @@ param location string = resourceGroup().location
 
 param resourceNameFormat string
 
+param scPricipalId string
+
 param deploymentScriptTimestamp string = utcNow()
 
 var indexDocument = 'index.html'
@@ -57,6 +59,21 @@ resource deploymentScript 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
     forceUpdateTag: deploymentScriptTimestamp
     retentionInterval: 'PT4H'
     arguments: '-ResourceGroupName ${resourceGroup().name} -StorageAccountName ${storageAccount.name} -IndexDocument ${indexDocument} -ErrorDocument404Path ${errorDocument404Path}'
+  }
+}
+
+// Enable pipelie to deploy website to storage account
+var storageAccountBlobDataOwnerRoleDefinitionId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
+)
+
+resource scRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: storageAccount
+  name: guid(resourceGroup().id, storageAccountBlobDataOwnerRoleDefinitionId)
+  properties: {
+    roleDefinitionId: storageAccountBlobDataOwnerRoleDefinitionId
+    principalId: scPricipalId
   }
 }
 
