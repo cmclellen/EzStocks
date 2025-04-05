@@ -1,19 +1,17 @@
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
-export default function useOutsideClick(callback: () => void) {
+export default function useOutsideClick(callback: () => void): RefObject<any> {
+  const ref = useRef({});
 
-    const ref = useRef({});
+  useEffect(() => {
+    const handleClick = () => {
+      callback();
+    };
 
-    useEffect(() => {
+    document.addEventListener("click", handleClick);
 
-        const handleClick = () => {
-            callback();
-        }
+    return () => document.removeEventListener("click", handleClick);
+  }, [callback]);
 
-        document.addEventListener('click', handleClick);
-
-        return () => document.removeEventListener('click', handleClick);
-    }, [])
-
-    return ref;
+  return ref;
 }

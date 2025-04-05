@@ -3,7 +3,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import FormButton from "../components/FormButton";
@@ -20,7 +20,7 @@ const defaultData: StockTicker[] = [];
 
 const columnHelper = createColumnHelper<StockTicker>();
 
-const getColumns = (handleEdit: any, handleDelete: any) => [
+const getColumns = (_: any, handleDelete: any) => [
   columnHelper.accessor("ticker", {
     header: () => <span>Ticker</span>,
     cell: (info) => <div className="text-center">{info.getValue()}</div>,

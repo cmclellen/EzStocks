@@ -10,16 +10,31 @@ import {
 } from "recharts";
 import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
+import { ReactNode } from "react";
+import { StockPrice } from "../services/StocksApi";
 
-function CustomTooltip({active, payload, label}: any) {
+function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
+  const prices = [...new Set(payload!.map((i: any) => i.payload.stocks))][0];
 
-  const prices = [...new Set(payload.map((i:any)=>i.payload.stocks))][0];
+  const tickers = prices ? Object.keys(prices!) : [];
 
-  return (<div className="w-[150px] border bg-blue-100 rounded-lg">
-    <ul>
-      {prices && Object.keys(prices).map((key:unknown) => (<li class="flex"><div className="flex-1 text-right mr-1 font-bold">{key}</div><div className="flex-1 ">{prices[key]}</div></li>))}
-    </ul>
-  </div>);
+  console.log("prices", prices);
+
+  return (
+    <div className="w-[150px] border bg-blue-100 rounded-lg">
+      <ul>
+        {tickers &&
+          tickers.map(
+            (ticker: string): ReactNode => (
+              <li key={ticker} className="flex">
+                <div className="flex-1 text-right mr-1 font-bold">{ticker}</div>
+                <div className="flex-1 ">{prices[ticker]}</div>
+              </li>
+            )
+          )}
+      </ul>
+    </div>
+  );
 }
 
 function StockGraph() {

@@ -1,5 +1,3 @@
-import Error from "./Error";
-
 interface ErrorProps {
   children?: React.ReactNode;
 }

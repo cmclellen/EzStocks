@@ -92,7 +92,10 @@ export const Default: Story = {
     return (
       <>
         <QueryClientProvider client={queryClient}>
-          <StockTickerSearchBox onSelectedSuggestion={onSelectedSuggestion} />
+          <StockTickerSearchBox
+            id="search-box"
+            onSelectedSuggestion={onSelectedSuggestion}
+          />
           {selectedSuggestion && (
             <div>
               Selection: {selectedSuggestion?.ticker} -{" "}

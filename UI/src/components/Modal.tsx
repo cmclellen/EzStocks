@@ -49,7 +49,10 @@ interface OpenProps {
   opensWindowName: string;
 }
 
-function Open({ children, opensWindowName }: OpenProps) {
+function Open({
+  children,
+  opensWindowName,
+}: OpenProps & { children: ReactElement<any> }) {
   const { open } = useContext(ModalContext);
 
   return cloneElement(children, { onClick: () => open(opensWindowName) });

@@ -6,7 +6,7 @@ export interface StockTicker {
   color: string;
 }
 
-interface StockPrice {
+export interface StockPrice {
   createdDate: Date;
   stocks: { [symbol: string]: number };
   pricePercentages: { [symbol: string]: number };
