@@ -31,6 +31,14 @@ module insights 'modules/insights.bicep' = {
   }
 }
 
+module storage 'modules/storage.bicep' = {
+  name: 'storage'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}
+
 module db 'modules/database.bicep' = {
   name: 'database'
   params: {

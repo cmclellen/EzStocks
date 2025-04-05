@@ -20,16 +20,8 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: format(resourceNameFormat, 'kv')
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: replace(format(resourceNameFormat, 'stg'), '-', '')
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    supportsHttpsTrafficOnly: true
-  }
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
