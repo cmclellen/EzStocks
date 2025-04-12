@@ -2,6 +2,7 @@
 using AutoMapper;
 using EzStocks.Api.Application.Dtos;
 using EzStocks.Api.Application.Security;
+using EzStocks.Api.Application.Strategies;
 using EzStocks.Api.Domain.Repositories;
 using MediatR;
 
@@ -72,8 +73,7 @@ namespace EzStocks.Api.Application.Queries
                 {
                     var price = stocksPriceItem.Stocks[ticker];
                     var minMax = stockMinMaxList[ticker];
-                    var max = minMax.Max - minMax.Min;
-                    stocksPriceItem.PricePercentages[ticker] = max == 0 ? 1.0 : Convert.ToDouble(Math.Round((price - minMax.Min) / max, 2));
+                    stocksPriceItem.PricePercentages[ticker] = Convert.ToDouble(Math.Round(Normalize.Transform(price, minMax.Min, minMax.Max), 2));
                 }
             }
 
