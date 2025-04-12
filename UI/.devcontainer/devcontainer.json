@@ -14,7 +14,7 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "WATCHPACK_POLLING=true && npm install && npm run dev",
+  "postCreateCommand": "npm install && npm run dev",
   // Configure tool-specific properties.
   "customizations": {
     // Configure properties specific to VS Code.
