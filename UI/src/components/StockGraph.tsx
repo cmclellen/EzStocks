@@ -18,8 +18,6 @@ function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
 
   const tickers = prices ? Object.keys(prices!) : [];
 
-  console.log("prices", prices);
-
   return (
     <div className="w-[150px] border bg-blue-100 rounded-lg">
       <ul>
@@ -37,12 +35,12 @@ function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
   );
 }
 
-function StockGraph() {
-  const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
+function StockGraph({stocksHistory}) {
+  // const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
 
-  if (isLoadingStocksHistory) return <Spinner />;
+  // if (isLoadingStocksHistory) return <Spinner />;
 
-  if (error) throw new Error("Failed loading stock history");
+  // if (error) throw new Error("Failed loading stock history");
 
   return (
     <>
