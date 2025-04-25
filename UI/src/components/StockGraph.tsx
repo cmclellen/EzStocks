@@ -8,10 +8,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import useStocksHistory from "../hooks/useStocksHistory";
-import Spinner from "./Spinner";
 import { ReactNode } from "react";
-import { StockPrice, StocksHistory, StockTicker } from "../services/StocksApi";
+import { StockPrice, StockTicker } from "../services/StocksApi";
 
 function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
   const prices = [...new Set(payload!.map((i: any) => i.payload.stocks))][0];
@@ -35,10 +33,13 @@ function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
   );
 }
 
+export interface StockGraphTickerData extends StockTicker {
+  isEnabled: boolean;
+}
+
 interface StockGraphProps {
-  // stocksHistory: StocksHistory;
   stockPrices: StockPrice[];
-  stockTickers: StockTicker[];
+  stockTickers: StockGraphTickerData[];
 }
 
 function StockGraph({ stockPrices, stockTickers }: StockGraphProps) {
@@ -55,15 +56,17 @@ function StockGraph({ stockPrices, stockTickers }: StockGraphProps) {
           <Legend />
           <Tooltip content={<CustomTooltip></CustomTooltip>} />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          {stockTickers.map((ticker) => (
-            <Line
-              key={ticker.ticker}
-              name={`${ticker.name} (${ticker.ticker})`}
-              type="monotone"
-              dataKey={`pricePercentages[${ticker.ticker}]`}
-              stroke={ticker.color}
-            />
-          ))}
+          {stockTickers
+            .filter((st) => st.isEnabled)
+            .map((ticker) => (
+              <Line
+                key={ticker.ticker}
+                name={`${ticker.name} (${ticker.ticker})`}
+                type="monotone"
+                dataKey={`pricePercentages[${ticker.ticker}]`}
+                stroke={ticker.color}
+              />
+            ))}
         </LineChart>
       </ResponsiveContainer>
     </>

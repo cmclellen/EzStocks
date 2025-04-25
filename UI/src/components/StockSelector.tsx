@@ -6,24 +6,27 @@ export interface StockItem {
 }
 
 interface StockSelectorProps {
-  stockItems: StockItem[];
+  stockItems: StockItem[] | undefined;
+  onStockItemChanged?: (stockItem: StockItem) => void;
 }
 
-function StockSelector({ stockItems }: StockSelectorProps) {
-  const stockTickers = stockItems.map((si) => si.name);
-
+function StockSelector({ stockItems, onStockItemChanged }: StockSelectorProps) {
   const handleStockSelected = (ev: { key: string; isChecked: boolean }) => {
-    console.log("isChecked", ev.key, ev.isChecked);
+    const stockItem = stockItems!.find((si) => si.name === ev.key);
+    if (stockItem) {
+      stockItem.isEnabled = ev.isChecked;
+      onStockItemChanged?.(stockItem);
+    }
   };
 
   return (
     <ul className="">
-      {stockTickers &&
-        stockTickers.map((name, index) => (
+      {stockItems &&
+        stockItems.map((stockItem, index) => (
           <li key={index}>
             <CheckBox
-              title={name}
-              isChecked={false}
+              title={stockItem.name}
+              isChecked={stockItem.isEnabled}
               onChange={handleStockSelected}
             ></CheckBox>
           </li>
