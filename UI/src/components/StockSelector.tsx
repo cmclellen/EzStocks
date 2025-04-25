@@ -1,31 +1,34 @@
-import { useEffect, useState } from "react";
-import { StocksHistory } from "../services/StocksApi";
 import CheckBox from "./CheckBox";
 
-interface StockSelectorProps {
-  stocksHistory?: StocksHistory;
+export interface StockItem {
+  name: string;
+  isEnabled: boolean;
 }
 
-function StockSelector({ stocksHistory }: StockSelectorProps) {
-  const [stockTickers, setStockTickers] = useState<string[]>([]);
+interface StockSelectorProps {
+  stockItems: StockItem[] | undefined;
+  onStockItemChanged?: (stockItem: StockItem) => void;
+}
 
-  useEffect(() => {
-    const items = stocksHistory?.prices
-      .map((p) => Object.keys(p.stocks))
-      .reduce((acc, value) => {
-        value.forEach((v) => acc.add(v));
-        return acc;
-      }, new Set<string>());
-    console.log(items);
-    setStockTickers([...items!]);
-  }, [stocksHistory]);
+function StockSelector({ stockItems, onStockItemChanged }: StockSelectorProps) {
+  const handleStockSelected = (ev: { key: string; isChecked: boolean }) => {
+    const stockItem = stockItems!.find((si) => si.name === ev.key);
+    if (stockItem) {
+      stockItem.isEnabled = ev.isChecked;
+      onStockItemChanged?.(stockItem);
+    }
+  };
 
   return (
     <ul className="">
-      {stockTickers &&
-        stockTickers.map((name, index) => (
+      {stockItems &&
+        stockItems.map((stockItem, index) => (
           <li key={index}>
-            <CheckBox title={name}></CheckBox>
+            <CheckBox
+              title={stockItem.name}
+              isChecked={stockItem.isEnabled}
+              onChange={handleStockSelected}
+            ></CheckBox>
           </li>
         ))}
     </ul>

@@ -12,7 +12,7 @@ export default defineConfig({
     cors: true,
     proxy: {
       "/api": {
-        target: "http://host.docker.internal:7274/api",
+        target: "http://127.0.0.1:7274/api",
         secure: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
