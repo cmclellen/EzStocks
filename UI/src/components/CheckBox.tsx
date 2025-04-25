@@ -2,21 +2,20 @@ import { useState } from "react";
 
 interface CheckBoxProps {
   title: string;
-  isChecked: boolean;
-  onChange: (checked: boolean) => void;
+  isChecked?: boolean;
+  onChange: (ev: { key: string; isChecked: boolean }) => void;
 }
 
 function CheckBox(props: CheckBoxProps) {
   const [isChecked, setIsChecked] = useState(props.isChecked || false);
 
-  console.log("isChecked", isChecked);
-
   const handleCheckboxChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const checked = event.target.checked;
+
     setIsChecked(checked);
-    props.onChange(checked);
+    props.onChange({ key: event.target.value, isChecked: checked });
   };
 
   return (
@@ -25,6 +24,7 @@ function CheckBox(props: CheckBoxProps) {
         checked={isChecked}
         id="checked-checkbox"
         type="checkbox"
+        value={props.title}
         onChange={handleCheckboxChanged}
         className="relative peer shrink-0 appearance-none w-6 h-6 border-2 border-primary-500 rounded-sm bg-secondary checked:bg-secondary checked:border-2"
       />
@@ -43,9 +43,9 @@ function CheckBox(props: CheckBoxProps) {
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>

@@ -1,31 +1,31 @@
-import { useEffect, useState } from "react";
-import { StocksHistory } from "../services/StocksApi";
 import CheckBox from "./CheckBox";
 
-interface StockSelectorProps {
-  stocksHistory?: StocksHistory;
+export interface StockItem {
+  name: string;
+  isEnabled: boolean;
 }
 
-function StockSelector({ stocksHistory }: StockSelectorProps) {
-  const [stockTickers, setStockTickers] = useState<string[]>([]);
+interface StockSelectorProps {
+  stockItems: StockItem[];
+}
 
-  useEffect(() => {
-    const items = stocksHistory?.prices
-      .map((p) => Object.keys(p.stocks))
-      .reduce((acc, value) => {
-        value.forEach((v) => acc.add(v));
-        return acc;
-      }, new Set<string>());
-    console.log(items);
-    setStockTickers([...items!]);
-  }, [stocksHistory]);
+function StockSelector({ stockItems }: StockSelectorProps) {
+  const stockTickers = stockItems.map((si) => si.name);
+
+  const handleStockSelected = (ev: { key: string; isChecked: boolean }) => {
+    console.log("isChecked", ev.key, ev.isChecked);
+  };
 
   return (
     <ul className="">
       {stockTickers &&
         stockTickers.map((name, index) => (
           <li key={index}>
-            <CheckBox title={name}></CheckBox>
+            <CheckBox
+              title={name}
+              isChecked={false}
+              onChange={handleStockSelected}
+            ></CheckBox>
           </li>
         ))}
     </ul>

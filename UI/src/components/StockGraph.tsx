@@ -11,7 +11,7 @@ import {
 import useStocksHistory from "../hooks/useStocksHistory";
 import Spinner from "./Spinner";
 import { ReactNode } from "react";
-import { StockPrice } from "../services/StocksApi";
+import { StockPrice, StocksHistory, StockTicker } from "../services/StocksApi";
 
 function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
   const prices = [...new Set(payload!.map((i: any) => i.payload.stocks))][0];
@@ -35,28 +35,27 @@ function CustomTooltip({ payload }: { payload?: StockPrice[] }) {
   );
 }
 
-function StockGraph({stocksHistory}) {
-  // const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();
+interface StockGraphProps {
+  // stocksHistory: StocksHistory;
+  stockPrices: StockPrice[];
+  stockTickers: StockTicker[];
+}
 
-  // if (isLoadingStocksHistory) return <Spinner />;
-
-  // if (error) throw new Error("Failed loading stock history");
-
+function StockGraph({ stockPrices, stockTickers }: StockGraphProps) {
   return (
     <>
-      {/* <pre>{JSON.stringify(stocksHistory, null, 2)}</pre> */}
       <ResponsiveContainer
         width="100%"
         aspect={4.0 / 2.0}
         className="flex items-center"
       >
-        <LineChart data={stocksHistory!.prices}>
+        <LineChart data={stockPrices}>
           <XAxis dataKey="createdDate" />
           <YAxis />
           <Legend />
           <Tooltip content={<CustomTooltip></CustomTooltip>} />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          {stocksHistory!.stockTickers.map((ticker) => (
+          {stockTickers.map((ticker) => (
             <Line
               key={ticker.ticker}
               name={`${ticker.name} (${ticker.ticker})`}
