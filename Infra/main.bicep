@@ -68,3 +68,10 @@ module function 'modules/function.bicep' = {
     polygonioApiKey: polygonioApiKey
   }
 }
+
+module b2c 'modules/b2c.bicep' = {
+  name: 'b2c'
+  params: {
+    location: location
+  }
+}
