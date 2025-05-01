@@ -7,8 +7,7 @@
     "vscode": {
       "extensions": [
         "ziyasal.vscode-open-in-github",
-        "msazurermtools.azurerm-vscode-tools",
-        "ms-vscode.azure-account",
+        "msazurermtools.azurerm-vscode-tools",        
 		    "davidanson.vscode-markdownlint",
         "ms-azuretools.vscode-bicep"
       ]
