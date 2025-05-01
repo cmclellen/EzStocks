@@ -38,6 +38,9 @@ jobs:
           echo "Branch name: $GITHUB_REF"
           echo "Workspace: $GITHUB_WORKSPACE"
 
+      - name: Setup Bicep
+        uses: anthony-c-martin/setup-bicep@v0.1
+
       - uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
