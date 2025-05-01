@@ -11,9 +11,10 @@ param location string
 
 @description('The name of the SKU for the AAD B2C Directory.')
 @allowed([
+  'Standard'
   'PremiumP1'
 ])
-param skuName string = 'PremiumP1'
+param skuName string = 'Standard'
 
 @description('The tier of the SKU for the AAD B2C Directory.')
 param skuTier string = 'A0'
