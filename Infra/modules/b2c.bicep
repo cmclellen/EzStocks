@@ -5,7 +5,7 @@ param projectName string = 'EzStocks'
 
 @description('The location where the AAD B2C Directory will be deployed.')
 @allowed([
-  'australia'
+  'australiaeast'
 ])
 param location string
 
