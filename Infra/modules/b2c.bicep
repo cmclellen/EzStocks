@@ -30,22 +30,22 @@ param resourceTags object = {}
 
 var directoryName = toLower('${projectName}.onmicrosoft.com')
 
-resource AzAdB2c 'Microsoft.AzureActiveDirectory/b2cDirectories@2021-04-01' = {
-  name: directoryName
-  location: region
-  tags: resourceTags
-  sku: {
-    name: skuName
-    tier: skuTier
-  }
-  properties: {
-    createTenantProperties: {
-      countryCode: countryCode
-      displayName: displayName
-    }
-  }
-}
+// resource AzAdB2c 'Microsoft.AzureActiveDirectory/b2cDirectories@2021-04-01' = {
+//   name: directoryName
+//   location: region
+//   tags: resourceTags
+//   sku: {
+//     name: skuName
+//     tier: skuTier
+//   }
+//   properties: {
+//     createTenantProperties: {
+//       countryCode: countryCode
+//       displayName: displayName
+//     }
+//   }
+// }
 
-output directoryId string = AzAdB2c.id
-output directoryLocation string = AzAdB2c.location
-output tenantId string = AzAdB2c.properties.tenantId
+// output directoryId string = AzAdB2c.id
+// output directoryLocation string = AzAdB2c.location
+// output tenantId string = AzAdB2c.properties.tenantId
