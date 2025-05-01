@@ -71,7 +71,5 @@ module function 'modules/function.bicep' = {
 
 module b2c 'modules/b2c.bicep' = {
   name: 'b2c'
-  params: {
-    location: location
-  }
+  params: {}
 }
