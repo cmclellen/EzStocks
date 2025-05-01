@@ -7,7 +7,7 @@ param projectName string = 'EzStocks'
 @allowed([
   'australia'
 ])
-param location string = 'australia'
+param region string = 'australia'
 
 @description('The name of the SKU for the AAD B2C Directory.')
 @allowed([
@@ -32,7 +32,7 @@ var directoryName = toLower('${projectName}.onmicrosoft.com')
 
 resource AzAdB2c 'Microsoft.AzureActiveDirectory/b2cDirectories@2021-04-01' = {
   name: directoryName
-  location: location
+  location: region
   tags: resourceTags
   sku: {
     name: skuName
