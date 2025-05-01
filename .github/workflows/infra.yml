@@ -17,6 +17,7 @@ permissions:
 
 env:
   AZURE_RESOURCEGROUP_NAME: "rg-ezstocks-dev-aue"
+  ACTIONS_STEP_DEBUG: true
 
 jobs:
   deploy:
