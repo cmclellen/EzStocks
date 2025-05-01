@@ -37,9 +37,7 @@ jobs:
           echo "Repository name: $GITHUB_REPOSITORY"
           echo "Branch name: $GITHUB_REF"
           echo "Workspace: $GITHUB_WORKSPACE"
-
-      - name: Setup Bicep
-        uses: anthony-c-martin/setup-bicep@v0.1
+          az config set bicep.use_binary_from_path=False
 
       - uses: azure/login@v2
         with:
