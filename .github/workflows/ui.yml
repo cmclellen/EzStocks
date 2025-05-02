@@ -1,4 +1,4 @@
-name: Deploy web app
+name: web app
 
 on:
   push:
