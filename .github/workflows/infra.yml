@@ -38,7 +38,11 @@ jobs:
           echo "Repository name: $GITHUB_REPOSITORY"
           echo "Branch name: $GITHUB_REF"
           echo "Workspace: $GITHUB_WORKSPACE"
-          az config set bicep.use_binary_from_path=False
+
+      - name: Configure Bicep CLI
+        run: |
+          az config set bicep.use_binary_from_path=false
+          az bicep upgrade
 
       - uses: azure/login@v2
         with:
