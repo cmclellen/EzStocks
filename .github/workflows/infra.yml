@@ -17,6 +17,7 @@ permissions:
 
 env:
   AZURE_RESOURCEGROUP_NAME: "rg-ezstocks-dev-aue"
+  ACTIONS_STEP_DEBUG: true
 
 jobs:
   deploy:
@@ -37,6 +38,11 @@ jobs:
           echo "Repository name: $GITHUB_REPOSITORY"
           echo "Branch name: $GITHUB_REF"
           echo "Workspace: $GITHUB_WORKSPACE"
+
+      - name: Configure Bicep CLI
+        run: |
+          az config set bicep.use_binary_from_path=false
+          az bicep upgrade
 
       - uses: azure/login@v2
         with:

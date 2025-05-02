@@ -1,4 +1,4 @@
-# EzStock
+# EzStocks
 
 ## Run in container
 
