@@ -4,7 +4,6 @@ import Spinner from "../components/Spinner";
 import StockGraph, { StockGraphTickerData } from "../components/StockGraph";
 import StockSelector, { StockItem } from "../components/StockSelector";
 import useStocksHistory from "../hooks/useStocksHistory";
-import { StockTicker } from "../services/StocksApi";
 
 function ViewStock() {
   const { stocksHistory, error, isLoadingStocksHistory } = useStocksHistory();

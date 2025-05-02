@@ -1,9 +1,15 @@
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import eslint from "vite-plugin-eslint";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss()],
+  plugins: [
+    tailwindcss(),
+    eslint({
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+    }),
+  ],
   server: {
     watch: {
       usePolling: true,
@@ -12,7 +18,7 @@ export default defineConfig({
     cors: true,
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:7274/api",
+        target: "http://host.docker.internal:7274/api",
         secure: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
