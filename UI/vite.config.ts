@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
-import eslint from "vite-plugin-eslint";
+import eslint from "vite-plugin-eslint"; // eslint-ignore-line
 
 // https://vite.dev/config/
 export default defineConfig({
