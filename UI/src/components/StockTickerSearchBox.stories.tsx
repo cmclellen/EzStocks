@@ -79,33 +79,37 @@ const meta: Meta<typeof StockTickerSearchBox> = {
   component: StockTickerSearchBox,
 };
 
+function DummyComponent() {
+  const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion>(); // eslint-ignore-line
+
+  function onSelectedSuggestion(selected?: Suggestion) {
+    setSelectedSuggestion(selected);
+  }
+
+  return (
+    <>
+      <QueryClientProvider client={queryClient}>
+        <StockTickerSearchBox
+          id="search-box"
+          onSelectedSuggestion={onSelectedSuggestion}
+        />
+        {selectedSuggestion && (
+          <div>
+            Selection: {selectedSuggestion?.ticker} - {selectedSuggestion?.name}
+          </div>
+        )}
+        {!selectedSuggestion && <div>No selection</div>}
+      </QueryClientProvider>
+    </>
+  );
+}
+
 export default meta;
 type Story = StoryObj<typeof StockTickerSearchBox>;
 
 export const Default: Story = {
   render: () => {
-    const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion>();
-
-    function onSelectedSuggestion(selected?: Suggestion) {
-      setSelectedSuggestion(selected);
-    }
-    return (
-      <>
-        <QueryClientProvider client={queryClient}>
-          <StockTickerSearchBox
-            id="search-box"
-            onSelectedSuggestion={onSelectedSuggestion}
-          />
-          {selectedSuggestion && (
-            <div>
-              Selection: {selectedSuggestion?.ticker} -{" "}
-              {selectedSuggestion?.name}
-            </div>
-          )}
-          {!selectedSuggestion && <div>No selection</div>}
-        </QueryClientProvider>
-      </>
-    );
+    return <DummyComponent />;
   },
   args: {
     //👇 The args you need here will depend on your component
