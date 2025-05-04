@@ -11,20 +11,33 @@ import { clsx } from "clsx";
 import { NavLink } from "react-router-dom";
 import { HiBars3, HiBell, HiXMark } from "react-icons/hi2";
 import { AiOutlineStock } from "react-icons/ai";
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+  useIsAuthenticated,
+  useMsal,
+} from "@azure/msal-react";
+import { loginRequest } from "../authConfig";
 
-const navigation = [
-  { name: "Dashboard", href: "/view-stock", current: true },
-  {
-    name: "Manage Stock Tickers",
-    href: "/manage-stock-tickers",
-    current: false,
-  },
-  {
-    name: "Administer Stock Tickers",
-    href: "/admin/manage-stock-tickers",
-    current: false,
-  },
-];
+const navigation = (isAuthenticated: boolean) => {
+  return [
+    { name: "Dashboard", href: "/view-stock", current: true },
+    ...(isAuthenticated
+      ? [
+          {
+            name: "Manage Stock Tickers",
+            href: "/manage-stock-tickers",
+            current: false,
+          },
+          {
+            name: "Administer Stock Tickers",
+            href: "/admin/manage-stock-tickers",
+            current: false,
+          },
+        ]
+      : []),
+  ];
+};
 
 function MobileMenu() {
   return (
@@ -45,6 +58,21 @@ function MobileMenu() {
 }
 
 function Header() {
+  const { accounts, instance } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+
+  const handleLoginRedirect = async () => {
+    instance.loginRedirect(loginRequest).catch((error) => console.error(error));
+  };
+
+  const handleLogout = async () => {
+    const logoutRequest = {
+      account: instance.getAccountByHomeId(accounts[0].homeAccountId),
+      postLogoutRedirectUri: "/",
+    };
+    instance.logoutRedirect(logoutRequest);
+  };
+
   return (
     <Disclosure as="nav" className="bg-secondary">
       <div className="mx-auto px-2 sm:px-6 lg:px-8 container">
@@ -58,7 +86,7 @@ function Header() {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {navigation.map((item) => (
+                {navigation(isAuthenticated).map((item) => (
                   <NavLink
                     key={item.name}
                     to={item.href}
@@ -79,65 +107,74 @@ function Header() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
-              type="button"
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <HiBell aria-hidden="true" className="size-6" />
-            </button>
-
-            {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <div>
-                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="size-8 rounded-full"
-                  />
-                </MenuButton>
-              </div>
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+            <UnauthenticatedTemplate>
+              <button type="button" onClick={handleLoginRedirect}>
+                Sign in
+              </button>
+            </UnauthenticatedTemplate>
+            <AuthenticatedTemplate>
+              <span>{accounts[0]?.username}</span>
+              <button
+                type="button"
+                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
               >
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Your Profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
-            </Menu>
+                <span className="absolute -inset-1.5" />
+                <span className="sr-only">View notifications</span>
+                <HiBell aria-hidden="true" className="size-6" />
+              </button>
+
+              {/* Profile dropdown */}
+              <Menu as="div" className="relative ml-3">
+                <div>
+                  <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">Open user menu</span>
+                    <img
+                      alt=""
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      className="size-8 rounded-full"
+                    />
+                  </MenuButton>
+                </div>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                >
+                  <MenuItem>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                    >
+                      Your Profile
+                    </a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                    >
+                      Settings
+                    </a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a
+                      onClick={handleLogout}
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                    >
+                      Sign out
+                    </a>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            </AuthenticatedTemplate>
           </div>
         </div>
       </div>
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) => (
+          {navigation(isAuthenticated).map((item) => (
             <DisclosureButton
               key={item.name}
               as="a"
