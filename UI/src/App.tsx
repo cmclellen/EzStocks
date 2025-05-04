@@ -8,13 +8,7 @@ import ViewStock from "./pages/ViewStock.tsx";
 import ManageStockTickers from "./pages/ManageStockTickers.tsx";
 import AdministerStockTickers from "./pages/AdministerStockTickers.tsx";
 import { CurrentUserProvider } from "./hooks/useCurrentUser.tsx";
-// import { loginRequest } from "./authConfig";
-import {
-  MsalProvider,
-  // AuthenticatedTemplate,
-  // useMsal,
-  // UnauthenticatedTemplate,
-} from "@azure/msal-react";
+import { MsalProvider } from "@azure/msal-react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
