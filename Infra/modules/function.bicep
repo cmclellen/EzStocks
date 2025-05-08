@@ -107,6 +107,14 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       ftpsState: 'FtpsOnly'
     }
   }
+
+  resource config 'config' = {
+    name: 'authsettings'
+    properties: {
+      microsoftAccountClientId: '00897edf-d475-4485-b036-c10f7515c6ad'
+      microsoftAccountClientSecretSettingName: 'ddd'
+    }
+  }
 }
 
 resource alphavantageApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
