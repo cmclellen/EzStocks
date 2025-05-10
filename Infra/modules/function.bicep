@@ -8,6 +8,11 @@ param alphavantageApiKey string
 @secure()
 param polygonioApiKey string
 
+param apiIdentityClientId string
+param apiIdentityTenantId string
+@secure()
+param apiIdentitySecret string
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: format(resourceNameFormat, 'appi')
 }
@@ -96,6 +101,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'AzureFunctionsJobHost__logging__logLevel__default'
           value: 'Debug'
         }
+        {
+          name: 'Identity__Secret'
+          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=api-identity-secret)'
+        }
       ]
       connectionStrings: [
         {
@@ -105,6 +114,22 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       ]
       minTlsVersion: '1.2'
       ftpsState: 'FtpsOnly'
+    }
+  }
+
+  resource config 'config' = {
+    name: 'authsettingsV2'
+    properties: {
+      identityProviders: {
+        azureActiveDirectory: {
+          enabled: true
+          registration: {
+            clientId: apiIdentityClientId
+            clientSecretSettingName: 'Identity__Secret'
+            openIdIssuer: 'https://EzStocks.ciamlogin.com/${apiIdentityTenantId}/v2.0'
+          }
+        }
+      }
     }
   }
 }
@@ -122,6 +147,14 @@ resource polygonioApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-pre
   parent: keyVault
   properties: {
     value: polygonioApiKey
+  }
+}
+
+resource apiAppRegistrationSecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
+  name: 'api-identity-secret'
+  parent: keyVault
+  properties: {
+    value: apiIdentitySecret
   }
 }
 

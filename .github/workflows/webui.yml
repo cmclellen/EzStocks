@@ -1,4 +1,4 @@
-name: web app
+name: webui
 
 on:
   push:
