@@ -126,7 +126,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           registration: {
             clientId: apiIdentityClientId
             clientSecretSettingName: 'Identity__Secret'
-            openIdIssuer: '${environment().authentication.loginEndpoint}${apiIdentityTenantId}/v2.0'
+            openIdIssuer: 'https://EzStocks.ciamlogin.com/${apiIdentityTenantId}/v2.0'
           }
         }
       }
