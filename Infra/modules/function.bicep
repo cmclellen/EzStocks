@@ -8,6 +8,9 @@ param alphavantageApiKey string
 @secure()
 param polygonioApiKey string
 
+@secure()
+param apiIdentitySecret string
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: format(resourceNameFormat, 'appi')
 }
@@ -96,6 +99,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'AzureFunctionsJobHost__logging__logLevel__default'
           value: 'Debug'
         }
+        {
+          name: 'Identity__Secret'
+          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=api-identity-secret)'
+        }
       ]
       connectionStrings: [
         {
@@ -112,7 +119,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
     name: 'authsettings'
     properties: {
       microsoftAccountClientId: '00897edf-d475-4485-b036-c10f7515c6ad'
-      microsoftAccountClientSecretSettingName: 'ddd'
+      microsoftAccountClientSecretSettingName: 'Identity__Secret'
     }
   }
 }
@@ -130,6 +137,14 @@ resource polygonioApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-pre
   parent: keyVault
   properties: {
     value: polygonioApiKey
+  }
+}
+
+resource apiAppRegistrationSecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
+  name: 'api-identity-secret'
+  parent: keyVault
+  properties: {
+    value: apiIdentitySecret
   }
 }
 
