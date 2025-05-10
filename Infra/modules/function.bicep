@@ -116,10 +116,18 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   }
 
   resource config 'config' = {
-    name: 'authsettings'
+    name: 'authsettingsV2'
     properties: {
-      microsoftAccountClientId: '00897edf-d475-4485-b036-c10f7515c6ad'
-      microsoftAccountClientSecretSettingName: 'Identity__Secret'
+      identityProviders: {
+        azureActiveDirectory: {
+          enabled: true
+          registration: {
+            clientId: '00897edf-d475-4485-b036-c10f7515c6ad'
+            clientSecretSettingName: 'Identity__Secret'
+            openIdIssuer: 'https://login.microsoftonline.com/0a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6/v2.0'
+          }
+        }
+      }
     }
   }
 }
