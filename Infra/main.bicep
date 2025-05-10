@@ -13,6 +13,8 @@ param alphavantageApiKey string
 @secure()
 param polygonioApiKey string
 
+param apiIdentityClientId string
+param apiIdentityTenantId string
 @secure()
 param apiIdentitySecret string
 
@@ -69,6 +71,8 @@ module function 'modules/function.bicep' = {
     resourceNameFormat: resourceNameFormat
     alphavantageApiKey: alphavantageApiKey
     polygonioApiKey: polygonioApiKey
+    apiIdentityClientId: apiIdentityClientId
+    apiIdentityTenantId: apiIdentityTenantId
     apiIdentitySecret: apiIdentitySecret
   }
 }

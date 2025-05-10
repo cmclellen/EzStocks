@@ -8,6 +8,8 @@ param alphavantageApiKey string
 @secure()
 param polygonioApiKey string
 
+param apiIdentityClientId string
+param apiIdentityTenantId string
 @secure()
 param apiIdentitySecret string
 
@@ -122,9 +124,9 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         azureActiveDirectory: {
           enabled: true
           registration: {
-            clientId: '00897edf-d475-4485-b036-c10f7515c6ad'
+            clientId: apiIdentityClientId
             clientSecretSettingName: 'Identity__Secret'
-            openIdIssuer: '${environment().authentication.loginEndpoint}a29a997e-a4fc-4e83-ae12-d78f0c8a0443/v2.0'
+            openIdIssuer: '${environment().authentication.loginEndpoint}${apiIdentityTenantId}/v2.0'
           }
         }
       }
