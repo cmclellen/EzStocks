@@ -4,6 +4,8 @@ using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Infrastructure.PolygonIO;
 using EzStocks.Api.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +13,14 @@ using Microsoft.Extensions.Logging;
 using Scrutor;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
+    .ConfigureFunctionsWebApplication(builder =>
+    {
+        // Explicitly adding the extension middleware because
+        // registering middleware when extension is loaded does not
+        // place the middleware in the pipeline where required request
+        // information is available.
+        builder.UseFunctionsAuthorization();
+    })
     .ConfigureAppConfiguration((ctx, config) =>
     {
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
@@ -33,7 +42,33 @@ var host = new HostBuilder()
             .ConfigureEFCore(configuration)
             .ConfigureOpenTelemetry();
 
-        services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();
+        services.AddFunctionsAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtFunctionsBearer(options =>
+            {
+                //options.Events.OnMessageReceived = async ctx => {
+                //    Console.WriteLine(ctx.Options);
+                //    await Task.CompletedTask;
+                //};
+                var tenantId = "a29a997e-a4fc-4e83-ae12-d78f0c8a0443";
+                var clientId = "00897edf-d475-4485-b036-c10f7515c6ad";
+                options.Authority = $"https://login.microsoftonline.com/{tenantId}"; //https://EzStocks.ciamlogin.com/
+                //options.Authority = "https://EzStocks.ciamlogin.com/";
+                //options.Audience = $"api://{clientId}";
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    //ValidateActor = false,
+                    //ValidateIssuerSigningKey = false,
+                    //ValidateAudience = false,
+                    ValidAudiences = new[] { $"api://{clientId}", clientId, "AzureADMyOrg" }
+                };
+            });
+        services.AddFunctionsAuthorization(options =>
+        {
+            options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
+        });
+
+        services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();        
 
         services.Scan(selector => selector
             .FromAssemblies(
