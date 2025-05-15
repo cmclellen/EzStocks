@@ -56,12 +56,12 @@ export const msalConfig: Configuration = {
  * For more information about OIDC scopes, visit:
  * https://docs.microsoft.com/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
+
+const clientId = "00897edf-d475-4485-b036-c10f7515c6ad";
+const apiScope = `api://${clientId}/`;
+
 export const loginRequest: RedirectRequest = {
-  scopes: [
-    // "User.Read",
-    "api://00897edf-d475-4485-b036-c10f7515c6ad/tickers.write",
-    "api://00897edf-d475-4485-b036-c10f7515c6ad/trader.tickers.write",
-  ],
+  scopes: [`${apiScope}tickers.write`, `${apiScope}trader.tickers.write`],
 };
 
 /**
