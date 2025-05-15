@@ -1,10 +1,8 @@
 using EzStocks.Api.Application.Services;
 using EzStocks.Api.Domain.Utils;
 using EzStocks.Api.Functions.Extensions;
-using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Infrastructure.PolygonIO;
 using EzStocks.Api.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +29,6 @@ var host = new HostBuilder()
         var configuration = ctx.Configuration;
 
         services
-            .AddOption<AlphavantageSettings>(configuration, AlphavantageSettings.ConfigurationSection)
             .AddOption<PolygonIOSettings>(configuration, PolygonIOSettings.ConfigurationSection);
 
         services.AddAutoMapper(EzStocks.Api.Application.AssemblyReference.Assembly);

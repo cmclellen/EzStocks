@@ -8,9 +8,6 @@ param location string = resourceGroup().location
 param environment string
 
 @secure()
-param alphavantageApiKey string
-
-@secure()
 param polygonioApiKey string
 
 param scPricipalId string
@@ -66,7 +63,6 @@ module function 'modules/function.bicep' = {
   params: {
     location: location
     resourceNameFormat: resourceNameFormat
-    alphavantageApiKey: alphavantageApiKey
     polygonioApiKey: polygonioApiKey
     entraB2cTenantId: entraB2cTenantId
     entraB2cClientId: entraB2cClientId

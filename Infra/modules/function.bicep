@@ -3,9 +3,6 @@ param location string = resourceGroup().location
 param resourceNameFormat string
 
 @secure()
-param alphavantageApiKey string
-
-@secure()
 param polygonioApiKey string
 
 param entraB2cTenantId string
@@ -80,14 +77,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           value: serviceBusNamespace.properties.serviceBusEndpoint
         }
         {
-          name: 'Alphavantage__ApiBaseUrl'
-          value: 'https://www.alphavantage.co/'
-        }
-        {
-          name: 'Alphavantage__ApiKey'
-          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=alphavantage-api-key)'
-        }
-        {
           name: 'PolygonIO__ApiBaseUrl'
           value: 'https://api.polygon.io/'
         }
@@ -117,14 +106,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       minTlsVersion: '1.2'
       ftpsState: 'FtpsOnly'
     }
-  }
-}
-
-resource alphavantageApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
-  name: 'alphavantage-api-key'
-  parent: keyVault
-  properties: {
-    value: alphavantageApiKey
   }
 }
 
