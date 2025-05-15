@@ -4,6 +4,8 @@ using EzStocks.Api.Functions.Extensions;
 using EzStocks.Api.Infrastructure.Alphavantage;
 using EzStocks.Api.Infrastructure.PolygonIO;
 using EzStocks.Api.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +13,14 @@ using Microsoft.Extensions.Logging;
 using Scrutor;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
+    .ConfigureFunctionsWebApplication(builder =>
+    {
+        // Explicitly adding the extension middleware because
+        // registering middleware when extension is loaded does not
+        // place the middleware in the pipeline where required request
+        // information is available.
+        builder.UseFunctionsAuthorization();
+    })
     .ConfigureAppConfiguration((ctx, config) =>
     {
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
@@ -31,9 +40,10 @@ var host = new HostBuilder()
         services
             .ConfigureAzureClients(ctx)
             .ConfigureEFCore(configuration)
-            .ConfigureOpenTelemetry();
+            .ConfigureOpenTelemetry()
+            .ConfigureAuthentication(configuration);
 
-        services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();
+        services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();        
 
         services.Scan(selector => selector
             .FromAssemblies(

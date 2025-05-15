@@ -10,7 +10,9 @@ export default function useGetStockTickers() {
   } = useQuery({
     queryKey: [QueryKey.STOCK_TICKERS],
     queryFn: async () => {
-      const rsp = await getStockTickers();
+      const accessToeken = localStorage.getItem("accesstoken")!;
+      console.log("accessToeken1", accessToeken);
+      const rsp = await getStockTickers(accessToeken);
       return rsp?.stockTickers;
     },
   });

@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Ardalis.Result;
+using DarkLoop.Azure.Functions.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AzStocks.Api.Functions.Functions
 {
+    [FunctionAuthorize]
     public class StockTickersFunctions(
         ISender sender)
     {
@@ -39,6 +42,7 @@ namespace AzStocks.Api.Functions.Functions
             return result.IsNotFound() ? new NotFoundResult() : new OkResult();
         }
 
+        [Authorize(Policy = "AuthenticatedUser")]
         [Function(nameof(GetStockTickers))]
         public async Task<IActionResult> GetStockTickers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stock-tickers")] HttpRequest req, CancellationToken cancellationToken = default)
         {

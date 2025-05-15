@@ -62,9 +62,13 @@ export interface GetStockTickersResponse {
   stockTickers: StockTicker[];
 }
 
-async function getStockTickers(): Promise<GetStockTickersResponse> {
+async function getStockTickers(
+  token: string
+): Promise<GetStockTickersResponse> {
   const url = "/stock-tickers";
-  const { data } = await AxiosInstance.get<GetStockTickersResponse>(url);
+  const { data } = await AxiosInstance.get<GetStockTickersResponse>(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return data;
 }
 

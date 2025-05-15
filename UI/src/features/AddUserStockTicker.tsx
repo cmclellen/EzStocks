@@ -8,6 +8,7 @@ import Spinner from "../components/Spinner";
 import { useAddUserStockTicker } from "../hooks/useAddUserStockTicker";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useGetStockTickers from "../hooks/useGetStockTickers";
+import { useMsal } from "@azure/msal-react";
 
 function AddUserStockTicker() {
   const { close } = useModal();
