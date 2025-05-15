@@ -9,6 +9,8 @@
     "ServicebusConnection__fullyQualifiedNamespace": "https://sbns-ezstocks-dev-aue.servicebus.windows.net:443/",
     "AZURE_TENANT_ID": "dca5775e-99b4-497c-90c1-c8e73396999e",
     "AZURE_SUBSCRIPTION_ID": "7bc8f609-efb0-4078-8e94-461c8c3df7ea",
+    "EntraB2C__TenantId": "a29a997e-a4fc-4e83-ae12-d78f0c8a0443",
+    "EntraB2C__ClientId": "00897edf-d475-4485-b036-c10f7515c6ad"
   },
   "Host": {
     "LocalHttpPort": 7071,
