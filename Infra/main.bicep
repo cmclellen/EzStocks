@@ -13,12 +13,9 @@ param alphavantageApiKey string
 @secure()
 param polygonioApiKey string
 
-param apiIdentityClientId string
-param apiIdentityTenantId string
-@secure()
-param apiIdentitySecret string
-
 param scPricipalId string
+param entraB2cTenantId string
+param entraB2cClientId string
 
 var resourceNameFormat = format('{{0}}-ezstocks-{0}-aue', environment)
 
@@ -71,8 +68,7 @@ module function 'modules/function.bicep' = {
     resourceNameFormat: resourceNameFormat
     alphavantageApiKey: alphavantageApiKey
     polygonioApiKey: polygonioApiKey
-    apiIdentityClientId: apiIdentityClientId
-    apiIdentityTenantId: apiIdentityTenantId
-    apiIdentitySecret: apiIdentitySecret
+    entraB2cTenantId: entraB2cTenantId
+    entraB2cClientId: entraB2cClientId
   }
 }
