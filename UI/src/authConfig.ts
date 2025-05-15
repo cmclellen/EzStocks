@@ -58,7 +58,7 @@ export const msalConfig: Configuration = {
  */
 export const loginRequest: RedirectRequest = {
   scopes: [
-    "User.Read",
+    // "User.Read",
     "api://00897edf-d475-4485-b036-c10f7515c6ad/tickers.write",
     "api://00897edf-d475-4485-b036-c10f7515c6ad/trader.tickers.write",
   ],

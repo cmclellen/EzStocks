@@ -45,22 +45,51 @@ var host = new HostBuilder()
         services.AddFunctionsAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtFunctionsBearer(options =>
             {
-                //options.Events.OnMessageReceived = async ctx => {
-                //    Console.WriteLine(ctx.Options);
-                //    await Task.CompletedTask;
-                //};
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = async ctx =>
+                    {
+                        var token = ctx?.Request.Headers.Authorization.ToString();
+                        string path = ctx?.Request.Path ?? "";
+                        if (!string.IsNullOrEmpty(token))
+
+                        {
+                            Console.WriteLine("Access token");
+                            Console.WriteLine($"URL: {path}");
+                            Console.WriteLine($"Token: {token}\r\n");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Access token");
+                            Console.WriteLine("URL: " + path);
+                            Console.WriteLine("Token: No access token provided\r\n");
+                        }
+                        await Task.CompletedTask;
+                    },
+                    OnTokenValidated = async ctx =>
+                    {
+                        Console.WriteLine(ctx.Options);
+                        if (ctx?.Principal != null)
+                        {
+                            foreach (var claim in ctx.Principal.Claims)
+                            {
+                                Console.WriteLine($"{claim.Type} - {claim.Value}");
+                            }
+                        }
+                        await Task.CompletedTask;
+                    },
+                };
+
                 var tenantId = "a29a997e-a4fc-4e83-ae12-d78f0c8a0443";
                 var clientId = "00897edf-d475-4485-b036-c10f7515c6ad";
-                options.Authority = $"https://login.microsoftonline.com/{tenantId}"; //https://EzStocks.ciamlogin.com/
-                //options.Authority = "https://EzStocks.ciamlogin.com/";
-                //options.Audience = $"api://{clientId}";
+                var authority = $"https://login.microsoftonline.com/{tenantId}";
+                options.Authority = authority;
+                options.Audience = $"api://{clientId}";
+
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    //ValidateActor = false,
-                    //ValidateIssuerSigningKey = false,
-                    //ValidateAudience = false,
-                    ValidAudiences = new[] { $"api://{clientId}", clientId, "AzureADMyOrg" }
+                    ValidIssuer = $"https://{tenantId}.ciamlogin.com/{tenantId}/v2.0",
+                    ValidAudience = clientId
                 };
             });
         services.AddFunctionsAuthorization(options =>
