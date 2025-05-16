@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 param resourceNameFormat string
 
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
-  name: format(resourceNameFormat, 'pubip')
+  name: format(resourceNameFormat, 'pip')
   location: location
   sku: {
     name: 'Standard'
