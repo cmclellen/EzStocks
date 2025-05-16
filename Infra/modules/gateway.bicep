@@ -101,12 +101,12 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
     ]
     backendHttpSettingsCollection: [
       {
-        name: 'ui_settings'
+        name: 'backendHttpSettings'
         properties: {
-          port: 80
-          protocol: 'Http'
+          port: 443
+          protocol: 'Https'
           cookieBasedAffinity: 'Disabled'
-          pickHostNameFromBackendAddress: false
+          pickHostNameFromBackendAddress: true
           requestTimeout: 20
           // probeEnabledState: true
           // probeName: 'appgwprobe'
@@ -131,7 +131,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
     ]
     requestRoutingRules: [
       {
-        name: 'appGwRule'
+        name: 'appGwUiRule'
         properties: {
           ruleType: 'Basic'
           priority: 1
@@ -142,7 +142,23 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/ui'
           }
           backendHttpSettings: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/ui_settings'
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
+          }
+        }
+      }
+      {
+        name: 'appGwApiRule'
+        properties: {
+          ruleType: 'Basic'
+          priority: 1
+          httpListener: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
+          }
+          backendAddressPool: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/api'
+          }
+          backendHttpSettings: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
           }
         }
       }
