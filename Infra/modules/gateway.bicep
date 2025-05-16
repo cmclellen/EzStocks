@@ -4,6 +4,10 @@ param resourceNameFormat string
 
 param subnetId string
 
+param staticWebsiteHostName string
+
+param fnAppFqdn string
+
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   name: format(resourceNameFormat, 'pip')
   location: location
@@ -68,7 +72,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         properties: {
           backendAddresses: [
             {
-              fqdn: 'stgezstocksdevaue.z8.web.${environment().suffixes.storage}'
+              fqdn: staticWebsiteHostName
             }
           ]
         }
@@ -77,7 +81,11 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         name: 'api'
         // id: '${applicationGateways_myappgw_name_resource.id}/backendAddressPools/api'
         properties: {
-          backendAddresses: []
+          backendAddresses: [
+            {
+              fqdn: fnAppFqdn
+            }
+          ]
         }
       }
       // {

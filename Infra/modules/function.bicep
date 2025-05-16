@@ -176,3 +176,5 @@ resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@20
     principalType: 'ServicePrincipal'
   }
 }
+
+output fnAppFqdn string = functionApp.properties.defaultHostName

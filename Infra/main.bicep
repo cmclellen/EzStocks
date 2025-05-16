@@ -83,5 +83,7 @@ module gateway 'modules/gateway.bicep' = {
     location: location
     resourceNameFormat: resourceNameFormat
     subnetId: network.outputs.defaultSubnetId
+    staticWebsiteHostName: storage.outputs.staticWebsiteHostName
+    fnAppFqdn: function.outputs.fnAppFqdn
   }
 }
