@@ -66,7 +66,11 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         name: 'ui'
         // id: '${applicationGateways_myappgw_name_resource.id}/backendAddressPools/ui'
         properties: {
-          backendAddresses: []
+          backendAddresses: [
+            {
+              fqdn: 'stgezstocksdevaue.z8.web.${environment().suffixes.storage}'
+            }
+          ]
         }
       }
       {
