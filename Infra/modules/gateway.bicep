@@ -134,7 +134,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         name: 'appGwUiRule'
         properties: {
           ruleType: 'Basic'
-          priority: 1
+          priority: 10
           httpListener: {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
           }
@@ -146,22 +146,22 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           }
         }
       }
-      {
-        name: 'appGwApiRule'
-        properties: {
-          ruleType: 'Basic'
-          priority: 1
-          httpListener: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
-          }
-          backendAddressPool: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/api'
-          }
-          backendHttpSettings: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
-          }
-        }
-      }
+      // {
+      //   name: 'appGwApiRule'
+      //   properties: {
+      //     ruleType: 'Basic'
+      //     priority: 10
+      //     httpListener: {
+      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
+      //     }
+      //     backendAddressPool: {
+      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/api'
+      //     }
+      //     backendHttpSettings: {
+      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
+      //     }
+      //   }
+      // }
     ]
   }
 }
