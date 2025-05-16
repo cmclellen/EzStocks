@@ -82,5 +82,6 @@ module gateway 'modules/gateway.bicep' = {
   params: {
     location: location
     resourceNameFormat: resourceNameFormat
+    subnetId: network.outputs.defaultSubnetId
   }
 }

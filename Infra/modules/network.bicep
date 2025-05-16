@@ -32,3 +32,5 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
     }
   }
 }
+
+output defaultSubnetId string = vnet::snet_default.id
