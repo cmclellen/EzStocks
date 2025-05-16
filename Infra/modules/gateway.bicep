@@ -25,6 +25,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
   name: appGwName
   location: location
   properties: {
+    enableHttp2: true
     sku: {
       name: 'Basic'
       tier: 'Basic'
@@ -88,7 +89,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
     ]
     backendHttpSettingsCollection: [
       {
-        name: 'appGwBackendUiHttpSettings'
+        name: 'ui_settings'
         properties: {
           port: 80
           protocol: 'Http'
@@ -129,7 +130,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/ui'
           }
           backendHttpSettings: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/appGwBackendUiHttpSettings'
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/ui_settings'
           }
         }
       }
