@@ -128,7 +128,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           // protocol: 'Http'
           protocol: 'Https'
           sslCertificate: {
-            id: resourceId('Microsoft.Network/applicationGateways/sslCertificates', 'server')
+            id: resourceId('Microsoft.Network/applicationGateways/sslCertificates', appGwName, 'server')
           }
           requireServerNameIndication: false
         }
