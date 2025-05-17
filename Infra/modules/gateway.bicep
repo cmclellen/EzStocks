@@ -61,7 +61,8 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
       {
         name: 'port_443'
         properties: {
-          port: 443
+          // port: 443
+          port: 80
         }
       }
     ]
