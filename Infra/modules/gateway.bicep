@@ -198,9 +198,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
 resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: appGateway
   name: 'diagnosticSettings'
-  location: resourceGroup().location
   properties: {
-    name: 'Diag'
     workspaceId: lawId
     logs: [
       {
