@@ -12,6 +12,11 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: format(resourceNameFormat, 'kv')
 }
 
+resource appGwManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: '${format(resourceNameFormat, 'id')}-001'
+  location: location
+}
+
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   name: format(resourceNameFormat, 'pip')
   location: location
@@ -33,7 +38,10 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
   name: appGwName
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${appGwManagedIdentity.id}': {}
+    }
   }
   properties: {
     enableHttp2: true
@@ -154,7 +162,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         name: 'appGwUiRule'
         properties: {
           ruleType: 'Basic'
-          priority: 10
+          priority: 100
           httpListener: {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
           }
@@ -180,7 +188,7 @@ resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@20
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRoleDefinition.id
-    principalId: appGateway.identity.principalId
+    principalId: appGwManagedIdentity.id
     principalType: 'ServicePrincipal'
   }
 }
