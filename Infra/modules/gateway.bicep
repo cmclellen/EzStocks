@@ -124,10 +124,11 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           frontendPort: {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/frontendPorts/port_443'
           }
-          protocol: 'Https'
-          sslCertificate: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/sslCertificates/server'
-          }
+          protocol: 'Http'
+          // protocol: 'Https'
+          // sslCertificate: {
+          //   id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/sslCertificates/server'
+          // }
           requireServerNameIndication: false
         }
       }
@@ -149,23 +150,6 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           }
         }
       }
-
-      // {
-      //   name: 'appGwApiRule'
-      //   properties: {
-      //     ruleType: 'Basic'
-      //     priority: 10
-      //     httpListener: {
-      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
-      //     }
-      //     backendAddressPool: {
-      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/api'
-      //     }
-      //     backendHttpSettings: {
-      //       id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
-      //     }
-      //   }
-      // }
     ]
   }
 }
