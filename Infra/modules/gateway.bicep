@@ -149,6 +149,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           }
         }
       }
+
       // {
       //   name: 'appGwApiRule'
       //   properties: {
