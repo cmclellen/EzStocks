@@ -17,6 +17,21 @@ resource appGwManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@
   location: location
 }
 
+resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '4633458b-17de-408a-b874-0445c86b69e6'
+}
+
+resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id, appGwManagedIdentity.id)
+  scope: keyVault
+  properties: {
+    roleDefinitionId: kvSecretsUserRoleDefinition.id
+    principalId: appGwManagedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   name: format(resourceNameFormat, 'pip')
   location: location
@@ -37,6 +52,9 @@ var appGwName = format(resourceNameFormat, 'appgw')
 resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
   name: appGwName
   location: location
+  dependsOn: [
+    kvSecretsUserRoleAssignment
+  ]
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -175,20 +193,5 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         }
       }
     ]
-  }
-}
-
-resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
-  scope: subscription()
-  name: '4633458b-17de-408a-b874-0445c86b69e6'
-}
-
-resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id, appGateway.id)
-  scope: keyVault
-  properties: {
-    roleDefinitionId: kvSecretsUserRoleDefinition.id
-    principalId: appGwManagedIdentity.properties.principalId
-    principalType: 'ServicePrincipal'
   }
 }
