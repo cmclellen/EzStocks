@@ -188,7 +188,7 @@ resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@20
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRoleDefinition.id
-    principalId: appGwManagedIdentity.id
+    principalId: appGwManagedIdentity.properties.principalId
     principalType: 'ServicePrincipal'
   }
 }
