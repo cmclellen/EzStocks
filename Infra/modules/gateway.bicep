@@ -59,9 +59,9 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
     ]
     frontendPorts: [
       {
-        name: 'appGwFrontendPort'
+        name: 'port_443'
         properties: {
-          port: 80
+          port: 443
         }
       }
     ]
@@ -122,9 +122,12 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/frontendIPConfigurations/appGwFrontendIpConfig'
           }
           frontendPort: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/frontendPorts/appGwFrontendPort'
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/frontendPorts/port_443'
           }
-          protocol: 'Http'
+          protocol: 'Https'
+          sslCertificate: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/sslCertificates/server'
+          }
           requireServerNameIndication: false
         }
       }
