@@ -12,11 +12,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: format(resourceNameFormat, 'kv')
 }
 
-resource appGwManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name: 'AppGW'
-  location: location
-}
-
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   name: format(resourceNameFormat, 'pip')
   location: location
@@ -37,6 +32,9 @@ var appGwName = format(resourceNameFormat, 'appgw')
 resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
   name: appGwName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     enableHttp2: true
     sku: {
@@ -182,7 +180,7 @@ resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@20
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRoleDefinition.id
-    principalId: appGwManagedIdentity.id
+    principalId: appGateway.identity.principalId
     principalType: 'ServicePrincipal'
   }
 }
