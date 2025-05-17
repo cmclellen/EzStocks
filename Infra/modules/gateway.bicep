@@ -8,6 +8,8 @@ param staticWebsiteHostName string
 
 param fnAppFqdn string
 
+param lawId string
+
 resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: format(resourceNameFormat, 'kv')
 }
@@ -40,7 +42,6 @@ resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
     tier: 'Regional'
   }
   properties: {
-    // ipAddress: '4.237.201.175'
     publicIPAddressVersion: 'IPv4'
     publicIPAllocationMethod: 'Static'
     idleTimeoutInMinutes: 4
@@ -110,7 +111,6 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
     backendAddressPools: [
       {
         name: 'ui'
-        // id: '${applicationGateways_myappgw_name_resource.id}/backendAddressPools/ui'
         properties: {
           backendAddresses: [
             {
@@ -121,7 +121,6 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
       }
       {
         name: 'api'
-        // id: '${applicationGateways_myappgw_name_resource.id}/backendAddressPools/api'
         properties: {
           backendAddresses: [
             {
@@ -190,6 +189,52 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           backendHttpSettings: {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
           }
+        }
+      }
+    ]
+  }
+}
+
+resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: appGateway
+  name: 'diagnosticSettings'
+  location: resourceGroup().location
+  properties: {
+    name: 'Diag'
+    workspaceId: lawId
+    logs: [
+      {
+        category: 'ApplicationGatewayAccessLog'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 7
+        }
+      }
+      {
+        category: 'ApplicationGatewayPerformanceLog'
+        enabled: true
+        retentionPolicy: {
+          days: 7
+          enabled: true
+        }
+      }
+      // {
+      //   category: 'ApplicationGatewayFirewallLog'
+      //   enabled: true
+      //   retentionPolicy: {
+      //     days: 365
+      //     enabled: true
+      //   }
+      // }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 7
         }
       }
     ]
