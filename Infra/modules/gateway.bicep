@@ -8,6 +8,10 @@ param staticWebsiteHostName string
 
 param fnAppFqdn string
 
+resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
+  name: format(resourceNameFormat, 'kv')
+}
+
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   name: format(resourceNameFormat, 'pip')
   location: location
@@ -43,6 +47,14 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
           subnet: {
             id: subnetId
           }
+        }
+      }
+    ]
+    sslCertificates: [
+      {
+        name: 'server'
+        properties: {
+          keyVaultSecretId: 'https://kv-ezstocks-dev-aue${environment().suffixes.keyvaultDns}/secrets/mycer/96bab9b15dd241848a6c1814cc96e633'
         }
       }
     ]
@@ -152,5 +164,20 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         }
       }
     ]
+  }
+}
+
+resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '4633458b-17de-408a-b874-0445c86b69e6'
+}
+
+resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id, appGateway.id)
+  scope: keyVault
+  properties: {
+    roleDefinitionId: kvSecretsUserRoleDefinition.id
+    principalId: appGateway.identity.principalId
+    principalType: 'ServicePrincipal'
   }
 }
