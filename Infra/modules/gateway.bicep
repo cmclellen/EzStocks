@@ -204,36 +204,16 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
       {
         category: 'ApplicationGatewayAccessLog'
         enabled: true
-        // retentionPolicy: {
-        //   enabled: true
-        //   days: 7
-        // }
       }
       {
         category: 'ApplicationGatewayPerformanceLog'
         enabled: true
-        // retentionPolicy: {
-        //   days: 7
-        //   enabled: true
-        // }
       }
-      // {
-      //   category: 'ApplicationGatewayFirewallLog'
-      //   enabled: true
-      //   retentionPolicy: {
-      //     days: 365
-      //     enabled: true
-      //   }
-      // }
     ]
     metrics: [
       {
         category: 'AllMetrics'
         enabled: true
-        // retentionPolicy: {
-        //   enabled: true
-        //   days: 7
-        // }
       }
     ]
   }
