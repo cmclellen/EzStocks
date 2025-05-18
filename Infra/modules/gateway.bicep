@@ -84,7 +84,7 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
       {
         name: 'server'
         properties: {
-          keyVaultSecretId: 'https://kv-ezstocks-dev-aue${environment().suffixes.keyvaultDns}/secrets/mycer/96bab9b15dd241848a6c1814cc96e633'
+          keyVaultSecretId: 'https://kv-ezstocks-dev-aue${environment().suffixes.keyvaultDns}/secrets/mycer'
         }
       }
     ]
