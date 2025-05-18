@@ -68,3 +68,23 @@ module function 'modules/function.bicep' = {
     entraB2cClientId: entraB2cClientId
   }
 }
+
+module network 'modules/network.bicep' = {
+  name: 'network'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+  }
+}
+
+module gateway 'modules/gateway.bicep' = {
+  name: 'gateway'
+  params: {
+    location: location
+    resourceNameFormat: resourceNameFormat
+    subnetId: network.outputs.defaultSubnetId
+    staticWebsiteHostName: storage.outputs.staticWebsiteHostName
+    fnAppFqdn: function.outputs.fnAppFqdn
+    lawId: insights.outputs.lawId
+  }
+}
