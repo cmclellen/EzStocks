@@ -7,7 +7,7 @@ param scPricipalId string
 param deploymentScriptTimestamp string = utcNow()
 
 var indexDocument = 'index.html'
-var errorDocument404Path = 'error.html'
+var errorDocument404Path = indexDocument // 'error.html' SPA needs to route to landing page too for errors, otherwise routing doesn't work
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: replace(format(resourceNameFormat, 'stg'), '-', '')
