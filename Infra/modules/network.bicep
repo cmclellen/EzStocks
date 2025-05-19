@@ -14,12 +14,20 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
     }
     privateEndpointVNetPolicies: 'Disabled'
     virtualNetworkPeerings: []
-    enableDdosProtection: false
+    enableDdosProtection: false    
   }
 
   resource snet_default 'subnets' = {
     name: 'default'
     properties: {
+      serviceEndpoints: [
+        {
+          service: 'Microsoft.KeyVault'
+          locations: [
+            location
+          ]
+        }
+      ]
       addressPrefix: '10.1.0.0/24'
       applicationGatewayIPConfigurations: [
         {
