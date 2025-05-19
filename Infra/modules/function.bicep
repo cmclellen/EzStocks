@@ -101,6 +101,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         {
           name: 'DefaultConnection'
           connectionString: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=cosmosdb-connection-string)'
+          type: 'SQLServer'
         }
       ]
       minTlsVersion: '1.2'
