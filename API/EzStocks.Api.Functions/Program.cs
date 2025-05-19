@@ -9,13 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scrutor;
-using Serilog;
-
-Log.Logger logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(builder =>
