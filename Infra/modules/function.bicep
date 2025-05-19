@@ -100,11 +100,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
           value: 'true'
         }
-        {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '1'
-          // value: 'https://stgezstocksdevaue.blob.core.windows.net/github-actions-deploy/Functionapp_20255191437748.zip?sv=2025-05-05&st=2025-05-19T01%3A38%3A11Z&se=2026-05-19T01%3A43%3A11Z&sr=b&sp=r&sig=xj5%2BGOhWA26sO10RiTQ5EKhBFO40aP7nFQHNzrGQkdw%3D'
-        }
+        // {
+        //   name: 'WEBSITE_RUN_FROM_PACKAGE'
+        //   value: '1'
+        // }
       ]
       connectionStrings: [
         {
