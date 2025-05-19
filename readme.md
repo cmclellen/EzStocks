@@ -6,3 +6,4 @@
   ![self-signed certificate](Docs/Images/self-signed-certificate.png)
 - Reference the certificate created in the `Listeners` created.
 - To run locally, I added the dummy hostname to my local `C:\Windows\System32\drivers\etc\hosts` file.
+- Ensure to update the redirect URIs for the UI's AppRegistration.
