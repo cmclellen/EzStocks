@@ -96,11 +96,20 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'EntraB2C__ClientId'
           value: entraB2cClientId
         }
+        {
+          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
+          value: 'true'
+        }
+        // {
+        //   name: 'WEBSITE_RUN_FROM_PACKAGE'
+        //   value: '1'
+        // }
       ]
       connectionStrings: [
         {
           name: 'DefaultConnection'
           connectionString: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=cosmosdb-connection-string)'
+          type: 'SQLServer'
         }
       ]
       minTlsVersion: '1.2'

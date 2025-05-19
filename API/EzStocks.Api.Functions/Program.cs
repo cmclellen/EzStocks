@@ -13,11 +13,7 @@ using Scrutor;
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(builder =>
     {
-        // Explicitly adding the extension middleware because
-        // registering middleware when extension is loaded does not
-        // place the middleware in the pipeline where required request
-        // information is available.
-        builder.UseFunctionsAuthorization();
+        //builder.UseFunctionsAuthorization();
     })
     .ConfigureAppConfiguration((ctx, config) =>
     {
@@ -37,8 +33,8 @@ var host = new HostBuilder()
         services
             .ConfigureAzureClients(ctx)
             .ConfigureEFCore(configuration)
-            .ConfigureOpenTelemetry()
-            .ConfigureAuthentication(configuration);
+            .ConfigureOpenTelemetry();
+            //.ConfigureAuthentication(configuration);
 
         services.AddScoped<IStocksApiClient, PolygonIOStocksApiClient>();        
 
@@ -68,10 +64,10 @@ var host = new HostBuilder()
     })
     .Build();
 
-using (var scope = host.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<EzStockDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
-}
+//using (var scope = host.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<EzStockDbContext>();
+//    await dbContext.Database.EnsureCreatedAsync();
+//}
 
 host.Run();

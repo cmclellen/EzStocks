@@ -174,21 +174,53 @@ resource appGateway 'Microsoft.Network/applicationGateways@2024-05-01' = {
         }
       }
     ]
+    urlPathMaps: [
+      {
+        name: 'default'
+        properties: {
+          defaultBackendAddressPool: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/ui'
+          }
+          defaultBackendHttpSettings: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
+          }
+          pathRules: [
+            {
+              name: 'api'
+              properties: {
+                paths: [
+                  '/api/*'
+                ]
+                backendAddressPool: {
+                  id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/api'
+                }
+                backendHttpSettings: {
+                  id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
     requestRoutingRules: [
       {
-        name: 'appGwUiRule'
+        name: 'appGwRule'
         properties: {
-          ruleType: 'Basic'
+          ruleType: 'PathBasedRouting'
           priority: 100
           httpListener: {
             id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/httpListeners/appGwListener'
           }
-          backendAddressPool: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/ui'
+          urlPathMap: {
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/urlPathMaps/default'
           }
-          backendHttpSettings: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
-          }
+          // backendAddressPool: {
+          //   id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendAddressPools/ui'
+          // }
+          // backendHttpSettings: {
+          //   id: '${resourceId('Microsoft.Network/applicationGateways', appGwName)}/backendHttpSettingsCollection/backendHttpSettings'
+          // }          
         }
       }
     ]
