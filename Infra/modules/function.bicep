@@ -51,19 +51,19 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
     siteConfig: {
       linuxFxVersion: 'DOTNET-ISOLATED|9.0'
       appSettings: [
-        {
-          name: 'AzureWebJobsStorage__blobServiceUri'
-          value: 'https://${storageAccount.name}.blob.${environment().suffixes.storage}'
-        }
-        {
-          name: 'AzureWebJobsStorage__accountName'
-          value: storageAccount.name
-        }
         // {
-        //   name: 'AzureWebJobsStorage'
-        //   value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-        //   //value: storageAccount.properties.primaryEndpoints.blob
+        //   name: 'AzureWebJobsStorage__blobServiceUri'
+        //   value: 'https://${storageAccount.name}.blob.${environment().suffixes.storage}'
         // }
+        // {
+        //   name: 'AzureWebJobsStorage__accountName'
+        //   value: storageAccount.name
+        // }
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          //value: storageAccount.properties.primaryEndpoints.blob
+        }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
