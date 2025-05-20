@@ -160,16 +160,16 @@ resource sbDataSenderRoleAssignment 'Microsoft.Authorization/roleAssignments@202
   }
 }
 
-resource stgBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+resource stgBlobDataOwnerRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
-  name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  name: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
 }
 
-resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, stgBlobDataContributorRoleDefinition.id)
+resource stgBlobDataOwnerRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, stgBlobDataOwnerRoleDefinition.id)
   scope: storageAccount
   properties: {
-    roleDefinitionId: stgBlobDataContributorRoleDefinition.id
+    roleDefinitionId: stgBlobDataOwnerRoleDefinition.id
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
