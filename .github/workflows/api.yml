@@ -63,4 +63,4 @@ jobs:
         with:
           app-name: "func-ezstocks-dev-aue"
           package: "./API/publish"
-          # use publish profile
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FUNC_EZSTOCKS_DEV_AUE }}
