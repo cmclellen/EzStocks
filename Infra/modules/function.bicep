@@ -52,8 +52,8 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       linuxFxVersion: 'DOTNET-ISOLATED|9.0'
       appSettings: [
         {
-          name: 'AzureWebJobsStorage__accountName'
-          value: storageAccount.name
+          name: 'AzureWebJobsStorage__blobServiceUri'
+          value: 'https://${storageAccount.name}.blob.${environment().suffixes.storage}'
         }
         // {
         //   name: 'AzureWebJobsStorage'
