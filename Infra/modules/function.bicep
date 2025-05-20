@@ -76,7 +76,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED'
           value: '1'
         }
-        // APPLICATIONINSIGHTS_CONNECTION_STRING not considered secrets https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
+        // APPLICATIONINSIGHTS_CONNECTION_STRING not considered a secret https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsights.properties.ConnectionString
@@ -105,14 +105,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'EntraB2C__ClientId'
           value: entraB2cClientId
         }
-        // {
-        //   name: 'AzureWebJobsFeatureFlags'
-        //   value: 'EnableWorkerIndexing'
-        // }
-        // {
-        //   name: 'WEBSITE_RUN_FROM_PACKAGE'
-        //   value: '1'
-        // }
       ]
       connectionStrings: [
         {
