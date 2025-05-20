@@ -72,6 +72,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED'
           value: '1'
         }
+        // APPLICATIONINSIGHTS_CONNECTION_STRING not considered secrets https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsights.properties.ConnectionString
@@ -140,6 +141,21 @@ resource sbDataReceiverRoleAssignment 'Microsoft.Authorization/roleAssignments@2
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataReceiverRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
+}
+
+resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(serviceBusNamespace.id, stAccountContributorRoleDefinition.id)
+  scope: serviceBusNamespace
+  properties: {
+    roleDefinitionId: stAccountContributorRoleDefinition.id
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
