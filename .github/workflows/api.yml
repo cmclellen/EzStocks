@@ -17,7 +17,6 @@ permissions:
 
 env:
   AZURE_RESOURCEGROUP_NAME: "rg-ezstocks-dev-aue"
-  ACTIONS_STEP_DEBUG: true
   DOTNET_VERSION: 9.x
   CONFIGURATION: Release
 
@@ -63,4 +62,6 @@ jobs:
         with:
           app-name: "func-ezstocks-dev-aue"
           package: "./API/publish"
+          enable-oryx-build: false
+          scm-do-build-during-deployment: false
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FUNC_EZSTOCKS_DEV_AUE }}
