@@ -131,6 +131,7 @@ resource polygonioApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-pre
   }
 }
 
+// Service Bus
 resource sbDataReceiverRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
   name: '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'
@@ -141,21 +142,6 @@ resource sbDataReceiverRoleAssignment 'Microsoft.Authorization/roleAssignments@2
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataReceiverRoleDefinition.id
-    principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
-  scope: subscription()
-  name: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
-}
-
-resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, stAccountContributorRoleDefinition.id)
-  scope: serviceBusNamespace
-  properties: {
-    roleDefinitionId: stAccountContributorRoleDefinition.id
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
@@ -176,6 +162,7 @@ resource sbDataSenderRoleAssignment 'Microsoft.Authorization/roleAssignments@202
   }
 }
 
+// Storage Account
 resource stgBlobDataOwnerRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
   name: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
@@ -191,6 +178,22 @@ resource stgBlobDataOwnerRoleAssignment 'Microsoft.Authorization/roleAssignments
   }
 }
 
+resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
+}
+
+resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(functionApp.id, stAccountContributorRoleDefinition.id)
+  scope: serviceBusNamespace
+  properties: {
+    roleDefinitionId: stAccountContributorRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// Key Vault
 resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
   name: '4633458b-17de-408a-b874-0445c86b69e6'
