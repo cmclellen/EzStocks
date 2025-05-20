@@ -100,10 +100,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'EntraB2C__ClientId'
           value: entraB2cClientId
         }
-        {
-          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
-          value: 'true'
-        }
         // {
         //   name: 'AzureWebJobsFeatureFlags'
         //   value: 'EnableWorkerIndexing'
