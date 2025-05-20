@@ -184,8 +184,8 @@ resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinit
 }
 
 resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(functionApp.id, stAccountContributorRoleDefinition.id)
-  scope: serviceBusNamespace
+  name: guid(storageAccount.id, stAccountContributorRoleDefinition.id)
+  scope: storageAccount
   properties: {
     roleDefinitionId: stAccountContributorRoleDefinition.id
     principalId: functionApp.identity.principalId
