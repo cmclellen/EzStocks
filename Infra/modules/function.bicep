@@ -138,7 +138,7 @@ resource sbDataReceiverRoleDefinition 'Microsoft.Authorization/roleDefinitions@2
 }
 
 resource sbDataReceiverRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id)
+  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id, functionApp.id)
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataReceiverRoleDefinition.id
@@ -153,7 +153,7 @@ resource sbDataSenderRoleDefinition 'Microsoft.Authorization/roleDefinitions@202
 }
 
 resource sbDataSenderRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, sbDataSenderRoleDefinition.id)
+  name: guid(serviceBusNamespace.id, sbDataSenderRoleDefinition.id, functionApp.id)
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataSenderRoleDefinition.id
@@ -169,7 +169,7 @@ resource stgBlobDataOwnerRoleDefinition 'Microsoft.Authorization/roleDefinitions
 }
 
 resource stgBlobDataOwnerRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, stgBlobDataOwnerRoleDefinition.id)
+  name: guid(storageAccount.id, stgBlobDataOwnerRoleDefinition.id, functionApp.id)
   scope: storageAccount
   properties: {
     roleDefinitionId: stgBlobDataOwnerRoleDefinition.id
@@ -184,7 +184,7 @@ resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinit
 }
 
 resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, stAccountContributorRoleDefinition.id)
+  name: guid(storageAccount.id, stAccountContributorRoleDefinition.id, functionApp.id)
   scope: storageAccount
   properties: {
     roleDefinitionId: stAccountContributorRoleDefinition.id
@@ -200,7 +200,7 @@ resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@20
 }
 
 resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id)
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id, functionApp.id)
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRoleDefinition.id
