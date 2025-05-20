@@ -55,6 +55,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'AzureWebJobsStorage__blobServiceUri'
           value: 'https://${storageAccount.name}.blob.${environment().suffixes.storage}'
         }
+        {
+          name: 'AzureWebJobsStorage__accountName'
+          value: storageAccount.name
+        }
         // {
         //   name: 'AzureWebJobsStorage'
         //   value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
