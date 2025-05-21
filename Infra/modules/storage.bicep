@@ -18,6 +18,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: 'StorageV2'
   properties: {
     supportsHttpsTrafficOnly: true
+    // Has to be enabled for deployment purposes only, otherwise could be set to false
     allowSharedKeyAccess: true
     minimumTlsVersion: 'TLS1_2'
   }
