@@ -53,8 +53,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-          //value: storageAccount.properties.primaryEndpoints.blob
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage}'
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -68,6 +67,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED'
           value: '1'
         }
+        // APPLICATIONINSIGHTS_CONNECTION_STRING not considered a secret https://learn.microsoft.com/en-us/azure/azure-monitor/app/connection-strings
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsights.properties.ConnectionString
@@ -96,14 +96,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
           name: 'EntraB2C__ClientId'
           value: entraB2cClientId
         }
-        {
-          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
-          value: 'true'
-        }
-        // {
-        //   name: 'WEBSITE_RUN_FROM_PACKAGE'
-        //   value: '1'
-        // }
       ]
       connectionStrings: [
         {
@@ -126,13 +118,14 @@ resource polygonioApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-pre
   }
 }
 
+// Service Bus
 resource sbDataReceiverRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
   name: '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'
 }
 
 resource sbDataReceiverRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id)
+  name: guid(serviceBusNamespace.id, sbDataReceiverRoleDefinition.id, functionApp.id)
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataReceiverRoleDefinition.id
@@ -147,7 +140,7 @@ resource sbDataSenderRoleDefinition 'Microsoft.Authorization/roleDefinitions@202
 }
 
 resource sbDataSenderRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(serviceBusNamespace.id, sbDataSenderRoleDefinition.id)
+  name: guid(serviceBusNamespace.id, sbDataSenderRoleDefinition.id, functionApp.id)
   scope: serviceBusNamespace
   properties: {
     roleDefinitionId: sbDataSenderRoleDefinition.id
@@ -156,28 +149,45 @@ resource sbDataSenderRoleAssignment 'Microsoft.Authorization/roleAssignments@202
   }
 }
 
-resource stgBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+// Storage Account
+resource stgBlobDataOwnerRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
-  name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  name: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
 }
 
-resource stgBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, stgBlobDataContributorRoleDefinition.id)
+resource stgBlobDataOwnerRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, stgBlobDataOwnerRoleDefinition.id, functionApp.id)
   scope: storageAccount
   properties: {
-    roleDefinitionId: stgBlobDataContributorRoleDefinition.id
+    roleDefinitionId: stgBlobDataOwnerRoleDefinition.id
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
 }
 
+resource stAccountContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
+  scope: subscription()
+  name: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
+}
+
+resource stAccountContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, stAccountContributorRoleDefinition.id, functionApp.id)
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: stAccountContributorRoleDefinition.id
+    principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// Key Vault
 resource kvSecretsUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {
   scope: subscription()
   name: '4633458b-17de-408a-b874-0445c86b69e6'
 }
 
 resource kvSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id)
+  name: guid(keyVault.id, kvSecretsUserRoleDefinition.id, functionApp.id)
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRoleDefinition.id
